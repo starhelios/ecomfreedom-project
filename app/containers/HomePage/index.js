@@ -6,11 +6,18 @@
  */
 
 import React from 'react';
+import Button from '@material-ui/core/Button';
 
 export default function HomePage() {
   return (
-    <h1>
-      This is the HomePage container!
-    </h1>
+    <div>
+      <h1>
+        This is the HomePage container!
+      </h1>
+      <Button variant="contained" color="primary">
+        Button
+      </Button>
+    </div>
+
   );
 }
