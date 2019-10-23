@@ -1,38 +1,65 @@
-/* eslint-disable no-console */
+const moment = require('moment-timezone');
+const path = require('path');
+const winston = require('winston');
+require('winston-daily-rotate-file');
 
-const chalk = require('chalk');
-const ip = require('ip');
+const TIME_FORMAT = 'YY-MMM-DD HH:mm:ss z';
+const timestamp = () => moment.tz(moment(), 'EST').format(TIME_FORMAT);
 
-const divider = chalk.gray('\n-----------------------------------');
-
-/**
- * Logger middleware, you can customize it to make messages more personal
- */
-const logger = {
-  // Called whenever there's an error on the server we want to print
-  error: err => {
-    console.error(chalk.red(err));
-  },
-
-  // Called when express.js app starts on given port w/o errors
-  appStarted: (port, host, tunnelStarted) => {
-    console.log(`Server started ! ${chalk.green('✓')}`);
-
-    // If the tunnel started, log that and the URL it's available at
-    if (tunnelStarted) {
-      console.log(`Tunnel initialised ${chalk.green('✓')}`);
-    }
-
-    console.log(`
-${chalk.bold('Access URLs:')}${divider}
-Localhost: ${chalk.magenta(`http://${host}:${port}`)}
-      LAN: ${chalk.magenta(`http://${ip.address()}:${port}`) +
-        (tunnelStarted
-          ? `\n    Proxy: ${chalk.magenta(tunnelStarted)}`
-          : '')}${divider}
-${chalk.blue(`Press ${chalk.italic('CTRL-C')} to stop`)}
-    `);
-  },
+const CONSOLE_CONFIG = {
+  json: false,
+  handleExceptions: true,
+  humanReadableUnhandledException: true,
+  timestamp,
+};
+const FILE_CONFIG = {
+  datePattern: 'YYYY-MM-DD',
+  zippedArchive: false,
+  maxSize: '1000m',
+  maxFiles: '500d',
+  timestamp,
 };
 
-module.exports = logger;
+function createLogger(filename) {
+  // eslint-disable-next-line no-param-reassign
+  filename += '-%DATE%.log';
+  const fullFilename = path.join(process.cwd(), 'logs', filename);
+  const winstonLogger = new winston.Logger({
+    transports: [
+      new winston.transports.Console(CONSOLE_CONFIG),
+      new winston.transports.DailyRotateFile(
+        Object.assign({ filename: fullFilename }, FILE_CONFIG),
+      ),
+    ],
+  });
+
+  winstonLogger.exitOnError = false;
+  return winstonLogger;
+}
+
+function errorTransformer(errors) {
+  return errors.map(error => {
+    const { response } = error;
+    const message =
+      response &&
+      response.body &&
+      response.body.error &&
+      response.body.error.message;
+    return message || error;
+  });
+}
+
+module.exports = function(name = 'define module') {
+  const winstonLogger = createLogger(name);
+  return {
+    info(...text) {
+      winstonLogger.info(`${name}:`, ...text);
+    },
+
+    error(...text) {
+      // eslint-disable-next-line no-param-reassign
+      text = errorTransformer(text);
+      winstonLogger.error(`${name}:`, ...text);
+    },
+  };
+};
