@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const createLogger = require('../logger');
 const validator = require('../validator');
+const db = require('../db');
 
 const router = express.Router();
 const SECRET = config.get('web-app:secret');
@@ -105,14 +106,33 @@ router.post('/login', (req, res) => {
  *           $ref: '#/definitions/NewUser'
  *     responses:
  *       200:
- *         description: stores a new user in DB
+ *         description: creates a new user in DB
+ *       422:
+ *         description: model does not satisfy the expected schema
+ *       409:
+ *         description: user with this username already exists
+ *
  */
-router.post('/', (req, res) => {
-  if (!validator.newUser(req.body)) {
+router.post('/', async (req, res) => {
+  const data = req.body;
+
+  if (!validator.newUser(data)) {
     logger.error('validation of the new user failed', validator.newUser.errors);
-    res.status(400).json({ errors: validator.newUser.errors });
+    res.status(422).json({ errors: validator.newUser.errors });
+    return;
   }
-  res.status(200).end();
+
+  const existing = await db.model.User.findOne({ username: data.username });
+  if (existing) {
+    res
+      .status(409)
+      .json({ errors: [{ dataPath: '.username', message: 'already exists' }] });
+    return;
+  }
+
+  const user = await db.model.User.create(data);
+  logger.info('user', user.username, 'has been created, id', user._id);
+  res.json({ username: user.user, _id: user._id });
 });
 
 module.exports = router;
