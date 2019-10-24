@@ -43,12 +43,13 @@ const logger = createLogger('web-server.user-route');
  *       200:
  *         description: login
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).end();
   }
-  if (username === 'test' && password === 'pass') {
+  const valid = await db.model.User.verify(username, password);
+  if (valid) {
     logger.info(
       'user',
       username,
@@ -124,6 +125,7 @@ router.post('/', async (req, res) => {
 
   const existing = await db.model.User.findOne({ username: data.username });
   if (existing) {
+    logger.error('user', user.username, 'already exists');
     res
       .status(409)
       .json({ errors: [{ dataPath: '.username', message: 'already exists' }] });
@@ -131,7 +133,7 @@ router.post('/', async (req, res) => {
   }
 
   const user = await db.model.User.create(data);
-  logger.info('user', user.username, 'has been created, id', user._id);
+  logger.info('user', user.username, 'has been created, id', String(user._id));
   res.json({ username: user.user, _id: user._id });
 });
 

@@ -27,6 +27,14 @@ USER.statics.create = async ({
   return user;
 };
 
+USER.statics.verify = async (username, password) => {
+  const user = await User.findOne({ username });
+  if (!user) {
+    return false;
+  }
+  return bcrypt.compare(password, user.hash);
+};
+
 const User = mongoose.model('user', USER);
 
 module.exports = {
