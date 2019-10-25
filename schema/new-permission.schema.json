@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "new permission configuration schema",
+  "type": "object",
+  "required": ["name", "description", "role"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 24,
+      "maxLength": 24
+    },
+    "name": {
+      "$ref": "#name"
+    },
+    "role": {
+      "$ref": "#name"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}
