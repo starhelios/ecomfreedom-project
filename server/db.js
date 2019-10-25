@@ -39,8 +39,28 @@ USER.statics.verify = async (username, password) => {
 
 const User = mongoose.model('user', USER);
 
+const ROLE = new mongoose.Schema({
+  name: { type: String, unique: true },
+  description: String
+});
+
+ROLE.statics.create = async ({ id, name, description }) => {
+  let role;
+  if (id) {
+    role = await Role.findById(id);
+    role.name = name;
+    role.description = description;
+  } else {
+    role = new Role({ name, description });
+  }
+  return role.save();
+};
+
+const Role = mongoose.model('role', ROLE);
+
 module.exports = {
   model: {
-    User
+    User,
+    Role
   }
 };
