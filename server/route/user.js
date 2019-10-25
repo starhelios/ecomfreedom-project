@@ -89,6 +89,10 @@ router.post('/login', async (req, res) => {
  *         type: string
  *       lastname:
  *         type: string
+ *       roles:
+ *         type: array
+ *         items:
+ *           type: string
  *
  * /user:
  *   post:
@@ -125,7 +129,7 @@ router.post('/', async (req, res) => {
 
   const existing = await db.model.User.findOne({ username: data.username });
   if (existing) {
-    logger.error('user', user.username, 'already exists');
+    logger.error('user', data.username, 'already exists');
     res
       .status(409)
       .json({ errors: [{ dataPath: '.username', message: 'already exists' }] });
