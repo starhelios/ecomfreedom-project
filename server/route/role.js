@@ -4,7 +4,7 @@ const validator = require('../validator');
 const db = require('../db');
 
 const router = express.Router();
-const logger = createLogger('web-server.user-route');
+const logger = createLogger('web-server.role-route');
 
 /**
  * @swagger
@@ -46,9 +46,9 @@ const logger = createLogger('web-server.user-route');
 router.post('/', async (req, res) => {
   const data = req.body;
 
-  if (!validator.newRolePermission(data)) {
-    logger.error('validation of the new role failed', validator.newRolePermission.errors);
-    res.status(422).json({ errors: validator.newRolePermission.errors });
+  if (!validator.newRole(data)) {
+    logger.error('validation of the new role failed', validator.newRole.errors);
+    res.status(422).json({ errors: validator.newRole.errors });
     return;
   }
 
