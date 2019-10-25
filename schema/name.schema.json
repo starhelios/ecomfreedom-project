@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "#role",
-  "title": "role",
+  "$id": "#name",
+  "title": "role or permission name",
   "type": "string",
   "pattern": "^[a-z-]+$",
   "minLength": 5

@@ -46,28 +46,21 @@ const logger = createLogger('web-server.user-route');
 router.post('/', async (req, res) => {
   const data = req.body;
 
-  if (!validator.newRole(data)) {
-    logger.error('validation of the new role failed', validator.newRole.errors);
-    res.status(422).json({ errors: validator.newRole.errors });
+  if (!validator.newRolePermission(data)) {
+    logger.error('validation of the new role failed', validator.newRolePermission.errors);
+    res.status(422).json({ errors: validator.newRolePermission.errors });
     return;
   }
 
   const existing = await db.model.Role.findOne({ name: data.name });
   if (existing) {
     logger.error('role', data.name, 'already exists');
-    res
-      .status(409)
-      .json({ errors: [{ dataPath: '.name', message: 'already exists' }] });
+    res.status(409).json({ errors: [{ dataPath: '.name', message: 'already exists' }] });
     return;
   }
 
   const role = await db.model.Role.create(data);
-  logger.info(
-    'role',
-    role.name,
-    'has been created/updated, id',
-    String(role._id)
-  );
+  logger.info('role', role.name, 'has been created/updated, id', String(role._id));
   res.json(role);
 });
 
