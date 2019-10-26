@@ -129,4 +129,51 @@ router.delete('/', async (req, res) => {
   res.json({ deleted: result.deletedCount });
 });
 
+/**
+ * @swagger
+ * /role:
+ *   get:
+ *     description: Get all the roles with assigned permissionss
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns roles
+ *
+ */
+router.get('/', async (req, res) => {
+  // TODO pagination
+  const result = await db.model.Role.find().populate('permissions');
+  res.json(result);
+});
+
+/**
+ * @swagger
+ * /role/{id}:
+ *   get:
+ *     parameters:
+ *       - name: id
+ *         description: id
+ *         in:  path
+ *     description: Get the role by id with assigned permissionss
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns deleted roles count - 1/0
+ *
+ */
+router.get('/:id', async (req, res) => {
+  const { params } = req;
+
+  if (!validator.mongoId(params)) {
+    logger.error('validation of role delete request failed', validator.mongoId.errors);
+    res.status(422).json({ errors: validator.mongoId.errors });
+    return;
+  }
+
+  const result = await db.model.Role.findById(params.id).populate('permissions');
+  res.json(result);
+});
+
 module.exports = router;
