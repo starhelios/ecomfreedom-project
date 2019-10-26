@@ -82,6 +82,49 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
+ * /role/{id}/permission/{permission}:
+ *   post:
+ *     parameters:
+ *       - name: id
+ *         description: role id to assign the permission
+ *         in: path
+ *       - name: permission
+ *         description: permission id to assign
+ *         in: path
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns number of affected rules 1/0
+ *
+ */
+router.post('/:id/permission/:permission', async (req, res) => {
+  const data = req.params;
+
+  if (!validator.assignPermission(data)) {
+    logger.error('validation of the new permission failed', validator.assignPermission.errors);
+    res.status(422).json({ errors: validator.assignPermission.errors });
+    return;
+  }
+
+  const exists = await db.model.Role.count({ _id: data.id });
+  if (!exists) {
+    logger.error('role not found, id', data.id);
+    res.status(422).json({ errors: [{ dataPath: '.id', message: 'role not found for provided id' }] });
+    return;
+  }
+
+  const { nModified } = await db.model.Role.updateOne(
+    { _id: data.id, permissions: { $not: { $eq: data.permission } } },
+    { $addToSet: { permissions: data.permission } }
+  );
+
+  logger.info('roles modified', nModified);
+  return res.json({ modified: nModified });
+});
+
+/**
+ * @swagger
  * /role/{id}:
  *   delete:
  *     parameters:
