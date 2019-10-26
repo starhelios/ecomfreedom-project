@@ -80,4 +80,53 @@ router.post('/', async (req, res) => {
   res.json(role);
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   DeleteRoleRequest:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: string
+ *
+ * /role:
+ *   delete:
+ *     description: deletes the role
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: role
+ *         description: id
+ *         in:  body
+ *         required: true
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/DeleteRoleRequest'
+ *     responses:
+ *       200:
+ *         description: returns deleted roles count - 1/0
+ *       422:
+ *         description: no id provided
+ *
+ */
+router.delete('/', async (req, res) => {
+  const data = req.body;
+
+  if (!validator.mongoId(data)) {
+    logger.error('validation of role delete request failed', validator.mongoId.errors);
+    res.status(422).json({ errors: validator.mongoId.errors });
+    return;
+  }
+
+  const result = await db.model.Role.deleteOne({ _id: data.id });
+  if (result.deletedCount) {
+    logger.info('role, id', data.id, 'has been deleted');
+  } else {
+    logger.error('could not delete role, id', data.id);
+  }
+  res.json({ deleted: result.deletedCount });
+});
+
 module.exports = router;
