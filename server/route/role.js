@@ -18,6 +18,10 @@ const logger = createLogger('web-server.role-route');
  *         type: string
  *       description:
  *         type: string
+ *       permissions:
+ *         type: array
+ *         items:
+ *           type: string
  *
  * /role:
  *   post:
@@ -52,10 +56,22 @@ router.post('/', async (req, res) => {
     return;
   }
 
-  const existing = await db.model.Role.findOne({ name: data.name });
-  if (existing) {
-    logger.error('role', data.name, 'already exists');
-    res.status(409).json({ errors: [{ dataPath: '.name', message: 'already exists' }] });
+  if (!data.id) {
+    // new role - check the name
+    const existing = await db.model.Role.findOne({ name: data.name });
+    if (existing) {
+      logger.error('role', data.name, 'already exists');
+      res.status(409).json({ errors: [{ dataPath: '.name', message: 'already exists' }] });
+      return;
+    }
+  }
+
+  const notCreatedPermissions = await db.model.Permission.findNotCreatedPermissions(data.permissions);
+  if (notCreatedPermissions.length) {
+    logger.error('permissions', notCreatedPermissions, 'have not been created yet');
+    res
+      .status(409)
+      .json({ errors: [{ dataPath: '.permissions', message: `not created, ids: ${notCreatedPermissions}` }] });
     return;
   }
 
