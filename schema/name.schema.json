@@ -3,6 +3,6 @@
   "$id": "#name",
   "title": "role or permission name",
   "type": "string",
-  "pattern": "^[a-z-]+$",
+  "pattern": "^[a-z-\\d]+$",
   "minLength": 5
 }
