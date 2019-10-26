@@ -66,4 +66,56 @@ router.post('/', async (req, res) => {
   res.json(permission);
 });
 
+/**
+ * @swagger
+ * definitions:
+ *   DeletePermissionRequest:
+ *     type: object
+ *     properties:
+ *       id:
+ *         type: string
+ *
+ * /permission:
+ *   delete:
+ *     description: deletes the permission and removes assigned permissions from Roles
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: role
+ *         description: id
+ *         in:  body
+ *         required: true
+ *         type: string
+ *         schema:
+ *           $ref: '#/definitions/DeletePermissionRequest'
+ *     responses:
+ *       200:
+ *         description: returns deleted roles count - 1/0
+ *       422:
+ *         description: no id provided
+ *
+ */
+router.delete('/', async (req, res) => {
+  const data = req.body;
+
+  if (!validator.mongoId(data)) {
+    logger.error('validation of permission delete request failed', validator.mongoId.errors);
+    res.status(422).json({ errors: validator.mongoId.errors });
+    return;
+  }
+
+  const { nModified } = await db.model.Role.update({}, { $pull: { permissions: data.id } }, { multi: true });
+  logger.info('roles changed', nModified);
+
+  const result = await db.model.Permission.deleteOne({ _id: data.id });
+  if (result.deletedCount) {
+    logger.info('permission, id', data.id, 'has been deleted');
+  } else {
+    logger.error('could not delete permission, id', data.id);
+  }
+  res.json({ deleted: result.deletedCount });
+});
+
 module.exports = router;

@@ -36,7 +36,7 @@ const User = mongoose.model('user', USER);
 const ROLE = new mongoose.Schema({
   name: { type: String, unique: true },
   description: String,
-  permissions: { type: [ObjectId], index: true }
+  permissions: [{ type: [ObjectId], ref: 'Permission' }]
 });
 
 ROLE.statics.create = async ({ id, name, description, permissions }) => {
@@ -72,11 +72,9 @@ PERMISSION.statics.create = async ({ id, name, description }) => {
 };
 
 PERMISSION.statics.findNotCreatedPermissions = async permissions => {
-  const notCreated = await Permission.find({ _id: { $not: { $in: permissions } } }).select({ _id: 1 });
-  if (notCreated.length) {
-    return notCreated.map(({ _id }) => _id);
-  }
-  return [];
+  const select = await Permission.find({ _id: { $in: permissions } }).select({ _id: 1 });
+  const created = select.map(({ _id }) => String(_id));
+  return permissions.filter(p => !created.includes(p));
 };
 
 const Permission = mongoose.model('permission', PERMISSION);
