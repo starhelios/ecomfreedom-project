@@ -1,10 +1,10 @@
 const express = require('express');
-// const createLogger = require('../logger');
-// const validator = require('../validator');
-// const db = require('../db');
+const createLogger = require('../logger');
+const validator = require('../validator');
+const db = require('../db');
 
 const router = express.Router();
-// const logger = createLogger('web-server.permission-route');
+const logger = createLogger('web-server.permission-route');
 
 /**
  * @swagger
@@ -18,8 +18,6 @@ const router = express.Router();
  *         type: string
  *       description:
  *         type: string
- *       rule:
- *         type: string
  *
  * /permission:
  *   post:
@@ -29,7 +27,7 @@ const router = express.Router();
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: role
+ *       - name: permission
  *         description: New Permission object
  *         in:  body
  *         required: true
@@ -47,7 +45,25 @@ const router = express.Router();
  */
 router.post('/', async (req, res) => {
   const data = req.body;
-  res.json(data);
+  if (!validator.newPermission(data)) {
+    logger.error('validation of the new permission failed', validator.newPermission.errors);
+    res.status(422).json({ errors: validator.newPermission.errors });
+    return;
+  }
+
+  if (!data.id) {
+    // new permission flow - check the name
+    const existing = await db.model.Permission.findOne({ name: data.name });
+    if (existing) {
+      logger.error('permission', data.name, 'already exists');
+      res.status(409).json({ errors: [{ dataPath: '.name', message: 'already exists' }] });
+      return;
+    }
+  }
+
+  const permission = await db.model.Permission.create(data);
+  logger.info('permission', permission.name, 'has been created/updated, id', String(permission._id));
+  res.json(permission);
 });
 
 module.exports = router;
