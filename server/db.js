@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types;
 const bcrypt = require('bcryptjs');
@@ -6,14 +7,29 @@ const config = require('./config');
 mongoose.Promise = Promise;
 mongoose.connect(config.get('db:url'), { useNewUrlParser: true });
 
-const USER = new mongoose.Schema({
-  username: { type: String, unique: true },
-  hash: String,
-  email: { type: String, index: true },
-  firstname: { type: String, index: true },
-  lastname: { type: String, index: true },
-  roles: { type: [String], index: true }
-});
+/* eslint-disable no-param-reassign */
+const DEFAULT_OPTIONS = {
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+    }
+  }
+};
+/* eslint-enable no-param-reassign */
+
+const USER = new mongoose.Schema(
+  {
+    username: { type: String, unique: true },
+    hash: String,
+    email: { type: String, index: true },
+    firstname: { type: String, index: true },
+    lastname: { type: String, index: true },
+    roles: { type: [String], index: true }
+  },
+  DEFAULT_OPTIONS
+);
 
 USER.statics.create = async ({ username, password, email, firstname, lastname, roles }) => {
   const salt = await bcrypt.genSalt(10);
@@ -33,11 +49,14 @@ USER.statics.verify = async (username, password) => {
 
 const User = mongoose.model('user', USER);
 
-const ROLE = new mongoose.Schema({
-  name: { type: String, unique: true },
-  description: String,
-  permissions: [{ type: [ObjectId], ref: 'Permission' }]
-});
+const ROLE = new mongoose.Schema(
+  {
+    name: { type: String, unique: true },
+    description: String,
+    permissions: [{ type: [ObjectId], ref: 'permission' }]
+  },
+  DEFAULT_OPTIONS
+);
 
 ROLE.statics.create = async ({ id, name, description, permissions }) => {
   let role;
@@ -54,10 +73,13 @@ ROLE.statics.create = async ({ id, name, description, permissions }) => {
 
 const Role = mongoose.model('role', ROLE);
 
-const PERMISSION = new mongoose.Schema({
-  name: { type: String, unique: true },
-  description: String
-});
+const PERMISSION = new mongoose.Schema(
+  {
+    name: { type: String, unique: true },
+    description: String
+  },
+  DEFAULT_OPTIONS
+);
 
 PERMISSION.statics.create = async ({ id, name, description }) => {
   let permission;
