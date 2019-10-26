@@ -26,10 +26,22 @@ const USER = new mongoose.Schema(
     email: { type: String, index: true },
     firstname: { type: String, index: true },
     lastname: { type: String, index: true },
-    roles: { type: [String], index: true }
+    roles: [{ type: [ObjectId], ref: 'roles' }]
   },
   DEFAULT_OPTIONS
 );
+
+// eslint-disable-next-line func-names
+USER.virtual('roleNames').get(function() {
+  // TODO lookup
+  return [];
+});
+
+// eslint-disable-next-line func-names
+USER.virtual('permissionNames').get(function() {
+  // TODO lookup
+  return [];
+});
 
 USER.statics.create = async ({ username, password, email, firstname, lastname, roles }) => {
   const salt = await bcrypt.genSalt(10);
@@ -44,7 +56,10 @@ USER.statics.verify = async (username, password) => {
   if (!user) {
     return false;
   }
-  return bcrypt.compare(password, user.hash);
+  if (await bcrypt.compare(password, user.hash)) {
+    return user;
+  }
+  return false;
 };
 
 const User = mongoose.model('user', USER);
@@ -69,6 +84,12 @@ ROLE.statics.create = async ({ id, name, description, permissions }) => {
     role = new Role({ name, description, permissions });
   }
   return role.save();
+};
+
+ROLE.statics.findNotCreatedRoles = async roles => {
+  const select = await Role.find({ _id: { $in: roles } }).select({ _id: 1 });
+  const created = select.map(({ _id }) => String(_id));
+  return roles.filter(p => !created.includes(p));
 };
 
 const Role = mongoose.model('role', ROLE);
