@@ -68,28 +68,15 @@ router.post('/', async (req, res) => {
 
 /**
  * @swagger
- * definitions:
- *   DeletePermissionRequest:
- *     type: object
- *     properties:
- *       id:
- *         type: string
- *
- * /permission:
+ * /permission/{id}:
  *   delete:
+ *     parameters:
+ *       - name: id
+ *         description: id to get
+ *         in: path
  *     description: deletes the permission and removes assigned permissions from Roles
- *     consumes:
- *       - application/json
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: role
- *         description: id
- *         in:  body
- *         required: true
- *         type: string
- *         schema:
- *           $ref: '#/definitions/DeletePermissionRequest'
  *     responses:
  *       200:
  *         description: returns deleted roles count - 1/0
@@ -97,8 +84,8 @@ router.post('/', async (req, res) => {
  *         description: no id provided
  *
  */
-router.delete('/', async (req, res) => {
-  const data = req.body;
+router.delete('/:id', async (req, res) => {
+  const data = req.params;
 
   if (!validator.mongoId(data)) {
     logger.error('validation of permission delete request failed', validator.mongoId.errors);
@@ -116,6 +103,55 @@ router.delete('/', async (req, res) => {
     logger.error('could not delete permission, id', data.id);
   }
   res.json({ deleted: result.deletedCount });
+});
+
+/**
+ * @swagger
+ * /permission:
+ *   get:
+ *     description: Get all the permissions
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns permissions
+ *
+ */
+router.get('/', async (req, res) => {
+  // TODO pagination
+  const result = await db.model.Permission.find();
+  res.json(result);
+});
+
+/**
+ * @swagger
+ * /permission/{id}:
+ *   get:
+ *     parameters:
+ *       - name: id
+ *         description: id to get
+ *         in: path
+ *     description: Get the permission object
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns permission object or null if not found
+ *       422:
+ *         description: id is wrong
+ *
+ */
+router.get('/:id', async (req, res) => {
+  const { params } = req;
+
+  if (!validator.mongoId(params)) {
+    logger.error('validation of role delete request failed', validator.mongoId.errors);
+    res.status(422).json({ errors: validator.mongoId.errors });
+    return;
+  }
+
+  const result = await db.model.Role.findById(params.id).populate('permissions');
+  res.json(result);
 });
 
 module.exports = router;
