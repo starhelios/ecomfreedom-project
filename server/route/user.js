@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
   const user = await db.model.User.verify(username, password);
   if (user) {
     logger.info('user', username, 'authenticated successfully, creating tokens');
-    const userData = { username, roles: user.roleNames, permissions: user.permissionNames };
+    const userData = { username, roles: await user.roleNames, permissions: await user.permissionNames };
     const token = jwt.sign(userData, SECRET, {
       expiresIn: config.get('web-app:token-expires-in')
     });
