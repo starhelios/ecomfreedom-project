@@ -26,21 +26,26 @@ const USER = new mongoose.Schema(
     email: { type: String, index: true },
     firstname: { type: String, index: true },
     lastname: { type: String, index: true },
-    roles: [{ type: [ObjectId], ref: 'roles' }]
+    roles: [{ type: [ObjectId], ref: 'role' }]
   },
   DEFAULT_OPTIONS
 );
 
 // eslint-disable-next-line func-names
-USER.virtual('roleNames').get(function() {
-  // TODO lookup
-  return [];
+USER.virtual('roleNames').get(async function() {
+  const roles = await Role.find({ _id: { $in: this.roles } }).select({ name: 1 });
+  return roles.map(({ name }) => name);
 });
 
 // eslint-disable-next-line func-names
-USER.virtual('permissionNames').get(function() {
-  // TODO lookup
-  return [];
+USER.virtual('permissionNames').get(async function() {
+  const roles = await Role.find({ _id: { $in: this.roles } })
+    .populate('permissions')
+    .select({ permissions: 1 });
+  const r = new Set();
+  // eslint-disable-next-line no-return-assign
+  roles.forEach(({ permissions }) => permissions.forEach(({ name }) => r.add(name)));
+  return Array.from(r);
 });
 
 USER.statics.create = async ({ username, password, email, firstname, lastname, roles }) => {
