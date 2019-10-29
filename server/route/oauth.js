@@ -72,7 +72,7 @@ router.post('/token', async (req, res) => {
 
   let user;
   if (grantType === GRANT_TYPE.PASSWORD) {
-    logger.info('grant type password');
+    logger.info('grant type: password');
     const { username, password } = req.body;
     user = await db.model.User.verify(username, password);
     if (!user) {
@@ -81,6 +81,7 @@ router.post('/token', async (req, res) => {
     }
     logger.info('user', user.username, 'authenticated successfully, creating tokens');
   } else if (grantType === GRANT_TYPE.REFRESH_TOKEN) {
+    logger.info('grant type: refresh token');
     try {
       const userData = jwt.verify(req.body.refresh_token, SECRET);
       if (userData.refreshToken !== 1) {
