@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "web server configuration schema",
   "type": "object",
-  "required": ["mongo", "web-app"],
+  "required": ["mongo", "web-app", "base-path"],
   "additionalProperties": false,
   "properties": {
     "$schema": {
@@ -52,6 +52,10 @@
         }
       },
       "required": ["port", "secret"]
+    },
+    "base-path": {
+      "type": "string",
+      "pattern": "^/v\\d+/[a-z-]+$"
     }
   }
 }
