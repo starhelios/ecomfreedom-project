@@ -6,20 +6,23 @@ import * as types from 'constants/actionTypes';
 // and instructing the redux-saga middle ware on the next line of action,
 // for success or failure operation.
 /* eslint-disable no-use-before-define */
-export default function* watchLoginListener() {
-  yield takeLatest(types.LOGIN_REQUEST, signInRequestSaga);
+export default function* watchAuthListener(context = {}) {
+  yield takeLatest(types.LOGIN_REQUEST, signInRequestSaga, context);
   yield takeLatest(types.FORGOT_PASSWORD_REQUEST, forgotPasswordRequestSaga);
   yield takeLatest(types.RESET_PASSWORD_REQUEST, resetPasswordRequestSaga);
   yield takeLatest(types.UPDATE_USER_REQUEST, updateUserSaga);
-  yield takeLatest(types.SIGN_UP_REQUEST, signUpRequestSaga);
+  yield takeLatest(types.SIGN_UP_REQUEST, signUpRequestSaga, context);
 }
 
-export function* signInRequestSaga({ payload }) {
+export function* signInRequestSaga({ history }, { payload }) {
   try {
     const res = yield call(signInRequest, payload);
     yield [
       put({ type: types.LOGIN_SUCCESS, res }),
     ];
+    if (history) {
+      history.push('/');
+    }
   } catch (error) {
     yield put({ type: types.LOGIN_FAILED, error });
   }
@@ -75,10 +78,13 @@ export function* updateUserSaga({ payload }) {
   }
 }
 
-export function* signUpRequestSaga({ payload }) {
+export function* signUpRequestSaga({ history }, { payload }) {
   try {
     const res = yield call(signUpRequest, payload);
     yield put({ type: types.SIGN_UP_SUCCESS, res });
+    if (history) {
+      history.push('/');
+    }
   } catch (error) {
     yield put({ type: types.SIGN_UP_FAILED, error });
   }

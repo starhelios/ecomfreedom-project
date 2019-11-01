@@ -18,11 +18,11 @@ export const setUserAction = res => ({
   res,
 });
 
-export const signInAction = (email, pass) => ({
+export const signInAction = (email, password) => ({
   type: LOGIN_REQUEST,
   payload: {
     email,
-    pass,
+    password,
   },
 });
 

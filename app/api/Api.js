@@ -21,10 +21,10 @@ export const signInRequest = (payload) => {
   console.log('payload', payload);
 
   return axios.post(`${API_ENDPOINT_URL}/oauth/token`, {
-    email: payload.email,
+    username: payload.email,
     password: payload.password,
-    client_id: '',
-    grant_type: ''
+    client_id: 'qwerty',
+    grant_type: 'password'
   }).then((res) => {
     console.log('res', res);
     if (res.data.user) {
