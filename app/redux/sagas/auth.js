@@ -78,9 +78,7 @@ export function* updateUserSaga({ payload }) {
 export function* signUpRequestSaga({ payload }) {
   try {
     const res = yield call(signUpRequest, payload);
-    yield [
-      put({ type: types.SIGN_UP_SUCCESS, res }),
-    ];
+    yield put({ type: types.SIGN_UP_SUCCESS, res });
   } catch (error) {
     yield put({ type: types.SIGN_UP_FAILED, error });
   }
