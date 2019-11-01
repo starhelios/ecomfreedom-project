@@ -28,17 +28,21 @@ const GRANT_TYPE = {
  *     properties:
  *       grant_type:
  *         type: string
- *         description: we support only "password"
+ *         enum: [password, refresh_token]
+ *         description: login - password, refresh_token on refresh
  *       client_id:
  *         type: string
  *         description: sent client id, for instance "WEB-APP"
  *       username:
  *         type: string
+ *         description: required when grant_type="password"
  *       password:
  *         type: string
  *         format: password
+ *         description: required when grant_type="password"
  *       refresh_token:
  *         type: string
+ *         description: required when grant_type="refresh_token"
  *
  * /oauth/token:
  *   post:
