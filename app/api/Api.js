@@ -40,17 +40,19 @@ export const signInRequest = (payload) => {
   }).catch(err => ({ success: false, reason: err.response.data.message }));
 };
 
-export const signUpRequest = payload => axios.post(`${API_ENDPOINT_URL}/auth/signup`, {
+export const signUpRequest = payload => axios.post(`${API_ENDPOINT_URL}/user`, {
   email: payload.email,
-  password: payload.password_2,
-  first_name: payload.first_name,
-  last_name: payload.last_name,
-  // username: payload.username
+  password: payload.password,
+  username: payload.email,
+  firstname: payload.firstname,
+  lastname: payload.lastname,
+  roles: payload.roles,
 }).then((res) => {
-  if (res.data.user) {
-    setAccessToken(res.data.token);
-    setUserID(res.data.user.id);
-    setUser(res.data.user);
+  console.log('signUpRequest res', res)
+  if (res.data._id) {
+    // setAccessToken(res.data.token);
+    // setUserID(res.data.user.id);
+    // setUser(res.data.user);
     return { success: true };
   }
   return { success: false, reason: res.message };

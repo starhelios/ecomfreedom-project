@@ -1,5 +1,5 @@
 import {
-  SIGN_IN_REQUEST,
+  LOGIN_REQUEST,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
   SIGN_UP_REQUEST,
@@ -19,16 +19,11 @@ export const setUserAction = res => ({
 });
 
 export const signInAction = (email, pass) => ({
-  type: SIGN_IN_REQUEST,
+  type: LOGIN_REQUEST,
   payload: {
     email,
     pass,
   },
-});
-
-export const facebookAction = payload => ({
-  type: FACEBOOK_REQUEST,
-  payload,
 });
 
 export const getUserAction = email => ({
