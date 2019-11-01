@@ -39,7 +39,7 @@ export default function (state = initialState, action) {
         },
       };
 
-    case types.SIGN_IN_SUCCESS:
+    case types.LOGIN_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -64,7 +64,7 @@ export default function (state = initialState, action) {
           userStatus: true,
         },
       };
-    case types.SIGN_IN_FAILED:
+    case types.LOGIN_FAILED:
       return {
         ...state,
         login: {
@@ -164,14 +164,6 @@ export default function (state = initialState, action) {
         error: 'Bad Request',
       };
 
-    // Requests for getting user data
-    // case types.GET_USER_REQUEST:
-    //   return {
-    //     ...state,
-    //       status: false,
-    //       error: false,
-    //       user: {}
-    //   };
     case types.GET_USER_SUCCESS:
       if (!action.res.success) {
         return {
@@ -198,13 +190,8 @@ export default function (state = initialState, action) {
           error: 'Bad Request',
         },
       };
-    case types.SIGN_UP_REQUEST:
-      return {
-        ...state,
-        status: false,
-        error: null,
-      };
     case types.SIGN_UP_SUCCESS:
+      console.log('SIGN_UP_SUCCESS reducer', action.res)
       if (!action.res.success) {
         return {
           ...state,
