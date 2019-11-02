@@ -84,10 +84,10 @@ router.post('/', async (req, res) => {
     return;
   }
 
-  const notCreatedRoles = await db.model.Role.findNotCreatedRoles(data.roles);
-  if (notCreatedRoles.length) {
-    logger.error('roles', notCreatedRoles, 'have not been created yet');
-    res.status(409).json({ errors: [{ dataPath: '.roles', message: `not created, ids: ${notCreatedRoles}` }] });
+  const allCreated = await db.model.Role.isCreated(data.roles);
+  if (!allCreated) {
+    logger.error('not all roles from', data.roles, 'have not been created yet');
+    res.status(409).json({ errors: [{ dataPath: '.roles', message: `not created: ${data.roles}` }] });
     return;
   }
 
