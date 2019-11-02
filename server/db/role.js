@@ -33,9 +33,13 @@ ROLE.statics.create = async ({ id, name, description, permissions }) => {
   return role.save();
 };
 
+ROLE.statics.mapToId = async roles => {
+  const select = await Role.find({ $or: [{ _id: { $in: roles } }, { name: { $in: roles } }] }).select({ _id: 1 });
+  return select.map(({ _id }) => String(_id));
+};
+
 ROLE.statics.findNotCreatedRoles = async roles => {
-  const select = await Role.find({ _id: { $in: roles } }).select({ _id: 1 });
-  const created = select.map(({ _id }) => String(_id));
+  const created = await Role.mapToId(roles);
   return roles.filter(p => !created.includes(p));
 };
 
