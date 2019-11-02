@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import LoginForm from 'components/LoginForm';
@@ -55,7 +56,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
+export default withRouter(connect(
   null,
   mapDispatchToProps
-)(withStyles(styles)(LoginPage));
+)(withStyles(styles)(LoginPage)));
