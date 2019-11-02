@@ -113,10 +113,8 @@ router.post('/:role/permission/:permission', async (req, res) => {
     return;
   }
 
-  const [roleId] = await db.model.Role.mapToId([data.role]);
-
-  const exists = await db.model.Role.count({ _id: roleId });
-  if (!exists) {
+  const roleId = await db.model.Role.mapOneToId(data.role);
+  if (!roleId) {
     logger.error('role not found, id/name', data.role);
     res.status(422).json({ errors: [{ dataPath: '.id', message: 'role not found for provided id' }] });
     return;
@@ -157,15 +155,14 @@ router.delete('/:role/permission/:permission', async (req, res) => {
   }
 
   const roleId = await db.model.Role.mapOneToId(data.role);
-  const exists = await db.model.Role.count({ _id: roleId });
-  if (!exists) {
+  if (!roleId) {
     logger.error('role not found, id/name', data.role);
     res.status(422).json({ errors: [{ dataPath: '.id', message: 'role not found for provided id' }] });
     return;
   }
 
   const permissionId = await db.model.Permission.mapOneToId(data.permission);
-  const { nModified } = await db.model.Role.updateOne({ _id: data.id }, { $pull: { permissions: permissionId } });
+  const { nModified } = await db.model.Role.updateOne({ _id: roleId }, { $pull: { permissions: permissionId } });
 
   logger.info('roles modified', nModified);
   return res.json({ modified: nModified });
