@@ -132,10 +132,9 @@ router.delete('/:name', async (req, res) => {
  *
  */
 router.get('/', paginated, async (req, res) => {
-  const { pageNumber, pageSize } = req.query;
   const result = await db.model.Permission.find()
-    .limit(pageSize)
-    .skip(pageNumber * pageSize);
+    .limit(req.page.size)
+    .skip(req.page.number * req.page.number);
   res.json(result);
 });
 

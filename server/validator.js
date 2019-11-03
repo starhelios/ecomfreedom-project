@@ -13,6 +13,7 @@ const assignPermissionSchema = readJson('schema', 'assign-permission.schema.json
 const tokenRequestSchema = readJson('schema', 'token-request.schema.json');
 const pageRequestSchema = readJson('schema', 'page-request.schema.json');
 const assignFilterSchema = readJson('schema', 'assign-filter.schema.json');
+const filtersSchema = readJson('schema', 'filters.schema.json');
 
 const name = ajv.compile(nameRequestSchema);
 const newUser = ajv.compile(newUserSchema);
@@ -22,6 +23,7 @@ const assignPermission = ajv.compile(assignPermissionSchema);
 const tokenRequest = ajv.compile(tokenRequestSchema);
 const pageRequest = ajv.compile(pageRequestSchema);
 const assignFilter = ajv.compile(assignFilterSchema);
+const filters = ajv.compile(filtersSchema);
 
 module.exports = {
   newUser,
@@ -31,5 +33,6 @@ module.exports = {
   assignPermission,
   tokenRequest,
   pageRequest,
-  assignFilter
+  assignFilter,
+  filters
 };

@@ -4,6 +4,7 @@ const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
 const paginated = require('../middleware/page-request');
+const filtered = require('../middleware/filter');
 
 const router = express.Router();
 // const SECRET = config.get('web-app:secret');
@@ -111,6 +112,15 @@ router.post('/', async (req, res) => {
  *         in: query
  *         required: true
  *         default: 10
+ *       - name: last-login-after
+ *         in: query
+ *         default: 1
+ *       - name: last-login-before
+ *         in: query
+ *         default: 2000000000000
+ *       - name: login-count-greater-than
+ *         in: query
+ *         default: 1
  *     description: Get users
  *     produces:
  *       - application/json
@@ -119,11 +129,10 @@ router.post('/', async (req, res) => {
  *         description: returns users
  *
  */
-router.get('/', paginated, async (req, res) => {
-  const { pageNumber, pageSize } = req.query;
-  const result = await db.model.User.find()
-    .limit(pageSize)
-    .skip(pageNumber * pageSize)
+router.get('/', paginated, filtered, async (req, res) => {
+  const result = await db.model.User.find(req.filter)
+    .limit(req.page.size)
+    .skip(req.page.number * req.page.number)
     .populate({ path: 'roles', populate: { path: 'permissions', model: 'permission' } });
   res.json(result);
 });
