@@ -43,6 +43,8 @@ module.exports = {
     ],
     'jsx-a11y/aria-props': 2,
     'jsx-a11y/heading-has-content': 0,
+    'jsx-a11y/no-static-element-interactions': 0,
+    'jsx-a11y/click-events-have-key-events': 0,
     'jsx-a11y/label-has-associated-control': [
       2,
       {
