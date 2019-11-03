@@ -11,7 +11,10 @@ const USER = new mongoose.Schema(
     email: { type: String, unique: true },
     firstname: { type: String, index: true },
     lastname: { type: String, index: true },
-    roles: [{ type: ObjectId, ref: 'role' }]
+    roles: [{ type: ObjectId, ref: 'role' }],
+    loginCount: { type: Number, default: 0 },
+    loginLast: { type: Date, default: null },
+    created: { type: Date, default: null }
   },
   DEFAULT_OPTIONS
 );
@@ -40,7 +43,8 @@ USER.statics.create = async ({ username, password, email, firstname, lastname, r
 
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
-  const user = new User({ username, hash, email, firstname, lastname, roles });
+  const created = new Date();
+  const user = new User({ username, hash, email, firstname, lastname, roles, created });
   await user.save();
   return user;
 };
@@ -70,6 +74,13 @@ USER.statics.verify = async (email, password) => {
     return user;
   }
   return false;
+};
+
+// eslint-disable-next-line func-names
+USER.methods.updateLoginStats = async function() {
+  this.loginLast = new Date();
+  ++this.loginCount;
+  await this.save();
 };
 
 const User = mongoose.model('user', USER);
