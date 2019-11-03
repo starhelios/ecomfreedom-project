@@ -11,8 +11,9 @@ import '@babel/polyfill';
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+// import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
 import { ThemeProvider, createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
@@ -46,9 +47,9 @@ const render = () => {
   ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <BrowserRouter history={history}>
           <App />
-        </ConnectedRouter>
+        </BrowserRouter>
       </Provider>
     </ThemeProvider>,
     MOUNT_NODE
