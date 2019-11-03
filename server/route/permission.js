@@ -118,9 +118,11 @@ router.delete('/:name', async (req, res) => {
  *       - name: pageNumber
  *         in: query
  *         required: true
+ *         default: 0
  *       - name: pageSize
  *         in: query
  *         required: true
+ *         default: 10
  *     description: Get all the permissions
  *     produces:
  *       - application/json
@@ -130,10 +132,9 @@ router.delete('/:name', async (req, res) => {
  *
  */
 router.get('/', paginated, async (req, res) => {
-  const { pageNumber, pageSize } = req.query;
   const result = await db.model.Permission.find()
-    .limit(pageSize)
-    .skip(pageNumber * pageSize);
+    .limit(req.page.limit)
+    .skip(req.page.skip);
   res.json(result);
 });
 

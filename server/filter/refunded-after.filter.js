@@ -1,6 +1,6 @@
 module.exports = {
   label: 'Refunded after',
   filter(/* date */) {
-    return [];
+    return false;
   }
 };
