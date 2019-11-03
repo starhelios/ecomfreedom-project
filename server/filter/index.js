@@ -17,8 +17,11 @@ fs.readdirSync(__dirname)
   });
 
 module.exports = {
-  exist(name) {
-    return name.every(n => filters.some(f => f.name === n));
+  exist(names) {
+    return names.every(n => filters.some(f => f.name === n));
+  },
+  findFilters(names) {
+    return filters.filter(f => names.includes(f.name));
   },
   filters
 };
