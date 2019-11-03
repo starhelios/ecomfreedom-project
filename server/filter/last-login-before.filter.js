@@ -1,6 +1,6 @@
 module.exports = {
   label: 'Last login before',
   filter(date) {
-    return [{ $match: { lastLogin: { $lte: date } } }];
+    return { loginLast: { $lt: new Date(Number(date)) } };
   }
 };
