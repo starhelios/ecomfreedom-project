@@ -15,11 +15,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import history from 'utils/history';
 import 'sanitize.css/sanitize.css';
-import {
-  ThemeProvider,
-  createMuiTheme,
-  responsiveFontSizes,
-} from '@material-ui/core/styles';
+import { ThemeProvider, createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import grey from '@material-ui/core/colors/grey';
 
@@ -41,7 +37,7 @@ const MOUNT_NODE = document.getElementById('app');
 let theme = createMuiTheme({
   palette: {
     primary: blue,
-    secondary: grey,
+    secondary: grey
   }
 });
 theme = responsiveFontSizes(theme);
@@ -55,7 +51,7 @@ const render = () => {
         </ConnectedRouter>
       </Provider>
     </ThemeProvider>,
-    MOUNT_NODE,
+    MOUNT_NODE
   );
 };
 
