@@ -80,7 +80,8 @@ module.exports = {
     'require-yield': 0,
     'no-underscore-dangle':0,
     'consistent-return': 0,
-    'no-param-reassign': "off"
+    'no-param-reassign': "off",
+    "no-plusplus": "off"
   },
   settings: {
     'import/resolver': {

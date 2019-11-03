@@ -16,4 +16,12 @@ fs.readdirSync(__dirname)
     });
   });
 
-module.exports = filters;
+module.exports = {
+  exist(names) {
+    return names.every(n => filters.some(f => f.name === n));
+  },
+  findFilters(names) {
+    return filters.filter(f => names.includes(f.name));
+  },
+  filters
+};

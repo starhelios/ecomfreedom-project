@@ -88,6 +88,7 @@ router.post('/token', async (req, res) => {
       logger.error('username/password are wrong');
       return res.status(401).end();
     }
+    await user.updateLoginStats();
     logger.info('user', user.email, 'authenticated successfully, creating tokens');
   } else if (grantType === GRANT_TYPE.REFRESH_TOKEN) {
     logger.info('grant type: refresh token');

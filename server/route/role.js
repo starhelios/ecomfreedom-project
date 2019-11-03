@@ -3,6 +3,7 @@ const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
 const paginated = require('../middleware/page-request');
+const filter = require('../filter');
 
 const router = express.Router();
 const logger = createLogger('web-server.role-route');
@@ -214,9 +215,11 @@ router.delete('/:name', async (req, res) => {
  *       - name: pageNumber
  *         in: query
  *         required: true
+ *         default: 0
  *       - name: pageSize
  *         in: query
  *         required: true
+ *         default: 10
  *     description: Get all the roles with assigned permissionss
  *     produces:
  *       - application/json
@@ -226,10 +229,9 @@ router.delete('/:name', async (req, res) => {
  *
  */
 router.get('/', paginated, async (req, res) => {
-  const { pageNumber, pageSize } = req.query;
   const result = await db.model.Role.find()
-    .limit(pageSize)
-    .skip(pageNumber * pageSize)
+    .limit(req.page.limit)
+    .skip(req.page.skip)
     .populate('permissions');
   res.json(result);
 });
@@ -264,6 +266,63 @@ router.get('/:name', async (req, res) => {
   const roleId = await db.model.Role.mapOneToId(params.name);
   const result = await db.model.Role.findById(roleId).populate('permissions');
   res.json(result);
+});
+
+/**
+ * @swagger
+ * /role/{role}/filter:
+ *   post:
+ *     parameters:
+ *       - name: role
+ *         description: id or name of role to set filters
+ *         in:  path
+ *         default: admin
+ *       - name: filters array
+ *         description: array of string with filter names
+ *         in:  body
+ *         required: true
+ *         type: array
+ *         items:
+ *           type: string
+ *           example: completed-course
+ *     description: adds filters for the role
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns role object or null if not found
+ *       409:
+ *         description: filters do not exist
+ *       422:
+ *         description: id or name is wrong
+ *
+ */
+
+router.post('/:role/filter', async (req, res) => {
+  const {
+    params: { role },
+    body: filters
+  } = req;
+
+  if (!validator.assignFilter({ role, filters })) {
+    logger.error('validation of assign filter request failed', validator.assignFilter.errors);
+    res.status(422).json({ errors: validator.assignFilter.errors });
+    return;
+  }
+
+  if (!filter.exist(filters)) {
+    logger.error('validation of filter name failed');
+    res.status(409).json({ errors: [{ dataPath: '.filters', message: 'some of filters do not exist' }] });
+    return;
+  }
+
+  const roleId = await db.model.Role.mapOneToId(role);
+  const { nModified } = await db.model.Role.updateOne({ _id: roleId }, { filters });
+
+  logger.info('roles modified', nModified);
+  return res.json({ modified: nModified });
 });
 
 module.exports = router;
