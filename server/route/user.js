@@ -106,11 +106,11 @@ router.post('/', async (req, res) => {
  *       - name: pageNumber
  *         in: query
  *         required: true
- *         example: 0
+ *         default: 0
  *       - name: pageSize
  *         in: query
  *         required: true
- *         example: 10
+ *         default: 10
  *     description: Get users
  *     produces:
  *       - application/json

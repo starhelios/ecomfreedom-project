@@ -16,4 +16,9 @@ fs.readdirSync(__dirname)
     });
   });
 
-module.exports = filters;
+module.exports = {
+  exist(name) {
+    return name.every(n => filters.some(f => f.name === n));
+  },
+  filters
+};

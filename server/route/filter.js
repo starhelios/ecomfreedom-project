@@ -16,7 +16,7 @@ const router = express.Router();
  *
  */
 router.get('/', (req, res) => {
-  res.json(filter);
+  res.json(filter.filters);
 });
 
 module.exports = router;
