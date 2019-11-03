@@ -121,6 +121,12 @@ router.post('/', async (req, res) => {
  *       - name: login-count-greater-than
  *         in: query
  *         default: 1
+ *       - name: signed-up-after
+ *         in: query
+ *         default: 1
+ *       - name: signed-up-before
+ *         in: query
+ *         default: 1
  *     description: Get users
  *     produces:
  *       - application/json
