@@ -1,6 +1,6 @@
 module.exports = {
   label: 'Signed up before',
   filter(date) {
-    return [{ $match: { signed: { $lte: date } } }];
+    return { created: { $lt: new Date(Number(date)) } };
   }
 };

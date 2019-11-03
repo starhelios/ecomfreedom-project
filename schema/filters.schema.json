@@ -15,6 +15,14 @@
     "login-count-greater-than": {
       "type": "string",
       "pattern": "^\\d+$"
+    },
+    "signed-up-after": {
+      "type": "string",
+      "pattern": "^\\d+$"
+    },
+    "signed-up-before": {
+      "type": "string",
+      "pattern": "^\\d+$"
     }
   }
 }
