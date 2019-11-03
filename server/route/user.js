@@ -1,9 +1,9 @@
 const express = require('express');
-// const jwt = require('jsonwebtoken');
 // const config = require('../config');
 const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
+const paginated = require('../middleware/page-request');
 
 const router = express.Router();
 // const SECRET = config.get('web-app:secret');
@@ -95,6 +95,36 @@ router.post('/', async (req, res) => {
   const user = await db.model.User.create(data);
   logger.info('user', user.username, 'has been created, id', String(user._id));
   res.json({ username: user.user, _id: user._id });
+});
+
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     parameters:
+ *       - name: pageNumber
+ *         in: query
+ *         required: true
+ *         example: 0
+ *       - name: pageSize
+ *         in: query
+ *         required: true
+ *         example: 10
+ *     description: Get users
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: returns users
+ *
+ */
+router.get('/', paginated, async (req, res) => {
+  const { pageNumber, pageSize } = req.query;
+  const result = await db.model.User.find()
+    .limit(pageSize)
+    .skip(pageNumber * pageSize)
+    .populate({ path: 'roles', populate: { path: 'permissions', model: 'permission' } });
+  res.json(result);
 });
 
 module.exports = router;

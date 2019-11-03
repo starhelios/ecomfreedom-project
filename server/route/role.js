@@ -2,6 +2,7 @@ const express = require('express');
 const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
+const paginated = require('../middleware/page-request');
 
 const router = express.Router();
 const logger = createLogger('web-server.role-route');
@@ -209,6 +210,13 @@ router.delete('/:name', async (req, res) => {
  * @swagger
  * /role:
  *   get:
+ *     parameters:
+ *       - name: pageNumber
+ *         in: query
+ *         required: true
+ *       - name: pageSize
+ *         in: query
+ *         required: true
  *     description: Get all the roles with assigned permissionss
  *     produces:
  *       - application/json
@@ -217,9 +225,12 @@ router.delete('/:name', async (req, res) => {
  *         description: returns roles
  *
  */
-router.get('/', async (req, res) => {
-  // TODO pagination
-  const result = await db.model.Role.find().populate('permissions');
+router.get('/', paginated, async (req, res) => {
+  const { pageNumber, pageSize } = req.query;
+  const result = await db.model.Role.find()
+    .limit(pageSize)
+    .skip(pageNumber * pageSize)
+    .populate('permissions');
   res.json(result);
 });
 
