@@ -15,11 +15,8 @@ const logger = createLogger('web-server.user-route');
  *   NewUser:
  *     type: object
  *     required:
- *       - username
  *       - password
  *       - email
- *       - firstname
- *       - lastname
  *     properties:
  *       username:
  *         type: string
@@ -77,11 +74,15 @@ router.post('/', async (req, res) => {
     return;
   }
 
-  const existing = await db.model.User.findOne({ username: data.username });
+  const existing = await db.model.User.findOne({ email: data.email });
   if (existing) {
-    logger.error('user', data.username, 'already exists');
-    res.status(409).json({ errors: [{ dataPath: '.username', message: 'already exists' }] });
+    logger.error('user', data.email, 'already exists');
+    res.status(409).json({ errors: [{ dataPath: '.email', message: 'already exists' }] });
     return;
+  }
+
+  if (!data.roles) {
+    data.roles = ['user'];
   }
 
   const allCreated = await db.model.Role.isCreated(data.roles);
@@ -93,8 +94,8 @@ router.post('/', async (req, res) => {
 
   data.roles = await db.model.Role.mapToId(data.roles);
   const user = await db.model.User.create(data);
-  logger.info('user', user.username, 'has been created, id', String(user._id));
-  res.json({ username: user.user, _id: user._id });
+  logger.info('user', user.email, 'has been created, id', String(user._id));
+  res.json({ email: user.email, _id: user._id });
 });
 
 /**
