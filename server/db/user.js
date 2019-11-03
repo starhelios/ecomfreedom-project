@@ -11,7 +11,7 @@ const USER = new mongoose.Schema(
     email: { type: String, unique: true },
     firstname: { type: String, index: true },
     lastname: { type: String, index: true },
-    roles: [{ type: [ObjectId], ref: 'role' }]
+    roles: [{ type: ObjectId, ref: 'role' }]
   },
   DEFAULT_OPTIONS
 );
