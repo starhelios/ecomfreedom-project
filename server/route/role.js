@@ -230,8 +230,8 @@ router.delete('/:name', async (req, res) => {
  */
 router.get('/', paginated, async (req, res) => {
   const result = await db.model.Role.find()
-    .limit(req.page.size)
-    .skip(req.page.number * req.page.number)
+    .limit(req.page.limit)
+    .skip(req.page.skip)
     .populate('permissions');
   res.json(result);
 });

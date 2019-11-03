@@ -9,7 +9,9 @@ module.exports = async (req, res, next) => {
   }
 
   req.query = fields;
-  req.page = { number: Number(pageNumber), size: Number(pageSize) };
+  const n = Number(pageNumber);
+  const s = Number(pageSize);
+  req.page = { limit: s, skip: s * n };
 
   next();
 };
