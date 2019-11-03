@@ -131,8 +131,8 @@ router.post('/', async (req, res) => {
  */
 router.get('/', paginated, filtered, async (req, res) => {
   const result = await db.model.User.find(req.filter)
-    .limit(req.page.size)
-    .skip(req.page.number * req.page.number)
+    .limit(req.page.limit)
+    .skip(req.page.skip)
     .populate({ path: 'roles', populate: { path: 'permissions', model: 'permission' } });
   res.json(result);
 });
