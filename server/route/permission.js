@@ -2,6 +2,7 @@ const express = require('express');
 const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
+const paginated = require('../middleware/page-request');
 
 const router = express.Router();
 const logger = createLogger('web-server.permission-route');
@@ -113,6 +114,13 @@ router.delete('/:name', async (req, res) => {
  * @swagger
  * /permission:
  *   get:
+ *     parameters:
+ *       - name: pageNumber
+ *         in: query
+ *         required: true
+ *       - name: pageSize
+ *         in: query
+ *         required: true
  *     description: Get all the permissions
  *     produces:
  *       - application/json
@@ -121,9 +129,11 @@ router.delete('/:name', async (req, res) => {
  *         description: returns permissions
  *
  */
-router.get('/', async (req, res) => {
-  // TODO pagination
-  const result = await db.model.Permission.find();
+router.get('/', paginated, async (req, res) => {
+  const { pageNumber, pageSize } = req.query;
+  const result = await db.model.Permission.find()
+    .limit(pageSize)
+    .skip(pageNumber * pageSize);
   res.json(result);
 });
 
