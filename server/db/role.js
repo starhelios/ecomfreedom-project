@@ -6,7 +6,8 @@ const ROLE = new mongoose.Schema(
   {
     name: { type: String, unique: true },
     description: String,
-    permissions: [{ type: [ObjectId], ref: 'permission' }]
+    permissions: [{ type: ObjectId, ref: 'permission' }],
+    filters: [String]
   },
   DEFAULT_OPTIONS
 );
@@ -26,7 +27,9 @@ ROLE.statics.create = async ({ id, name, description, permissions }) => {
     role = await Role.findById(id);
     role.name = name;
     role.description = description;
-    role.permissions = permissions;
+    if (permissions) {
+      role.permissions = permissions;
+    }
   } else {
     role = new Role({ name, description, permissions });
   }

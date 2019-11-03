@@ -118,9 +118,11 @@ router.delete('/:name', async (req, res) => {
  *       - name: pageNumber
  *         in: query
  *         required: true
+ *         default: 0
  *       - name: pageSize
  *         in: query
  *         required: true
+ *         default: 10
  *     description: Get all the permissions
  *     produces:
  *       - application/json
