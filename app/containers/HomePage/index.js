@@ -9,16 +9,16 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import Button from '@material-ui/core/Button';
-import { push } from 'connected-react-router';
 import routes from 'constants/routes.json';
 
-export function HomePage({ pusher }) {
+export function HomePage({ history }) {
   return (
     <div style={{ textAlign: 'center' }}>
       <h1>Ecom Freedom Homepage</h1>
-      <Button variant="contained" color="primary" onClick={() => pusher(routes.LOGIN)}>
+      <Button variant="contained" color="primary" onClick={() => history.push(routes.LOGIN)}>
         Login
       </Button>
     </div>
@@ -26,17 +26,15 @@ export function HomePage({ pusher }) {
 }
 
 HomePage.propTypes = {
-  pusher: PropTypes.func
+  history: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({});
 
-const withConnect = connect(
-  mapStateToProps,
-  { pusher: push }
-);
+const withConnect = connect(mapStateToProps);
 
 export default compose(
   withConnect,
+  withRouter,
   memo
 )(HomePage);
