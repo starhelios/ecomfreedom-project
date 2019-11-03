@@ -8,7 +8,7 @@ const USER = new mongoose.Schema(
   {
     username: { type: String, unique: true },
     hash: String,
-    email: { type: String, index: true },
+    email: { type: String, unique: true },
     firstname: { type: String, index: true },
     lastname: { type: String, index: true },
     roles: [{ type: [ObjectId], ref: 'role' }]
@@ -34,6 +34,10 @@ USER.virtual('permissionNames').get(async function() {
 });
 
 USER.statics.create = async ({ username, password, email, firstname, lastname, roles }) => {
+  if (!username) {
+    username = email;
+  }
+
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
   const user = new User({ username, hash, email, firstname, lastname, roles });
@@ -49,8 +53,16 @@ USER.statics.verifyUsername = async username => {
   return user;
 };
 
-USER.statics.verify = async (username, password) => {
-  const user = await User.findOne({ username });
+USER.statics.verifyEmail = async email => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    return false;
+  }
+  return user;
+};
+
+USER.statics.verify = async (email, password) => {
+  const user = await User.findOne({ email });
   if (!user) {
     return false;
   }
