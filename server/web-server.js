@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
-const { Role, Permission } = require('./authorizer');
+const { Role, Permission } = require('./middleware/authorizer');
 
 const userRoute = require('./route/user');
 const roleRoute = require('./route/role');
