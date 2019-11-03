@@ -17,7 +17,7 @@ import routes from 'constants/routes.json';
 export function HomePage({ history }) {
   return (
     <div style={{ textAlign: 'center' }}>
-      <h1>Ecom Freedom Homepage</h1>
+      <h1>Ecom Freedom Homepage test</h1>
       <Button variant="contained" color="primary" onClick={() => history.push(routes.LOGIN)}>
         Login
       </Button>
