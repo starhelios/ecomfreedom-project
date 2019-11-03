@@ -4,10 +4,8 @@ module.exports = {
     const re = new RegExp(inclusion);
     return [
       {
-        $match: {
-          $not: {
-            $or: [{ firstname: re }, { lastname: re }, { email: re }]
-          }
+        $not: {
+          $or: [{ firstname: re }, { lastname: re }, { email: re }]
         }
       }
     ];

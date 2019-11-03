@@ -1,6 +1,6 @@
 module.exports = {
   label: 'Enrolled in any course',
   filter() {
-    return [];
+    return false;
   }
 };

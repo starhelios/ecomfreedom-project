@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 
   const filtersInQuery = filter.findFilters(paramNames);
   if (filtersInQuery.length) {
-    const conditions = filtersInQuery.map(f => f.filter(req.query[f.name]));
+    const conditions = filtersInQuery.map(f => f.filter(req.query[f.name])).filter(f => !!f);
     req.filter = { $and: conditions };
   } else {
     req.filter = {};
