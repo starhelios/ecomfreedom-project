@@ -57,7 +57,7 @@
     "db:delete-test-users:prod": "node ./server/db-script/delete-test-users.js --NODE_ENV=production",
     "jasmine:init": "jasmine init",
     "test:integration": "jasmine --NODE_ENV=integration-testing --reporter=jasmine-console-reporter ",
-    "test:integration-covered": "istanbul cover --include-all-sources spec/specs.js && istanbul check-coverage --NODE_ENV=integration-testing"
+    "test:integration-covered": "istanbul cover --root server --include-all-sources spec/specs.js && istanbul check-coverage --NODE_ENV=integration-testing"
   },
   "browserslist": [
     "last 2 versions",
