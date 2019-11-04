@@ -83,7 +83,9 @@ module.exports = {
     'no-underscore-dangle':0,
     'consistent-return': 0,
     'no-param-reassign': "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off"
   },
   settings: {
     'import/resolver': {
