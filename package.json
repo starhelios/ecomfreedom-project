@@ -54,7 +54,9 @@
     "db:create-test-users:dev": "node ./server/db-script/create-test-users.js --NODE_ENV=development",
     "db:create-test-users:prod": "node ./server/db-script/create-test-users.js --NODE_ENV=production",
     "db:delete-test-users:dev": "node ./server/db-script/delete-test-users.js --NODE_ENV=development",
-    "db:delete-test-users:prod": "node ./server/db-script/delete-test-users.js --NODE_ENV=production"
+    "db:delete-test-users:prod": "node ./server/db-script/delete-test-users.js --NODE_ENV=production",
+    "jasmine:init": "jasmine init",
+    "test:integration": "jasmine --NODE_ENV=integration-testing --reporter=jasmine-console-reporter "
   },
   "browserslist": [
     "last 2 versions",
@@ -193,6 +195,10 @@
     "stylelint-config-styled-components": "0.1.1",
     "stylelint-processor-styled-components": "1.6.0",
     "whatwg-fetch": "3.0.0",
-    "express-static-proxy": "1.0.0"
+    "supertest": "4.0.2",
+    "jasmine": "3.5.0",
+    "jasmine-console-reporter": "3.1.0",
+    "istanbul": "0.4.5",
+    "jasmine-node": "3.0.0"
   }
 }
