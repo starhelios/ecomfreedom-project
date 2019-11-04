@@ -18,6 +18,7 @@ import GlobalStyle from '../../global-styles';
 import RequireAuth from '../../components/RequireAuth';
 import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
+import AdminPage from '../AdminPage';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/signup" component={SignupPage} />
+        <Route path="/admin" component={AdminPage} />
         <Route exact path="/profile" component={RequireAuth(ProfilePage)} />
         <Route component={NotFoundPage} />
       </Switch>
