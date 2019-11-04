@@ -11,6 +11,7 @@ const MAX_SIGN_IN_DATE = new Date('2019-11-01');
 const MIN_LAST_LOGIN_DATE = new Date('2019-10-01');
 const MAX_LAST_LOGIN_DATE = new Date('2019-11-01');
 
+const TEST_USER_ROLE = 'test-user';
 const USER_COUNT = 10;
 
 function randInt(max) {
@@ -46,7 +47,7 @@ function* UserGenerator() {
     const loginCount = randInt(MAX_LOGIN_COUNT);
     const loginLast = lastLoginDateGenerator.next().value;
     const created = signInDateGenerator.next().value;
-    const roles = ['user'];
+    const roles = ['user', TEST_USER_ROLE];
     yield {
       username: '',
       email,
@@ -63,6 +64,8 @@ const userGenerator = UserGenerator();
 
 (async function f() {
   try {
+    await db.model.Role.createIfNotExists(TEST_USER_ROLE);
+
     for (let i = 0; i < USER_COUNT; ++i) {
       const data = userGenerator.next().value;
       // eslint-disable-next-line no-await-in-loop
