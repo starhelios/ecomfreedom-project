@@ -16,7 +16,14 @@ const USER = new mongoose.Schema(
     loginLast: { type: Date, default: null },
     created: { type: Date, default: null }
   },
-  DEFAULT_OPTIONS
+  {
+    toJSON: {
+      transform(doc, ret) {
+        DEFAULT_OPTIONS.toJSON.transform(doc, ret);
+        delete ret.hash;
+      }
+    }
+  }
 );
 
 // eslint-disable-next-line func-names
