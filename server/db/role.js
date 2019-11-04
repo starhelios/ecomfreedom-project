@@ -26,7 +26,7 @@ ROLE.statics.createIfNotExists = async (name, permissions, filters) => {
   return Role.create({ name, description: '', permissions, filters });
 };
 
-ROLE.statics.create = async ({ id, name, description, permissions }) => {
+ROLE.statics.create = async ({ id, name, description, permissions, filters }) => {
   let role;
   if (id) {
     role = await Role.findById(id);
@@ -35,8 +35,11 @@ ROLE.statics.create = async ({ id, name, description, permissions }) => {
     if (permissions) {
       role.permissions = permissions;
     }
+    if (filters) {
+      role.filters = filters;
+    }
   } else {
-    role = new Role({ name, description, permissions });
+    role = new Role({ name, description, permissions, filters });
   }
   return role.save();
 };
