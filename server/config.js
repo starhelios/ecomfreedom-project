@@ -4,13 +4,16 @@ const ajv = new Ajv({ schemaId: 'auto', allErrors: true });
 const ENV = 'NODE_ENV';
 const nconf = require('nconf');
 const { readJson, BASE_PATH } = require('./file-util');
+
 nconf
   .argv()
   .env()
   .required([ENV]);
 
 const env = nconf.get(ENV);
+
 const data = readJson('config', `${env}.json`);
+ajv.addSchema(readJson('schema', 'filter.schema.json'));
 const schema = readJson('schema', 'config.schema.json');
 const validate = ajv.compile(schema);
 
@@ -32,11 +35,6 @@ console.info('mongo host:', nconf.get('mongo:host'));
 console.info('database:', nconf.get('mongo:db'));
 
 nconf.set('mode:dev', env === 'development');
-nconf.set(
-  'db:url',
-  `mongodb://${nconf.get('mongo:host')}/${nconf.get(
-    'mongo:db'
-  )}?retryWrites=true`
-);
+nconf.set('db:url', `mongodb://${nconf.get('mongo:host')}/${nconf.get('mongo:db')}?retryWrites=true`);
 
 module.exports = nconf;
