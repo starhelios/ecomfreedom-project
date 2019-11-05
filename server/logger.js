@@ -25,12 +25,10 @@ function createLogger(filename) {
   // eslint-disable-next-line no-param-reassign
   filename += '-%DATE%.log';
   const fullFilename = path.join(process.cwd(), 'logs', filename);
-  const winstonLogger = new winston.Logger({
-    transports: [
-      new winston.transports.Console(CONSOLE_CONFIG),
-      new winston.transports.DailyRotateFile(Object.assign({ filename: fullFilename }, FILE_CONFIG))
-    ]
-  });
+  const transports = [new winston.transports.Console(CONSOLE_CONFIG)];
+  if (FILE_LOGS) {
+    transports.push(new winston.transports.DailyRotateFile(Object.assign({ filename: fullFilename }, FILE_CONFIG)));
+  }
 
   const winstonLogger = new winston.Logger({ transports });
   winstonLogger.exitOnError = false;
