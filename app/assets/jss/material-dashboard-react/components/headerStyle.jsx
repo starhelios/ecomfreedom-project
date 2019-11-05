@@ -75,6 +75,10 @@ const headerStyle = theme => ({
     backgroundColor: dangerColor[0],
     color: whiteColor,
     ...defaultBoxShadow
+  },
+  white: {
+    backgroundColor: whiteColor,
+    color: infoColor[0],
   }
 });
 

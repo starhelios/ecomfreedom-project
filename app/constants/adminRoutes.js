@@ -43,7 +43,7 @@ const dashboardRoutes = [
     icon: Person,
     component: Permissions,
     layout: routes.ADMIN
-  },
+  }
 ];
 
 export default dashboardRoutes;

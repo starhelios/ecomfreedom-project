@@ -64,6 +64,12 @@ const container = {
   marginLeft: "auto"
 };
 
+const content = {
+  marginTop: "0px",
+  padding: "30px 15px",
+  minHeight: "calc(100vh - 123px)"
+};
+
 const defaultFont = {
   fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   fontWeight: "300",
@@ -92,7 +98,10 @@ const grayColor = [
 ];
 const blackColor = "#000";
 const whiteColor = "#FFF";
-
+const topBar = {
+  background: whiteColor,
+  color: blackColor
+}
 const boxShadow = {
   boxShadow:
     "0 10px 30px -12px rgba(" +
@@ -267,6 +276,7 @@ export {
   //variables
   drawerWidth,
   transition,
+  content,
   container,
   boxShadow,
   card,
@@ -296,6 +306,7 @@ export {
   cardHeader,
   defaultBoxShadow,
   title,
+  topBar,
   cardTitle,
   cardSubtitle,
   cardLink
