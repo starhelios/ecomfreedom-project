@@ -8,10 +8,8 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 // import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import AppBar from "@material-ui/core/AppBar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Toolbar from "@material-ui/core/Toolbar";
+import AdminNavbar from "components/Navbars/AdminNavbar";
+import AdminContent from "components/Content/AdminContent";
 
 const styles = {
   cardCategoryWhite: {
@@ -47,46 +45,41 @@ function TableList(props) {
   const { classes } = props;
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            Permissions
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardBody>
-              <Table
-                tableHeaderColor="info"
-                tableHead={["ID", "Name", "Country", "City", "Salary"]}
-                tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                  [
-                    "4",
-                    "Philip Chaney",
-                    "$38,735",
-                    "Korea, South",
-                    "Overland Park"
-                  ],
-                  [
-                    "5",
-                    "Doris Greene",
-                    "$63,542",
-                    "Malawi",
-                    "Feldkirchen in Kärnten"
-                  ],
-                  ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
-                ]}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
+      <AdminNavbar title="Permissions" />
+      <AdminContent>
+        <GridContainer>
+          <GridItem xs={12} sm={12} md={12}>
+            <Card>
+              <CardBody>
+                <Table
+                  tableHeaderColor="info"
+                  tableHead={["ID", "Name", "Country", "City", "Salary"]}
+                  tableData={[
+                    ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
+                    ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
+                    ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
+                    [
+                      "4",
+                      "Philip Chaney",
+                      "$38,735",
+                      "Korea, South",
+                      "Overland Park"
+                    ],
+                    [
+                      "5",
+                      "Doris Greene",
+                      "$63,542",
+                      "Malawi",
+                      "Feldkirchen in Kärnten"
+                    ],
+                    ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
+                  ]}
+                />
+              </CardBody>
+            </Card>
+          </GridItem>
+        </GridContainer>
+      </AdminContent>
     </>
   );
 }
