@@ -30,12 +30,12 @@ describe('permissions apis', () => {
     expect(description).toBe('read write permission');
   });
 
-  it('should fail when reading permissions when no pagination', async () => {
+  test('should fail when reading permissions when no pagination', async () => {
     const res = await request(app).get(path);
     expect(res.status).toBe(422);
   });
 
-  it('should create and read a permission', async () => {
+  test('should create and read a permission', async () => {
     let res = await request(app)
       .get(`${path}/${id}`)
       .query({ pageNumber: 0, pageSize: 10 });
@@ -51,7 +51,7 @@ describe('permissions apis', () => {
     expect(res.body.data[0]).toEqual({ id, name, description });
   });
 
-  it('should update the permission by id', async () => {
+  test('should update the permission by id', async () => {
     let res = await request(app)
       .post(path)
       .send({ id, name: 'read-write-changed', description: 'read write changed permission' });
@@ -66,7 +66,7 @@ describe('permissions apis', () => {
     expect(res.body.data[0]).toEqual({ id, name: 'read-write-changed', description: 'read write changed permission' });
   });
 
-  it('should delete the permission by id', async () => {
+  test('should delete the permission by id', async () => {
     let res = await request(app).delete(`${path}/${id}`);
     expect(res.status).toBe(200);
 
@@ -77,7 +77,7 @@ describe('permissions apis', () => {
     expect(res.body.total).toBe(0);
   });
 
-  it('should delete the permission by name', async () => {
+  test('should delete the permission by name', async () => {
     let res = await request(app).delete(`${path}/read-write`);
     expect(res.status).toBe(200);
 
