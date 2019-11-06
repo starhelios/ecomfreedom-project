@@ -30,6 +30,10 @@ describe('permissions apis', () => {
     expect(description).toBe('read write permission');
   });
 
+  afterAll(() => {
+    db.close();
+  });
+
   test('should fail when reading permissions when no pagination', async () => {
     const res = await request(app).get(path);
     expect(res.status).toBe(422);
