@@ -5,7 +5,7 @@ const db = require('../../server/db/test');
 
 const path = `${config.get('base-path')}/role`;
 
-describe('role apis', () => {
+xdescribe('role apis', () => {
   beforeAll(async () => db.open());
   afterAll(() => db.close());
 
@@ -24,8 +24,6 @@ describe('role apis', () => {
     expect(res.status).toBe(200);
     permission = res.body;
   });
-
-  afterAll(() => db.close());
 
   beforeEach(async () => {
     await db.model.Role.deleteMany({});
