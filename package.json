@@ -41,8 +41,11 @@
     "lint:staged": "lint-staged",
     "pretest": "npm run test:clean && npm run lint",
     "test:clean": "rimraf ./coverage",
-    "test": "cross-env NODE_ENV=test jest --coverage",
+    "test": "npm run test:ui && npm run test:integration-coverage",
+    "test:ui": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "test:integration": "jest --config=jest.it.config.js --NODE_ENV=integration-testing",
+    "test:integration-coverage": "jest --config=jest.it.config.js --NODE_ENV=integration-testing --coverage",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "prettify": "prettier --write",
     "db:create-admin:dev": "node ./server/db-script/create-admin.js --NODE_ENV=development",
@@ -54,8 +57,7 @@
     "db:create-test-users:dev": "node ./server/db-script/create-test-users.js --NODE_ENV=development",
     "db:create-test-users:prod": "node ./server/db-script/create-test-users.js --NODE_ENV=production",
     "db:delete-test-users:dev": "node ./server/db-script/delete-test-users.js --NODE_ENV=development",
-    "db:delete-test-users:prod": "node ./server/db-script/delete-test-users.js --NODE_ENV=production",
-    "test:integration": "jest --config=server-test/jest.config.js --NODE_ENV=integration-testing"
+    "db:delete-test-users:prod": "node ./server/db-script/delete-test-users.js --NODE_ENV=production"
   },
   "browserslist": [
     "last 2 versions",
