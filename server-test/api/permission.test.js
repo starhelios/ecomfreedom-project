@@ -1,7 +1,7 @@
 const request = require('supertest');
 const config = require('../../server/config');
 const app = require('../../server/web-server');
-const db = require('../../server/db');
+const db = require('../../server/db/test');
 
 const path = `${config.get('base-path')}/permission`;
 
@@ -9,6 +9,9 @@ describe('permissions apis', () => {
   let id;
   let name;
   let description;
+
+  beforeAll(() => db.open());
+  afterAll(() => db.close());
 
   beforeEach(async () => {
     await db.model.Permission.deleteMany({});
@@ -29,8 +32,6 @@ describe('permissions apis', () => {
     expect(name).toBe('read-write');
     expect(description).toBe('read write permission');
   });
-
-  afterAll(() => db.close());
 
   test('should fail when reading permissions when no pagination', async () => {
     const res = await request(app).get(path);
