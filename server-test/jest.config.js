@@ -1,5 +1,6 @@
 module.exports = {
   rootDir: 'api',
   verbose: true,
-  watch: false
+  watch: false,
+  testEnvironment: 'node'
 };
