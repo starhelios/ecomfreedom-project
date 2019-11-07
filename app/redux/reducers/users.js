@@ -20,7 +20,10 @@ import {
 } from 'constants/actionTypes';
 
 const initialState = {
-  permissions: [],
+  permissions: {
+    data: [],
+    total: 0
+  },
   roles: [],
   users: []
 };
@@ -37,7 +40,10 @@ export default function(state = initialState, action) {
       }
       return {
         ...state,
-        permissions: action.res.data
+        permissions: {
+          data: action.res.data.data,
+          total: action.res.data.total
+        }
       };
     case GET_PERMISSIONS_FAILED:
       return {
@@ -45,6 +51,7 @@ export default function(state = initialState, action) {
         permissions: []
       };
     case CREATE_PERMISSIONS_SUCCESS:
+      console.log('CREATE_PERMISSIONS_SUCCESS', action.res, [...state.permissions.data, action.res.data])
       if (!action.res.success) {
         return {
           ...state
@@ -52,22 +59,29 @@ export default function(state = initialState, action) {
       }
       return {
         ...state,
-        permissions: [...state.permissions, action.res.data]
+        permissions: {
+          data: [...state.permissions.data, action.res.data],
+          total: state.total + 1
+        }
       };
     case CREATE_PERMISSIONS_FAILED:
       return {
         ...state
       };
     case DELETE_PERMISSIONS_SUCCESS:
+      console.log('DELETE_PERMISSIONS_SUCCESS', action.res)
       if (!action.res.success) {
         return {
           ...state
         };
       }
-      temp = state.permissions.filter(item => item.id !== action.res.id)
+      temp = state.permissions.data.filter(item => item.name !== action.res.name)
       return {
         ...state,
-        permissions: [...temp]
+        permissions: {
+          data: [...temp],
+          total: state.total - 1 > 0 ? state.total - 1 : 0
+        }
       };
     case DELETE_PERMISSIONS_FAILED:
       return {

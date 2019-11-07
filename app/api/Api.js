@@ -127,45 +127,48 @@ export const getUsers = payload => {
 };
 
 //Permissions
-export const getPermissions = payload => {
+export const getPermissions = payload =>
   axios
     .get(`${API_ENDPOINT_URL}/permission`)
     .then(res => {
-      console.log('getPermissions res', res)
-      if (res.data.status) {
-        return {success: true};
+      if (res.data) {
+        return {success: true, data: res.data};
       }
       return {success: false, reason: res.message};
     })
     .catch(err => ({success: false, reason: err.response.data.message}));
-};
+
 export const createPermission = payload => {
-  axios
-    .post(`${API_ENDPOINT_URL}/permission`, {
-      name: payload.name,
-      description: payload.description
-    })
+  const data = {
+    name: payload.name,
+    description: payload.description
+  };
+
+  if (payload.id) {
+    data.id = payload.id;
+  }
+
+  return axios
+    .post(`${API_ENDPOINT_URL}/permission`, data)
     .then(res => {
-      console.log('getPermissions res', res)
-      if (res.data.status) {
-        return {success: true};
+      if (res.data) {
+        return {success: true, data: res.data};
       }
       return {success: false, reason: res.message};
     })
     .catch(err => ({success: false, reason: err.response.data.message}));
-};
-export const deletePermission = payload => {
+}
+
+export const deletePermission = payload =>
   axios
     .delete(`${API_ENDPOINT_URL}/permission/${payload.name}`)
     .then(res => {
-      console.log('getPermissions res', res)
-      if (res.data.status) {
+      if (res.data) {
         return {success: true};
       }
       return {success: false, reason: res.message};
     })
     .catch(err => ({success: false, reason: err.response.data.message}));
-};
 
 
 function setAccessToken(token) {

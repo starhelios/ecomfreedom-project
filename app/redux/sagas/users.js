@@ -25,7 +25,7 @@ export default function* watchAuthListener() {
 export function* getPermissionsRequestSaga({ payload }) {
   try {
     const res = yield call(getPermissions, payload);
-    yield [put({ type: GET_PERMISSIONS_SUCCESS, res })];
+    yield put({ type: GET_PERMISSIONS_SUCCESS, res });
   } catch (error) {
     yield put({ type: GET_PERMISSIONS_FAILED, error });
   }
@@ -34,7 +34,7 @@ export function* getPermissionsRequestSaga({ payload }) {
 export function* createPermissionsRequestSaga({ payload }) {
   try {
     const res = yield call(createPermission, payload);
-    yield [put({ type: CREATE_PERMISSIONS_SUCCESS, res })];
+    yield put({ type: CREATE_PERMISSIONS_SUCCESS, res });
   } catch (error) {
     yield put({ type: CREATE_PERMISSIONS_FAILED, error });
   }
@@ -43,7 +43,7 @@ export function* createPermissionsRequestSaga({ payload }) {
 export function* deletePermissionsRequestSaga({ payload }) {
   try {
     const res = yield call(deletePermission, payload);
-    yield [put({ type: DELETE_PERMISSIONS_SUCCESS, res })];
+    yield put({ type: DELETE_PERMISSIONS_SUCCESS, res: { ...res, name: payload.name } });
   } catch (error) {
     yield put({ type: DELETE_PERMISSIONS_FAILED, error });
   }
