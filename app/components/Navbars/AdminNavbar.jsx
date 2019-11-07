@@ -7,12 +7,14 @@ import Typography from "@material-ui/core/Typography";
 
 import headerStyle from "assets/jss/material-dashboard-react/components/headerStyle.jsx";
 
-const AdminNavbar = ({ classes, title }) => (
+const AdminNavbar = ({ classes, title, right }) => (
   <AppBar elevation={1} position="sticky" className={classes.white}>
     <Toolbar>
       <Typography variant="h6">
         {title}
       </Typography>
+      <div className={classes.grow} />
+      <div style={{ float: 'right' }}>{right}</div>
     </Toolbar>
   </AppBar>
 );

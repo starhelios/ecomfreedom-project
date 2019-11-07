@@ -121,7 +121,7 @@ class Dashboard extends React.Component {
           routes={routes}
           logoText={"Ecom Freedom"}
           logo={logo}
-          image={this.state.image}
+          // image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
           color={this.state.color}

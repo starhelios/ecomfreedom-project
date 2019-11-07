@@ -112,6 +112,62 @@ export const updateAccount = payload => {
     }));
 };
 
+// Users
+export const getUsers = payload => {
+  axios
+    .get(`${API_ENDPOINT_URL}/user`)
+    .then(res => {
+      console.log('getUsers res', res)
+      if (res.data.status) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+};
+
+//Permissions
+export const getPermissions = payload => {
+  axios
+    .get(`${API_ENDPOINT_URL}/permission`)
+    .then(res => {
+      console.log('getPermissions res', res)
+      if (res.data.status) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+};
+export const createPermission = payload => {
+  axios
+    .post(`${API_ENDPOINT_URL}/permission`, {
+      name: payload.name,
+      description: payload.description
+    })
+    .then(res => {
+      console.log('getPermissions res', res)
+      if (res.data.status) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+};
+export const deletePermission = payload => {
+  axios
+    .delete(`${API_ENDPOINT_URL}/permission/${payload.name}`)
+    .then(res => {
+      console.log('getPermissions res', res)
+      if (res.data.status) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+};
+
+
 function setAccessToken(token) {
   localStorage.setItem('authentication_token', token);
 }
@@ -128,17 +184,6 @@ function setUser(user) {
 
 export const setUserLocalStorage = user => {
   localStorage.setItem('user', user);
-};
-
-export const setPermissions = perms => {
-  localStorage.setItem('permissions', JSON.stringify(perms));
-};
-
-export const getPermissions = () => {
-  if (!localStorage.getItem('permissions')) {
-    return false;
-  }
-  return JSON.parse(localStorage.getItem('permissions'));
 };
 
 export const getUserID = () => {
