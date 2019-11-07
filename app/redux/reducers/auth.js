@@ -69,11 +69,6 @@ export default function(state = initialState, action) {
       }
       return {
         ...state,
-        login: {
-          ...state.login,
-          loginStatus: action.res.success,
-          error: null
-        },
         user: {
           data: action.res.data,
           status: true,
