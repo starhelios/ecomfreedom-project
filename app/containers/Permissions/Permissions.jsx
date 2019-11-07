@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { find } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
@@ -10,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Modal from 'components/Modal/Modal';
 import GridItem from 'components/Grid/GridItem.jsx';
 import GridContainer from 'components/Grid/GridContainer.jsx';
-import Table from 'components/Table/Table.jsx';
+import TableList from 'components/Table/TableList';
 import Card from 'components/Card/Card.jsx';
 // import CardHeader from 'components/Card/CardHeader.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
@@ -55,6 +56,9 @@ const styles = {
 class Permissions extends Component {
   state = {
     open: false,
+    openConfirm: false,
+    editId: null,
+    deleteItem: null,
     name: '',
     description: ''
   }
@@ -68,27 +72,65 @@ class Permissions extends Component {
   }
 
   handleClose = () => {
-    this.setState({ open: false, name: '', description: '' });
+    this.setState({ open: false, openConfirm: false, name: '', description: '', editId: null, deleteItem: null });
   };
 
   handleSubmit = () => {
-    const { name, description } = this.state;
+    const { name, description, editId } = this.state;
     const { createPermissionAction } = this.props;
-    console.log('handleSubmit', name, description);
-    createPermissionAction({ name, description });
+    const payload = { name, description };
+
+    if (editId) {
+      payload.id = editId;
+    }
+
+    createPermissionAction(payload);
+    this.handleClose();
   }
 
   onChange = field => event => {
     this.setState({ [field]: event.target.value });
   }
 
-  onDelete = name => {
-    const { deletePermissionAction } = this.props;
-    deletePermissionAction({ name });
+  handleDelete = (item) => {
+    this.setState({ openConfirm: true, deleteItem: item });
   }
 
+  handleDeleteConfirmed = () => {
+    const { deleteItem } = this.state;
+    const { deletePermissionAction } = this.props;
+    if (deleteItem) {
+      deletePermissionAction({ name: deleteItem.name });
+      this.handleClose();
+    }
+  }
+
+  handleEdit = (item) => {
+    this.setState({ open: true, name: item.name, editId: item.id, description: item.description });
+  }
+
+  renderConfirm = () => {
+    const { openConfirm } = this.state;
+
+    return (
+      <Modal
+        open={openConfirm}
+        maxWidth="md"
+        onClose={this.handleClose}
+        onSubmit={this.handleDeleteConfirmed}
+        description="Are you sure you want to delete this element?"
+      />
+    )
+  }
+
+  renderNavbar = classes => (
+    <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
+      Add Permission
+    </Fab>
+  )
+
   renderModal = () => {
-    const { open } = this.state;
+    const { open, name, description } = this.state;
 
     return (
       <Modal
@@ -106,6 +148,7 @@ class Permissions extends Component {
           label="Name"
           type="text"
           fullWidth
+          value={name}
           onChange={this.onChange('name')}
         />
         <TextField
@@ -116,6 +159,7 @@ class Permissions extends Component {
           label="Description"
           type="text"
           fullWidth
+          value={description}
           onChange={this.onChange('description')}
         />
       </Modal>
@@ -123,44 +167,23 @@ class Permissions extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const navbarActions = (
-      <Fab elevation={1} variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
-        Add Permission
-      </Fab>
-    );
+    const { classes, data } = this.props;
 
     return (
       <>
-        <AdminNavbar title='Permissions' right={navbarActions}/>
+        <AdminNavbar title='Permissions' right={this.renderNavbar(classes)}/>
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardBody>
-                  <Table
-                    tableHeaderColor='info'
-                    tableHead={['ID', 'Name', 'Description', 'City', 'Salary']}
-                    tableData={[
-                      ['1', 'Dakota Rice', '$36,738', 'Niger', 'Oud-Turnhout'],
-                      ['2', 'Minerva Hooper', '$23,789', 'Curaçao', 'Sinaai-Waas'],
-                      ['3', 'Sage Rodriguez', '$56,142', 'Netherlands', 'Baileux'],
-                      [
-                        '4',
-                        'Philip Chaney',
-                        '$38,735',
-                        'Korea, South',
-                        'Overland Park'
-                      ],
-                      [
-                        '5',
-                        'Doris Greene',
-                        '$63,542',
-                        'Malawi',
-                        'Feldkirchen in Kärnten'
-                      ],
-                      ['6', 'Mason Porter', '$78,615', 'Chile', 'Gloucester']
-                    ]}
+                  <TableList
+                    tableHeaderColor="info"
+                    tableHead={['Name', 'Description']}
+                    tableColumns={['name', 'description']}
+                    tableData={data}
+                    deleteAction={this.handleDelete}
+                    editAction={this.handleEdit}
                   />
                 </CardBody>
               </Card>
@@ -168,6 +191,7 @@ class Permissions extends Component {
           </GridContainer>
         </AdminContent>
         {this.renderModal()}
+        {this.renderConfirm()}
       </>
     );
   }
@@ -176,8 +200,15 @@ class Permissions extends Component {
 Permissions.propTypes = {
   getPermissionsAction: PropTypes.func,
   createPermissionAction: PropTypes.func,
-  deletePermissionAction: PropTypes.func
+  deletePermissionAction: PropTypes.func,
+  data: PropTypes.array,
+  total: PropTypes.number
 };
+
+const mapStateToProps = ({ users }) => ({
+  data: users.permissions.data,
+  total: users.permissions.total
+});
 
 const mapDispatchToProps = dispatch => ({
   getPermissionsAction: () => {
@@ -188,10 +219,10 @@ const mapDispatchToProps = dispatch => ({
   },
   deletePermissionAction: data => {
     dispatch(deletePermission(data));
-  },
+  }
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(Permissions));

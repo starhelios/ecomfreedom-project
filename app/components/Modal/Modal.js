@@ -13,7 +13,7 @@ export default function FormDialog(props) {
   return (
     <div>
       <Dialog maxWidth={maxWidth} open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{title}</DialogTitle>
+        {title ? <DialogTitle id="form-dialog-title">{title}</DialogTitle> : null }
         <DialogContent>
           {description ? (
             <DialogContentText>
