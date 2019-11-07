@@ -32,6 +32,16 @@ function TableList({ ...props }) {
                   </TableCell>
                 );
               })}
+              {editAction || deleteAction ? (
+                <TableCell
+                  className={classes.tableCell + " " + classes.tableHeadCell}
+                  key="actions"
+                  style={{ textAlign: 'right'}}
+                >
+                  Actions
+                </TableCell>
+                ) : null
+              }
             </TableRow>
           </TableHead>
         ) : null}

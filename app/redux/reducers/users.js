@@ -24,8 +24,14 @@ const initialState = {
     data: [],
     total: 0
   },
-  roles: [],
-  users: []
+  roles: {
+    data: [],
+    total: 0
+  },
+  users: {
+    data: [],
+    total: 0
+  }
 };
 let temp;
 export default function(state = initialState, action) {
@@ -51,7 +57,6 @@ export default function(state = initialState, action) {
         permissions: []
       };
     case CREATE_PERMISSIONS_SUCCESS:
-      console.log('CREATE_PERMISSIONS_SUCCESS', action.res, [...state.permissions.data, action.res.data])
       if (!action.res.success) {
         return {
           ...state
@@ -69,7 +74,6 @@ export default function(state = initialState, action) {
         ...state
       };
     case DELETE_PERMISSIONS_SUCCESS:
-      console.log('DELETE_PERMISSIONS_SUCCESS', action.res)
       if (!action.res.success) {
         return {
           ...state
@@ -98,7 +102,10 @@ export default function(state = initialState, action) {
       }
       return {
         ...state,
-        roles: action.res.data
+        roles: {
+          data: action.res.data.data,
+          total: action.res.data.total
+        }
       };
     case GET_ROLES_FAILED:
       return {
@@ -113,7 +120,10 @@ export default function(state = initialState, action) {
       }
       return {
         ...state,
-        roles: [...state.roles, action.res.data]
+        roles: {
+          data: [...state.roles.data, action.res.data],
+          total: state.total + 1
+        }
       };
     case CREATE_ROLE_FAILED:
       return {
@@ -122,13 +132,16 @@ export default function(state = initialState, action) {
     case DELETE_ROLE_SUCCESS:
       if (!action.res.success) {
         return {
-          ...state,
+          ...state
         };
       }
-      temp = state.roles.filter(item => item.id !== action.res.id)
+      temp = state.roles.data.filter(item => item.name !== action.res.name)
       return {
         ...state,
-        roles: [...temp]
+        roles: {
+          data: [...temp],
+          total: state.total - 1 > 0 ? state.total - 1 : 0
+        }
       };
     case DELETE_ROLE_FAILED:
       return {
