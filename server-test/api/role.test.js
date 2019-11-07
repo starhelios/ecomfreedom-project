@@ -5,9 +5,9 @@ const db = require('../../server/db/test');
 
 const path = `${config.get('base-path')}/role`;
 
-xdescribe('role apis', () => {
-  beforeAll(async () => db.open());
-  afterAll(() => db.close());
+describe('role apis', () => {
+  beforeAll(db.beforeAll);
+  afterAll(db.afterAll);
 
   let permission;
 
