@@ -1,4 +1,21 @@
-import * as types from 'constants/actionTypes';
+import {
+  SET_USER_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILED,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILED,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAILED,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILED,
+  GET_USER_SUCCESS,
+  GET_USER_FAILED,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILED,
+  LOG_OUT_SUCCESS
+} from 'constants/actionTypes';
+
 
 const initialState = {
   login: {
@@ -28,7 +45,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case types.SET_USER_REQUEST:
+    case SET_USER_REQUEST:
       return {
         ...state,
         user: {
@@ -39,7 +56,7 @@ export default function(state = initialState, action) {
         }
       };
 
-    case types.LOGIN_SUCCESS:
+    case LOGIN_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -64,7 +81,7 @@ export default function(state = initialState, action) {
           userStatus: true
         }
       };
-    case types.LOGIN_FAILED:
+    case LOGIN_FAILED:
       return {
         ...state,
         login: {
@@ -74,7 +91,7 @@ export default function(state = initialState, action) {
       };
 
     // UPDATE USER REDUCER
-    case types.UPDATE_USER_SUCCESS:
+    case UPDATE_USER_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -99,7 +116,7 @@ export default function(state = initialState, action) {
           userStatus: true
         }
       };
-    case types.UPDATE_USER_FAILED:
+    case UPDATE_USER_FAILED:
       return {
         ...state,
         login: {
@@ -109,13 +126,13 @@ export default function(state = initialState, action) {
       };
 
     // Requests for forgot password
-    case types.FORGOT_PASSWORD_REQUEST:
+    case FORGOT_PASSWORD_REQUEST:
       return {
         ...state,
         status: false,
         error: null
       };
-    case types.FORGOT_PASSWORD_SUCCESS:
+    case FORGOT_PASSWORD_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -133,7 +150,7 @@ export default function(state = initialState, action) {
           status: action.res.success
         }
       };
-    case types.FORGOT_PASSWORD_FAILED:
+    case FORGOT_PASSWORD_FAILED:
       return {
         ...state,
         forgotPassword: {
@@ -144,7 +161,7 @@ export default function(state = initialState, action) {
       };
 
     // Requests for resetting the password
-    case types.RESET_PASSWORD_SUCCESS:
+    case RESET_PASSWORD_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -157,14 +174,14 @@ export default function(state = initialState, action) {
         status: action.res.success,
         error: null
       };
-    case types.RESET_PASSWORD_FAILED:
+    case RESET_PASSWORD_FAILED:
       return {
         ...state,
         status: false,
         error: 'Bad Request'
       };
 
-    case types.GET_USER_SUCCESS:
+    case GET_USER_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -181,7 +198,7 @@ export default function(state = initialState, action) {
         error: null,
         user: { ...action.res.data }
       };
-    case types.GET_USER_FAILED:
+    case GET_USER_FAILED:
       return {
         ...state,
         user: {
@@ -190,7 +207,7 @@ export default function(state = initialState, action) {
           error: 'Bad Request'
         }
       };
-    case types.SIGN_UP_SUCCESS:
+    case SIGN_UP_SUCCESS:
       if (!action.res.success) {
         return {
           ...state,
@@ -207,7 +224,7 @@ export default function(state = initialState, action) {
           error: null
         }
       };
-    case types.SIGN_UP_FAILED:
+    case SIGN_UP_FAILED:
       return {
         ...state,
         signUp: {
@@ -215,7 +232,7 @@ export default function(state = initialState, action) {
           error: action.res.reason
         }
       };
-    case types.LOG_OUT_SUCCESS:
+    case LOG_OUT_SUCCESS:
       return {
         ...initialState
       };

@@ -8,6 +8,7 @@ import {
   warningColor,
   dangerColor,
   whiteColor,
+  blackColor,
   grayColor
 } from "assets/jss/material-dashboard-react.jsx";
 
@@ -51,6 +52,9 @@ const headerStyle = theme => ({
   appResponsive: {
     top: "8px"
   },
+  grow: {
+    flexGrow: 1,
+  },
   primary: {
     backgroundColor: primaryColor[0],
     color: whiteColor,
@@ -78,7 +82,7 @@ const headerStyle = theme => ({
   },
   white: {
     backgroundColor: whiteColor,
-    color: infoColor[0],
+    color: blackColor,
   }
 });
 
