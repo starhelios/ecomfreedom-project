@@ -115,8 +115,8 @@ const sidebarStyle = theme => ({
     display: "block",
     top: "0",
     left: "0",
-    backgroundSize: "cover",
-    backgroundPosition: "center center",
+    // backgroundSize: "cover",
+    // backgroundPosition: "center center",
     "&:after": {
       position: "absolute",
       zIndex: "3",
@@ -124,8 +124,8 @@ const sidebarStyle = theme => ({
       height: "100%",
       content: '""',
       display: "block",
-      background: blackColor,
-      opacity: ".8"
+      background: '#262b41',
+      // opacity: ".8"
     }
   },
   list: {
