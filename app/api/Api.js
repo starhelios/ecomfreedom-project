@@ -112,21 +112,21 @@ export const updateAccount = payload => {
     }));
 };
 
-// Users
-export const getUsers = payload => {
-  axios
-    .get(`${API_ENDPOINT_URL}/user`)
-    .then(res => {
-      console.log('getUsers res', res)
-      if (res.data.status) {
-        return {success: true};
-      }
-      return {success: false, reason: res.message};
-    })
-    .catch(err => ({success: false, reason: err.response.data.message}));
-};
+// // Users
+// export const getUsers = payload => {
+//   axios
+//     .get(`${API_ENDPOINT_URL}/user`)
+//     .then(res => {
+//       console.log('getUsers res', res)
+//       if (res.data.status) {
+//         return {success: true};
+//       }
+//       return {success: false, reason: res.message};
+//     })
+//     .catch(err => ({success: false, reason: err.response.data.message}));
+// };
 
-//Permissions
+// Permissions
 export const getPermissions = payload =>
   axios
     .get(`${API_ENDPOINT_URL}/permission`)
@@ -162,6 +162,95 @@ export const createPermission = payload => {
 export const deletePermission = payload =>
   axios
     .delete(`${API_ENDPOINT_URL}/permission/${payload.name}`)
+    .then(res => {
+      if (res.data) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+
+// Roles
+export const getRoles = payload =>
+  axios
+    .get(`${API_ENDPOINT_URL}/role`)
+    .then(res => {
+      if (res.data) {
+        return {success: true, data: res.data};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+
+export const createRole = payload => {
+  const data = {
+    name: payload.name,
+    description: payload.description
+  };
+
+  if (payload.id) {
+    data.id = payload.id;
+  }
+
+  return axios
+    .post(`${API_ENDPOINT_URL}/role`, data)
+    .then(res => {
+      if (res.data) {
+        return {success: true, data: res.data};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+}
+
+export const deleteRole = payload =>
+  axios
+    .delete(`${API_ENDPOINT_URL}/role/${payload.name}`)
+    .then(res => {
+      if (res.data) {
+        return {success: true};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+
+
+// Users
+export const getUsers = payload =>
+  axios
+    .get(`${API_ENDPOINT_URL}/user`)
+    .then(res => {
+      if (res.data) {
+        return {success: true, data: res.data};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+
+export const createUsers = payload => {
+  const data = {
+    name: payload.name,
+    description: payload.description
+  };
+
+  if (payload.id) {
+    data.id = payload.id;
+  }
+
+  return axios
+    .post(`${API_ENDPOINT_URL}/user`, data)
+    .then(res => {
+      if (res.data) {
+        return {success: true, data: res.data};
+      }
+      return {success: false, reason: res.message};
+    })
+    .catch(err => ({success: false, reason: err.response.data.message}));
+}
+
+export const deleteUsers = payload =>
+  axios
+    .delete(`${API_ENDPOINT_URL}/user/${payload.name}`)
     .then(res => {
       if (res.data) {
         return {success: true};
