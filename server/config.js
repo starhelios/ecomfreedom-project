@@ -3,16 +3,16 @@ const ajv = new Ajv({ schemaId: 'auto', allErrors: true });
 
 const ENV = 'NODE_ENV';
 const nconf = require('nconf');
-const { readJson } = require('./file-util');
+const { readJson, BASE_PATH } = require('./file-util');
+
 nconf
-  .use('memory')
   .argv()
   .env()
   .required([ENV]);
 
 const env = nconf.get(ENV);
-// const data = env === 'production' ? prod : dev;
-const data = require(`../config/${env}.js`);
+
+const data = readJson('config', `${env}.json`);
 ajv.addSchema(readJson('schema', 'filter.schema.json'));
 const schema = readJson('schema', 'config.schema.json');
 const validate = ajv.compile(schema);
@@ -27,17 +27,39 @@ if (!validate(data)) {
 
 // eslint-disable-next-line no-console
 console.info('starting with the env:', env);
-nconf.overrides(data);
+
+nconf.file({ file: `${BASE_PATH}config/${env}.json` });
+
+if (nconf.get('DB_HOST')) {
+  nconf.set('mongo:host', nconf.get('DB_HOST'));
+}
+if (nconf.get('DB_USER')) {
+  nconf.set('mongo:user', nconf.get('DB_USER'));
+}
+if (nconf.get('DB_PASSWORD')) {
+  nconf.set('mongo:password', nconf.get('DB_PASSWORD'));
+}
+if (nconf.get('DB_NAME')) {
+  nconf.set('mongo:db', nconf.get('DB_NAME'));
+}
+
 // eslint-disable-next-line no-console
 console.info('mongo host:', nconf.get('mongo:host'));
 // eslint-disable-next-line no-console
 console.info('database:', nconf.get('mongo:db'));
 
 nconf.set('mode:dev', env === 'development');
+
+let credentials = '';
+if (nconf.get('mongo:user') && nconf.get('mongo:password')) {
+  credentials = `${nconf.get('mongo:user')}:${nconf.get('mongo:password')}@`;
+}
+
 nconf.set(
   'db:url',
-  `mongodb+srv://${env === 'production' ? `${nconf.get('mongo:user')}:${nconf.get('mongo:password')}@` : ''}${nconf.get(
-    'mongo:host'
-  )}/${nconf.get('mongo:db')}?retryWrites=true&w=majority`
+  `${nconf.get('mongo:protocol')}://${credentials}${nconf.get('mongo:host')}/${nconf.get(
+    'mongo:db'
+  )}?retryWrites=true&w=majority`
 );
+
 module.exports = nconf;
