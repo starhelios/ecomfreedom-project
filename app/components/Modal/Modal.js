@@ -8,7 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function FormDialog(props) {
-  const { open, onClose, onSubmit, title, description, maxWidth, children } = props;
+  const { open, onClose, onSubmit, title, description, maxWidth, children, okTitle } = props;
 
   return (
     <div>
@@ -29,7 +29,7 @@ export default function FormDialog(props) {
             Cancel
           </Button>
           <Button onClick={onSubmit} color="primary">
-            Submit
+            {okTitle || 'Submit'}
           </Button>
         </DialogActions>
       </Dialog>

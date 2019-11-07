@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { find } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
 // core components
@@ -119,6 +117,7 @@ class Permissions extends Component {
         onClose={this.handleClose}
         onSubmit={this.handleDeleteConfirmed}
         description="Are you sure you want to delete this element?"
+        okTitle="Delete"
       />
     )
   }
@@ -139,6 +138,7 @@ class Permissions extends Component {
         onClose={this.handleClose}
         onSubmit={this.handleSubmit}
         title="Add New Permission"
+        okTitle="Save"
       >
         <TextField
           autoFocus
