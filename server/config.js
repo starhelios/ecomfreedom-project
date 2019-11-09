@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const Ajv = require('ajv');
 const ajv = new Ajv({ schemaId: 'auto', allErrors: true });
 
