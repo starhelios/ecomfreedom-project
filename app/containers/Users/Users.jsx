@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
-import * as moment from 'moment';
+import moment, * as moments from 'moment';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from '@material-ui/core/Fab';
@@ -99,8 +99,8 @@ class Users extends Component {
       return {
         ...rest,
         roles: map(roles, p => p.name).join(', '),
-        created: moment(created).format('YYYY-MM-DD HH:mm:ss'),
-        loginLast: moment(loginLast).format('YYYY-MM-DD HH:mm:ss'),
+        created: created && moment(created).format('YYYY-MM-DD HH:mm:ss'),
+        loginLast: loginLast && moment(loginLast).format('YYYY-MM-DD HH:mm:ss'),
         loginCount
       };
     });
@@ -166,11 +166,11 @@ class Users extends Component {
   }
 
   render() {
-    const { classes, data } = this.props;
+    const { data } = this.props;
 
     return (
       <>
-        <AdminNavbar title='Users' />
+        <AdminNavbar title="Users" />
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
