@@ -25,7 +25,7 @@ const dashboardRoutes = [
   //   layout: '/admin'
   // },
   {
-    path: '/users',
+    path: routes.USERS,
     name: 'Users',
     icon: Person,
     component: Users,
@@ -33,7 +33,7 @@ const dashboardRoutes = [
     visible: true
   },
   {
-    path: '/role',
+    path: routes.ROLE,
     name: 'Role',
     icon: Person,
     component: Role,
@@ -41,7 +41,7 @@ const dashboardRoutes = [
     visible: false
   },
   {
-    path: '/roles',
+    path: routes.ROLES,
     name: 'Roles',
     icon: Person,
     component: Roles,
@@ -50,7 +50,7 @@ const dashboardRoutes = [
   },
 
   {
-    path: '/permissions',
+    path: routes.PERMISSIONS,
     name: 'Permissions',
     icon: Person,
     component: Permissions,
