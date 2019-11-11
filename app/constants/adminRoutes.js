@@ -5,6 +5,7 @@ import Person from '@material-ui/icons/Person';
 // import UserProfile from 'views/UserProfile/UserProfile.jsx';
 import Users from 'containers/Users/Users';
 import Roles from 'containers/Roles/Roles';
+import Role from 'containers/Roles/Role';
 import Permissions from 'containers/Permissions/Permissions';
 import routes from 'constants/routes.json';
 
@@ -28,21 +29,33 @@ const dashboardRoutes = [
     name: 'Users',
     icon: Person,
     component: Users,
-    layout: routes.ADMIN
+    layout: routes.ADMIN,
+    visible: true
+  },
+  {
+    path: '/role',
+    name: 'Role',
+    icon: Person,
+    component: Role,
+    layout: routes.ADMIN,
+    visible: false
   },
   {
     path: '/roles',
     name: 'Roles',
     icon: Person,
     component: Roles,
-    layout: routes.ADMIN
+    layout: routes.ADMIN,
+    visible: true
   },
+
   {
     path: '/permissions',
     name: 'Permissions',
     icon: Person,
     component: Permissions,
-    layout: routes.ADMIN
+    layout: routes.ADMIN,
+    visible: true
   }
 ];
 
