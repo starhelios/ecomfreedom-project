@@ -17,7 +17,7 @@ import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { getUsers, createUsers, deleteUsers } from "../../redux/actions/users";
+import { getUsers, createUsers, deleteUsers } from '../../redux/actions/users';
 
 const styles = {
   cardCategoryWhite: {
@@ -61,7 +61,7 @@ class Users extends Component {
     deleteItem: null,
     name: '',
     description: ''
-  }
+  };
 
   componentDidMount() {
     this.props.getUsersAction();
@@ -69,7 +69,7 @@ class Users extends Component {
 
   handleAddNew = () => {
     this.setState({ open: true });
-  }
+  };
 
   handleClose = () => {
     this.setState({ open: false, openConfirm: false, name: '', description: '', editId: null, deleteItem: null });
@@ -86,14 +86,14 @@ class Users extends Component {
 
     createUserAction(payload);
     this.handleClose();
-  }
+  };
 
   onChange = field => event => {
     this.setState({ [field]: event.target.value });
-  }
+  };
 
-  prepareData = (data) => {
-    return map(data, item => {
+  prepareData = data =>
+    map(data, item => {
       const { roles, created, loginLast, loginCount, ...rest } = item;
 
       return {
@@ -104,7 +104,6 @@ class Users extends Component {
         loginCount
       };
     });
-  }
 
   renderConfirm = () => {
     const { openConfirm } = this.state;
@@ -118,14 +117,14 @@ class Users extends Component {
         description="Are you sure you want to delete this element?"
         okTitle="Delete"
       />
-    )
-  }
+    );
+  };
 
   renderNavbar = classes => (
     <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
       Add User
     </Fab>
-  )
+  );
 
   renderModal = () => {
     const { open, name, description } = this.state;
@@ -163,7 +162,7 @@ class Users extends Component {
         />
       </Modal>
     );
-  }
+  };
 
   render() {
     const { data } = this.props;

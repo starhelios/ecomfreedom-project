@@ -22,7 +22,6 @@ let userInfo = {};
 const switchRoutes = (
   <Switch>
     {routes.map((prop, key) => {
-      console.log('prop', prop)
       if (prop.layout === "/admin") {
         return (
           <Route
