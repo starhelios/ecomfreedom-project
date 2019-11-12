@@ -1,13 +1,13 @@
 const express = require('express');
-// const config = require('../config');
+const config = require('../config');
 const createLogger = require('../logger');
 const validator = require('../validator');
 const db = require('../db');
 const paginated = require('../middleware/page-request');
 const filtered = require('../middleware/filter');
+const { Role } = require('../middleware/authorizer');
 
 const router = express.Router();
-// const SECRET = config.get('web-app:secret');
 const logger = createLogger('web-server.user-route');
 
 /**
@@ -146,5 +146,11 @@ router.get('/', paginated, filtered, async (req, res) => {
     data
   });
 });
+
+if (config.get('NODE_ENV') === 'test') {
+  router.get('/test-users-only', Role('test-role'), (req, res) => {
+    res.json(true);
+  });
+}
 
 module.exports = router;
