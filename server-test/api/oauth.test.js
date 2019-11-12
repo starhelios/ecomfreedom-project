@@ -17,12 +17,22 @@ describe('oauth apis', () => {
   });
 
   beforeAll(async () => {
-    // test user role
+    // test user permission
     let res = await request(app)
+      .post(`${config.get('base-path')}/permission`)
+      .send({
+        name: 'test-permission',
+        description: 'test user role'
+      });
+    expect(res.status).toBe(200);
+
+    // test user role
+    res = await request(app)
       .post(`${config.get('base-path')}/role`)
       .send({
         name: 'test-role',
-        description: 'test user role'
+        description: 'test user role',
+        permissions: ['test-permission']
       });
     expect(res.status).toBe(200);
 
@@ -77,7 +87,7 @@ describe('oauth apis', () => {
     expect(data.username).toBe('user@test.com');
     expect(data.email).toBe('user@test.com');
     expect(data.roles).toEqual(['test-role']);
-    expect(data.permissions).toEqual([]);
+    expect(data.permissions).toEqual(['test-permission']);
     expect(data.exp * 1000).toBeGreaterThan(Date.now());
 
     res = await request(app)
@@ -140,6 +150,24 @@ describe('oauth apis', () => {
       .set('Authorization', `Bearer ${at}`);
     expect(res.status).toBe(200);
     expect(res.body).toEqual(true);
+
+    // should fail on another role
+    res = await request(app)
+      .get(`${config.get('base-path')}/user/admin-users-only/`)
+      .set('Authorization', `Bearer ${at}`);
+    expect(res.status).toBe(401);
+
+    res = await request(app)
+      .get(`${config.get('base-path')}/user/test-permission-only/`)
+      .set('Authorization', `Bearer ${at}`);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(true);
+
+    // should fail on another permission
+    res = await request(app)
+      .get(`${config.get('base-path')}/user/write-permission-only/`)
+      .set('Authorization', `Bearer ${at}`);
+    expect(res.status).toBe(401);
   });
 
   test('should authorize and fail when refresh token is wrong', async () => {
