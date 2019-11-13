@@ -17,7 +17,7 @@ import Card from 'components/Card/Card.jsx';
 import CardBody from 'components/Card/CardBody.jsx';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { getUsers, createUsers, deleteUsers } from '../../redux/actions/users';
+import { getUsers, getFilters } from '../../redux/actions/users';
 
 const styles = {
   cardCategoryWhite: {
@@ -64,7 +64,7 @@ class UsersFilterPage extends Component {
   };
 
   componentDidMount() {
-    this.props.getUsersAction();
+    this.props.getFilters();
   }
 
   handleAddNew = () => {
@@ -195,7 +195,7 @@ class UsersFilterPage extends Component {
 
 UsersFilterPage.propTypes = {
   getUsersAction: PropTypes.func,
-  createUserAction: PropTypes.func,
+  getFilters: PropTypes.func,
   deleteUserAction: PropTypes.func,
   data: PropTypes.array,
   total: PropTypes.number
@@ -210,11 +210,8 @@ const mapDispatchToProps = dispatch => ({
   getUsersAction: () => {
     dispatch(getUsers());
   },
-  createUserAction: data => {
-    dispatch(createUsers(data));
-  },
-  deleteUserAction: data => {
-    dispatch(deleteUsers(data));
+  getFiltersAction: data => {
+    dispatch(getFilters(data));
   }
 });
 
