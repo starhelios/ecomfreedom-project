@@ -10,7 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import Link from '@material-ui/core/Link';
+import Close from "@material-ui/icons/Close";
 // core components
 import Modal from 'components/Modal/Modal';
 import GridItem from 'components/Grid/GridItem';
@@ -53,7 +54,17 @@ const styles = {
   },
   fab: {
     background: 'orange',
-    elevation: 1
+    marginLeft: 16
+  },
+  filterContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  filterCard: {
+    marginTop: 10,
+    marginBottom: 10
   }
 };
 
@@ -65,7 +76,8 @@ class UsersFilterPage extends Component {
     deleteItem: null,
     name: '',
     description: '',
-    role: {}
+    role: {},
+    selected: {}
   };
 
   componentWillMount() {
@@ -93,28 +105,29 @@ class UsersFilterPage extends Component {
   };
 
   handleAddNew = () => {
-    this.setState({ open: true });
+    console.log('New Student');
   };
 
-  handleClose = () => {
-    this.setState({ open: false, openConfirm: false, name: '', description: '', editId: null, deleteItem: null });
+  handleExportCSV = () => {
+    console.log('Export CSV');
   };
 
-  handleSubmit = () => {
-    const { name, description, editId } = this.state;
-    const { createUserAction } = this.props;
-    const payload = { name, description };
-
-    if (editId) {
-      payload.id = editId;
-    }
-
-    createUserAction(payload);
-    this.handleClose();
+  handleCloseFilter = name => () => {
+    console.log('handleCloseFilter', name);
+    const { selected } = this.state;
+    selected[name] = false;
+    this.setState({ selected });
   };
 
-  onChange = field => event => {
-    this.setState({ [field]: event.target.value });
+  handleChange = event => {
+    console.log('handleChange', event, event.target);
+    const { selected } = this.state;
+    selected[event.target.value] = true;
+    this.setState({ selected });
+  };
+
+  resetFilters = () => {
+    this.setState({ selected: {}});
   };
 
   prepareData = data =>
@@ -131,32 +144,54 @@ class UsersFilterPage extends Component {
     });
 
   renderNavbar = classes => (
-    <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
-      Add User
-    </Fab>
+    <>
+      <Fab variant="extended" size="medium" aria-label="like" color="secondary" onClick={this.handleExportCSV}>
+        Export CSV
+      </Fab>
+      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
+        Add Student
+      </Fab>
+    </>
   );
 
   render() {
     const { data, roles, filters, classes } = this.props;
-    const { role } = this.state;
+    const { role, selected } = this.state;
 
     console.log('role', role, roles);
     console.log('filters', filters);
+    console.log('selected', selected);
     return (
       <>
-        <AdminNavbar title={role.description || ''} />
+        <AdminNavbar title={role.description || ''} right={this.renderNavbar(classes)} />
         <AdminContent>
-          <FormControl className={classes.formControl}>
-            <Select onChange={this.handleChange} displayEmpty className={classes.selectEmpty}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-            <FormHelperText>Without label</FormHelperText>
-          </FormControl>
+          <Card>
+            <CardBody className={classes.filterContent}>
+              <FormControl className={classes.formControl}>
+                <Select onChange={this.handleChange} value="" displayEmpty disableUnderline>
+                  <MenuItem value="">
+                    Add Filter
+                  </MenuItem>
+                  {map(filters, item => (<MenuItem key={item.name} value={item.name}>{item.label}</MenuItem>))}
+                </Select>
+              </FormControl>
+              <Link onClick={this.resetFilters}>Reset Filters</Link>
+            </CardBody>
+          </Card>
+          {map(filters, item => {
+            if (selected[item.name]) {
+              return (
+                <Card className={classes.filterCard} key={item.name}>
+                  <CardBody className={classes.filterContent}>
+                    <div className={classes.filterContent}>
+                      <div>{item.label}</div>
+                    </div>
+                    <Close onClick={this.handleCloseFilter(item.name)} />
+                  </CardBody>
+                </Card>
+              )
+            }
+          })}
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
