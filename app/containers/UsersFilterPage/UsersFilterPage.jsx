@@ -7,6 +7,10 @@ import moment, * as moments from 'moment';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
 // core components
 import Modal from 'components/Modal/Modal';
 import GridItem from 'components/Grid/GridItem';
@@ -67,11 +71,20 @@ class UsersFilterPage extends Component {
   componentWillMount() {
     this.setRole();
     this.props.getFiltersAction();
+    this.props.getUsersAction();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { roles } = this.props;
+
+    if (prevProps.roles !== roles) {
+      this.setRole();
+    }
   }
 
   setRole = () => {
     const { match, roles } = this.props;
-    const roleName = match && match.params && match.params.name;
+    const roleName = match && match.params && match.params.role;
     const role = find(roles, item => item.name === roleName);
 
     if (role) {
@@ -117,74 +130,33 @@ class UsersFilterPage extends Component {
       };
     });
 
-  renderConfirm = () => {
-    const { openConfirm } = this.state;
-
-    return (
-      <Modal
-        open={openConfirm}
-        maxWidth="md"
-        onClose={this.handleClose}
-        onSubmit={this.handleDeleteConfirmed}
-        description="Are you sure you want to delete this element?"
-        okTitle="Delete"
-      />
-    );
-  };
-
   renderNavbar = classes => (
     <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
       Add User
     </Fab>
   );
 
-  renderModal = () => {
-    const { open, name, description } = this.state;
-
-    return (
-      <Modal
-        open={open}
-        maxWidth="md"
-        onClose={this.handleClose}
-        onSubmit={this.handleSubmit}
-        title="Add New User"
-        okTitle="Save"
-      >
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          name="name"
-          label="Name"
-          type="text"
-          fullWidth
-          value={name}
-          onChange={this.onChange('name')}
-        />
-        <TextField
-          autoFocus
-          margin="dense"
-          id="description"
-          name="description"
-          label="Description"
-          type="text"
-          fullWidth
-          value={description}
-          onChange={this.onChange('description')}
-        />
-      </Modal>
-    );
-  };
-
   render() {
-    const { data } = this.props;
+    const { data, roles, filters, classes } = this.props;
     const { role } = this.state;
 
-    console.log('role', role);
+    console.log('role', role, roles);
+    console.log('filters', filters);
     return (
       <>
-        <AdminNavbar title={role.name || ''} />
+        <AdminNavbar title={role.description || ''} />
         <AdminContent>
+          <FormControl className={classes.formControl}>
+            <Select onChange={this.handleChange} displayEmpty className={classes.selectEmpty}>
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+            <FormHelperText>Without label</FormHelperText>
+          </FormControl>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
@@ -200,8 +172,6 @@ class UsersFilterPage extends Component {
             </GridItem>
           </GridContainer>
         </AdminContent>
-        {this.renderModal()}
-        {this.renderConfirm()}
       </>
     );
   }
@@ -210,11 +180,14 @@ class UsersFilterPage extends Component {
 UsersFilterPage.propTypes = {
   getUsersAction: PropTypes.func.isRequired,
   getFiltersAction: PropTypes.func.isRequired,
+  roles: PropTypes.arrayOf(PropTypes.any).isRequired,
   data: PropTypes.array,
   total: PropTypes.number
 };
 
 const mapStateToProps = ({ users }) => ({
+  roles: users.roles.data,
+  filters: users.filters,
   data: users.users.data,
   total: users.users.total
 });
