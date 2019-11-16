@@ -8,7 +8,8 @@ module.exports = {
   model: {
     User: require('./user'),
     Role: require('./role'),
-    Permission: require('./permission')
+    Permission: require('./permission'),
+    Course: require('./course')
   },
 
   beforeAll(done) {
