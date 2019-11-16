@@ -20,7 +20,8 @@
       "type": "array",
       "items": {
         "anyOf": [{ "$ref": "#mongo-id" }, { "$ref": "#name" }, { "type": "string", "format": "email" }]
-      }
+      },
+      "minItems": 1
     }
   }
 }

@@ -1,3 +1,4 @@
+const HttpStatus = require('http-status-codes');
 const express = require('express');
 const router = express.Router();
 const validator = require('../validator');
@@ -48,6 +49,8 @@ const db = require('../db');
  *     responses:
  *       200:
  *         description: created a new course in DB
+ *       409:
+ *         description: not all authors have been created
  *       422:
  *         description: model does not satisfy the expected schema
  *
@@ -57,13 +60,15 @@ router.post('/', async (req, res) => {
 
   if (!validator.course(data)) {
     logger.error('validation of create course request failed', validator.course.errors);
-    res.status(422).json({ errors: validator.course.errors });
+    res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ errors: validator.course.errors });
     return;
   }
   const authorsCreated = await db.model.User.verifyEmails(data.authors);
   if (!authorsCreated) {
     logger.error('authors', data.authors, 'have not been created yet');
-    res.status(409).json({ errors: [{ dataPath: '.authors', message: `not created: ${data.authors}` }] });
+    res
+      .status(HttpStatus.CONFLICT)
+      .json({ errors: [{ dataPath: '.authors', message: `not created: ${data.authors}` }] });
     return;
   }
 
