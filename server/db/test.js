@@ -9,7 +9,8 @@ module.exports = {
     User: require('./user'),
     Role: require('./role'),
     Permission: require('./permission'),
-    Course: require('./course')
+    Course: require('./course'),
+    PricingPlan: require('./pricing-plan')
   },
 
   beforeAll(done) {
