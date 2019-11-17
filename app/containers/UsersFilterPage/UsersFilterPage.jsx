@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map, find, filter, forEach } from 'lodash';
 import moment, * as moments from 'moment';
+import { CSVLink } from 'react-csv/lib';
 // @material-ui/core components
 import 'date-fns';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -76,6 +77,9 @@ const styles = {
   },
   label: {
     marginRight: 24
+  },
+  csvLink: {
+    textDecoration: 'none'
   }
 };
 
@@ -206,7 +210,7 @@ class UsersFilterPage extends Component {
     this.setState({ filtersValues: { ...filtersValues, [field]: event.target.value }});
   };
 
-  renderControl = (item) => {
+  renderControl = item => {
     const { filtersValues } = this.state;
     const value = filtersValues[item];
     let control;
@@ -258,24 +262,33 @@ class UsersFilterPage extends Component {
     return control;
   };
 
-  renderNavbar = classes => (
-    <>
-      <Fab variant="extended" size="medium" aria-label="like" color="secondary" onClick={this.handleExportCSV}>
-        Export CSV
-      </Fab>
-      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
-        Add Student
-      </Fab>
-    </>
-  );
-
-  render() {
-    const { data, roles, filters, classes } = this.props;
-    const { role, selected, filtersValues } = this.state;
+  renderNavbar = () => {
+    const { classes, data } = this.props;
+    const { role } = this.state;
+    const filename = `${role.name}-${moment().format('MM-DD-YYYY')}.csv`;
 
     return (
       <>
-        <AdminNavbar title={role.description || ''} right={this.renderNavbar(classes)} />
+        <CSVLink data={this.prepareData(data)} filename={filename} className={classes.csvLink}>
+          <Fab variant="extended" size="medium" aria-label="like" color="secondary" onClick={this.handleExportCSV}>
+            Export CSV
+          </Fab>
+        </CSVLink>
+
+        <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
+          Add Student
+        </Fab>
+      </>
+    );
+  }
+
+  render() {
+    const { data, filters, classes } = this.props;
+    const { role, selected } = this.state;
+
+    return (
+      <>
+        <AdminNavbar title={role.description || ''} right={this.renderNavbar()} />
         <AdminContent>
           <Card>
             <CardBody className={classes.filterContent}>
