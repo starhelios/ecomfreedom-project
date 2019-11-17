@@ -16,6 +16,7 @@ const pageRequestSchema = readJson('schema', 'page-request.schema.json');
 const assignFilterSchema = readJson('schema', 'assign-filter.schema.json');
 const filtersSchema = readJson('schema', 'filters.schema.json');
 const courseSchema = readJson('schema', 'new-course.schema.json');
+const pricingPlanSchema = readJson('schema', 'new-pricing-plan.schema.json');
 
 const name = ajv.compile(nameRequestSchema);
 const newUser = ajv.compile(newUserSchema);
@@ -27,6 +28,7 @@ const pageRequest = ajv.compile(pageRequestSchema);
 const assignFilter = ajv.compile(assignFilterSchema);
 const filters = ajv.compile(filtersSchema);
 const course = ajv.compile(courseSchema);
+const pricingPlan = ajv.compile(pricingPlanSchema);
 
 module.exports = {
   newUser,
@@ -38,5 +40,6 @@ module.exports = {
   pageRequest,
   assignFilter,
   filters,
-  course
+  course,
+  pricingPlan
 };
