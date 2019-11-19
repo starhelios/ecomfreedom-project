@@ -1,5 +1,5 @@
 import React from "react";
-import { map } from 'lodash';
+import { map, find } from 'lodash';
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
@@ -24,7 +24,7 @@ import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebar
 
 const useStyles = makeStyles(theme => ({
   nested: {
-    paddingLeft: theme.spacing(8),
+    paddingLeft: `${theme.spacing(8)}px !important`,
   },
   arrow: {
     float: 'right'
@@ -36,8 +36,8 @@ const Sidebar = ({ ...props }) => {
   function activeRoute(routeName, link) {
     return props.location.pathname.indexOf(routeName) > -1 || props.location.pathname.indexOf(link) > -1 ? true : false;
   }
-  function activeParent(routeName, link) {
-    return props.location.pathname.indexOf(routeName) > -1 || props.location.pathname.indexOf(link) > -1 ? true : false;
+  function activeParent(children, routeName, link) {
+    return !!find(children, item => (activeRoute(item.layout + item.path, item.layout + item.link)));
   }
   const { classes, color, logo, image, logoText, routes } = props;
   const styles = useStyles();
@@ -50,7 +50,8 @@ const Sidebar = ({ ...props }) => {
           [" " + classes[color]]: activeRoute(prop.layout + prop.path, prop.layout + prop.link)
         });
         const whiteFontClasses = classNames({
-          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path, prop.layout + prop.link )
+          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path, prop.layout + prop.link ) ||
+          activeParent(prop.children, prop.layout + prop.path, prop.layout + prop.link)
         });
         return (
           <div key={key}>
@@ -92,30 +93,23 @@ const Sidebar = ({ ...props }) => {
               </ListItem>
             </NavLink>
             {prop.children ? (
-              <Collapse in={activeRoute(prop.layout + prop.path, prop.layout + prop.link )} timeout="auto" unmountOnExit>
+              <Collapse
+                in={activeRoute(prop.layout + prop.path, prop.layout + prop.link ) ||
+                  activeParent(prop.children, prop.layout + prop.path, prop.layout + prop.link)}
+                timeout="auto"
+                unmountOnExit
+              >
                 <List component="div" disablePadding>
-                  {map(prop.children, item => item.visible && (
-                    <NavLink
+                  {map(prop.children, item => item.visible &&
+                    (<NavLink
+                      key={item.link + item.path}
                       to={item.layout + (item.link || item.path)}
                       className={activePro + classes.item}
                       activeClassName="active"
                     >
-                      <ListItem button className={styles.nested}>
-                        {typeof item.icon === 'string' ? (
-                          <Icon
-                            className={classNames(classes.itemIcon, whiteFontClasses, {
-                              [classes.itemIconRTL]: props.rtlActive
-                            })}
-                          >
-                            {item.icon}
-                          </Icon>
-                        ) : (
-                          <item.icon
-                            className={classNames(classes.itemIcon, whiteFontClasses, {
-                              [classes.itemIconRTL]: props.rtlActive
-                            })}
-                          />
-                        )}
+                      <ListItem button className={classNames(styles.nested, classes.itemLink, {
+                        [" " + classes[color]]: activeRoute(item.layout + item.path, item.layout + item.link)
+                      })}>
                         <ListItemText
                           primary={props.rtlActive ? item.rtlName : item.name}
                           className={classNames(classes.itemText, whiteFontClasses, {
@@ -124,8 +118,8 @@ const Sidebar = ({ ...props }) => {
                           disableTypography={true}
                         />
                       </ListItem>
-                    </NavLink>
-                  ))}
+                    </NavLink>)
+                  )}
                 </List>
               </Collapse>
             ) : null
