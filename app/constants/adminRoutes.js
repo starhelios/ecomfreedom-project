@@ -20,6 +20,7 @@ import NewCourse from 'containers/CoursesPage/Course';
 import Permissions from 'containers/Permissions/Permissions';
 import routes from 'constants/routes.json';
 import UsersFilterPage from 'containers/UsersFilterPage/UsersFilterPage';
+import CourseCurriculum from 'containers/CoursesPage/CourseCurriculum';
 
 const dashboardRoutes = [
   {
@@ -121,6 +122,14 @@ const dashboardRoutes = [
     name: 'New Course',
     icon: VideoLibrary,
     component: NewCourse,
+    layout: routes.ADMIN,
+    visible: false
+  },
+  {
+    path: routes.CURRICULUM,
+    name: 'Curriculum',
+    icon: VideoLibrary,
+    component: CourseCurriculum,
     layout: routes.ADMIN,
     visible: false
   },
