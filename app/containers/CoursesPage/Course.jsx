@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { forEach, find, size, filter } from 'lodash';
+import { forEach, map, size, filter } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from '@material-ui/core/Fab';
-import TextField from '@material-ui/core/TextField';
+import {
+  TextField,
+  Typography,
+  FormLabel,
+  FormControl,
+  Box,
+  Select,
+  MenuItem
+} from '@material-ui/core';
 // core components
-import Modal from 'components/Modal/Modal';
-import GridItem from 'components/Grid/GridItem.jsx';
-import GridContainer from 'components/Grid/GridContainer.jsx';
-import TableList from 'components/Table/TableList';
-import Card from 'components/Card/Card.jsx';
-// import CardHeader from 'components/Card/CardHeader.jsx';
+import GridItem from 'components/Grid/GridItem';
+import GridContainer from 'components/Grid/GridContainer';
+import Card from 'components/Card/Card';
 import CardBody from 'components/Card/CardBody';
+import CardFooter from 'components/Card/CardFooter';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { getRole, createRole, deleteRole } from 'redux/actions/users';
+import { createCourse } from 'redux/actions/courses';
 import routes from 'constants/routes.json';
+import { getUsers } from 'redux/actions/users';
 
 const styles = {
   cardCategoryWhite: {
@@ -48,7 +55,23 @@ const styles = {
     }
   },
   fab: {
-    marginLeft: 17
+    background: 'orange'
+  },
+  subtitle: {
+    marginTop: 24,
+    marginBottom: 24
+  },
+  formControl: {
+    marginBottom: 24
+  },
+  footer: {
+    justifyContent: 'flex-end',
+  },
+  card: {
+    padding: 24
+  },
+  selectLabel: {
+    marginBottom: 16
   }
 };
 
@@ -64,30 +87,9 @@ class Role extends Component {
   }
 
   componentWillMount() {
-    this.setRole();
+    // TODO check step and redirect
+    this.props.getUsersAction();
   }
-
-  componentDidUpdate(prevProps) {
-    const { roles } = this.props;
-
-    if (prevProps.roles !== roles) {
-      this.setRole();
-    }
-  }
-
-  setRole = () => {
-    const { match, roles } = this.props;
-    const roleName = match && match.params && match.params.name;
-    const role = find(roles, item => item.name === roleName);
-
-    if (role) {
-      const selected = {};
-      forEach(role.permissions, p => {
-        selected[p.name] = true;
-      });
-      this.setState({ id: role.id, name: role.name, description: role.description, selected });
-    }
-  };
 
   handleBack = () => {
     const { history } = this.props;
@@ -137,69 +139,92 @@ class Role extends Component {
     this.setState({ [field]: event.target.value });
   };
 
-  renderNavbar = classes => (
-    <>
-      <Fab variant="extended" size="medium" aria-label="like" color="secondary" className={classes.fab} onClick={this.handleBack}>
-        Cancel
-      </Fab>
-      <Fab variant="extended" size="medium" aria-label="like" color="primary" className={classes.fab} onClick={this.handleSave}>
-        Save
-      </Fab>
-    </>
-  );
+  handleCreateCourse = () => {
+    const { createCourseAction } = this.props;
+    const { title, subtitle, author } = this.state;
+
+    if (title && subtitle && author ) {
+      const payload = {
+        title,
+        subtitle,
+        authors: [
+          author
+        ]
+      };
+      console.log('payload', payload);
+      createCourseAction(payload);
+    }
+  };
 
   render() {
-    const { classes, roles, permissions } = this.props;
-    const { selected, name, description } = this.state;
-
-    console.log('role', roles, permissions);
-    console.log('selected', selected);
+    const { classes, users } = this.props;
+    const { title, subtitle, author } = this.state;
 
     return (
       <>
-        <AdminNavbar title="Role" right={this.renderNavbar(classes)} />
+        <AdminNavbar title="New Course" />
         <AdminContent>
           <GridContainer>
-            <GridItem xs={12} sm={12} md={12}>
-              <Card>
+            <GridItem xs={12} sm={3} md={4}>
+              <Typography component="div" classes={{ root: classes.subtitle }}>
+                <Box fontSize={18} fontWeight={500}>
+                  Information
+                </Box>
+              </Typography>
+              <Typography component="div">
+                <Box fontSize={16} fontFamily="fontFamily">
+                  Add basic information about the course and author name
+                </Box>
+              </Typography>
+            </GridItem>
+            <GridItem xs={12} sm={9} md={8}>
+              <Card className={classes.card}>
                 <CardBody>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    name="name"
-                    label="Name"
-                    type="text"
-                    fullWidth
-                    value={name}
-                    disabled
-                    onChange={this.onChange('name')}
-                  />
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="description"
-                    name="description"
-                    label="Description"
-                    type="text"
-                    fullWidth
-                    value={description}
-                    onChange={this.onChange('description')}
-                  />
+                  <FormControl variant="outlined" fullWidth className={classes.formControl}>
+                    <FormLabel component="legend">Course Title</FormLabel>
+                    <TextField
+                      autoFocus
+                      margin="normal"
+                      id="title"
+                      name="name"
+                      type="text"
+                      fullWidth
+                      value={title}
+                      variant="outlined"
+                      onChange={this.onChange('title')}
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" fullWidth className={classes.formControl}>
+                    <FormLabel component="legend">Course Subtitle</FormLabel>
+                    <TextField
+                      autoFocus
+                      margin="normal"
+                      id="description"
+                      name="subtitle"
+                      type="text"
+                      fullWidth
+                      variant="outlined"
+                      value={subtitle}
+                      onChange={this.onChange('subtitle')}
+                    />
+                  </FormControl>
+                  <FormControl variant="outlined" fullWidth className={classes.formControl}>
+                    <FormLabel component="legend" className={classes.selectLabel}>Select Author</FormLabel>
+                    <Select onChange={this.onChange('author')}>
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      {map(users, item => (
+                        <MenuItem value={item.email}>{item.email}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </CardBody>
-              </Card>
-              <Card>
-                <CardBody>
-                  <TableList
-                    tableHeaderColor="info"
-                    tableHead={['Name', 'Description']}
-                    tableColumns={['name', 'description']}
-                    tableData={permissions}
-                    selected={selected}
-                    onSelect={this.onSelect}
-                    onSelectAll={this.onSelectAll}
-                  />
-                </CardBody>
+                <CardFooter className={classes.footer}>
+                  <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleCreateCourse}>
+                    Create Course
+                  </Fab>
+                </CardFooter>
               </Card>
             </GridItem>
           </GridContainer>
@@ -211,29 +236,22 @@ class Role extends Component {
 
 Role.propTypes = {
   classes: PropTypes.objectOf(PropTypes.any).isRequired,
-  getRoleAction: PropTypes.func.isRequired,
-  createRoleAction: PropTypes.func.isRequired,
-  role: PropTypes.objectOf(PropTypes.any).isRequired,
-  roles: PropTypes.arrayOf(PropTypes.any).isRequired,
-  permissions: PropTypes.arrayOf(PropTypes.any).isRequired,
-  permissionsTotal: PropTypes.number.isRequired,
-  history: PropTypes.objectOf(PropTypes.any).isRequired,
-  match: PropTypes.objectOf(PropTypes.any).isRequired
+  createCourseAction: PropTypes.func.isRequired,
+  getUsersAction: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.any).isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 
 const mapStateToProps = ({ users }) => ({
-  role: users.role,
-  permissions: users.permissions.data,
-  permissionsTotal: users.permissions.total,
-  roles: users.roles.data
+  users: users.users.data
 });
 
 const mapDispatchToProps = dispatch => ({
-  getRoleAction: name => {
-    dispatch(getRole(name));
+  getUsersAction: () => {
+    dispatch(getUsers());
   },
-  createRoleAction: data => {
-    dispatch(createRole(data));
+  createCourseAction: data => {
+    dispatch(createCourse(data));
   },
 });
 
