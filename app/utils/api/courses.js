@@ -17,9 +17,10 @@ export const getCourses = payload => {
 };
 
 export const getCourse = payload => {
+  console.log('getCourse', payload);
   const id = payload && payload.id;
   return axios
-    .get(`${API_ENDPOINT_URL}/course/${id}`, { params })
+    .get(`${API_ENDPOINT_URL}/course/${id}`)
     .then(res => {
       if (res.data) {
         return { success: true, data: res.data };
@@ -62,3 +63,23 @@ export const deleteCourses = payload =>
       return { success: false, reason: res.message };
     })
     .catch(err => ({ success: false, reason: err.response.data.message }));
+
+export const createSection = payload => {
+  const data = {
+    title: payload.title,
+    id: payload.id
+  };
+
+  const courseId = payload.courseId;
+
+  return axios
+    .post(`${API_ENDPOINT_URL}/course/${courseId}/section`, data)
+    .then(res => {
+      console.log('createSection res', res);
+      if (res.data) {
+        return { success: true, data: res.data };
+      }
+      return { success: false, reason: res.message };
+    })
+    .catch(err => ({ success: false, reason: err.response.data.message }));
+};
