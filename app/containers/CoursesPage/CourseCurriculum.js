@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { forEach, map, size, filter } from 'lodash';
+import { map } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from '@material-ui/core/Fab';
-import {
-  TextField,
-  Typography,
-  FormLabel,
-  FormControl,
-  Box,
-  Select,
-  MenuItem
-} from '@material-ui/core';
 // core components
 import GridItem from 'components/Grid/GridItem';
 import GridContainer from 'components/Grid/GridContainer';
@@ -67,7 +58,7 @@ const styles = {
     marginBottom: 24
   },
   footer: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   card: {
     padding: 24
@@ -161,7 +152,13 @@ class CourseCurriculum extends Component {
       <Fab variant="extended" color="default" size="medium" aria-label="like" onClick={this.handlePreview}>
         preview
       </Fab>
-      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleCreateSection}>
+      <Fab
+        variant="extended"
+        size="medium"
+        aria-label="like"
+        className={classes.fab}
+        onClick={this.handleCreateSection}
+      >
         New Section
       </Fab>
     </>
@@ -212,6 +209,7 @@ class CourseCurriculum extends Component {
 CourseCurriculum.propTypes = {
   classes: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
+  course: PropTypes.objectOf(PropTypes.any),
   getCourseAction: PropTypes.func.isRequired,
   createSectionAction: PropTypes.func.isRequired,
   createLectureAction: PropTypes.func.isRequired,
