@@ -1,5 +1,6 @@
 import {
   GET_COURSES_REQUEST,
+  GET_COURSE_REQUEST,
   CREATE_COURSES_REQUEST,
   DELETE_COURSES_REQUEST,
   CREATE_SECTIONS_REQUEST,
@@ -8,6 +9,11 @@ import {
 
 export const getCourses = payload => ({
   type: GET_COURSES_REQUEST,
+  payload
+});
+
+export const getCourse = payload => ({
+  type: GET_COURSE_REQUEST,
   payload
 });
 
