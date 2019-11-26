@@ -75,6 +75,8 @@ router.post('/', async (req, res) => {
 
   data.authors = await db.model.User.mapToId(data.authors);
   const course = await db.model.Course.create(data);
+  const sectionCount = await course.createSection({ title: 'First section' });
+  await course.createLecture(sectionCount - 1, { title: 'First lecture', status: 'draft' });
   logger.info('course', course.title, 'has been created/updated, id', String(course._id));
   res.json(course);
 });
@@ -259,6 +261,51 @@ router.get('/', paginated(20), async (req, res) => {
   res.json({
     total,
     data
+  });
+});
+
+/**
+ * @swagger
+ * /course/{course}:
+ *  get:
+ *    description: get course by mongo id
+ *    consumes:
+ *      - application/json
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - name: course
+ *        in: path
+ *        required: true
+ *        type: string
+ *        schema:
+ *          $ref: '#/definitions/Course'
+ *    responses:
+ *      200:
+ *        description: course by id is found
+ *      400:
+ *        description: no course in url path
+ *      404:
+ *        description: no course in mongodb
+ */
+router.get('/:course', async (req, res) => {
+  const { params } = req;
+  logger.info('Here');
+  if (!validator.getCourse({ params })) {
+    const { errors } = validator.getCourse;
+    logger.error('Validation of get course request is failed', errors);
+    res.status(HttpStatus.BAD_REQUEST).json({ errors });
+  }
+  const course = await db.model.Course.findById(params.course);
+
+  if (!course) {
+    res.status(HttpStatus.NOT_FOUND).json({
+      error: `Course with id ${params.course} is not found`
+    });
+  }
+
+  res.json({
+    course
   });
 });
 
