@@ -1,5 +1,5 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
-import { getCourses, createCourses, deleteCourses } from 'api/Api';
+import { getCourses, createCourses, deleteCourses, createSection, deleteSection } from 'api/Api';
 import {
   GET_COURSES_REQUEST,
   GET_COURSES_SUCCESS,
@@ -9,7 +9,13 @@ import {
   CREATE_COURSES_FAILED,
   DELETE_COURSES_REQUEST,
   DELETE_COURSES_SUCCESS,
-  DELETE_COURSES_FAILED
+  DELETE_COURSES_FAILED,
+  CREATE_SECTIONS_REQUEST,
+  CREATE_SECTIONS_SUCCESS,
+  CREATE_SECTIONS_FAILED,
+  DELETE_SECTIONS_REQUEST,
+  DELETE_SECTIONS_SUCCESS,
+  DELETE_SECTIONS_FAILED,
 } from 'constants/actionTypes';
 
 // Responsible for searching media library, making calls to the API
@@ -20,6 +26,8 @@ export default function* watchAuthListener(context = {}) {
   yield takeLatest(GET_COURSES_REQUEST, getCoursesRequestSaga);
   yield takeLatest(CREATE_COURSES_REQUEST, createCoursesRequestSaga, context);
   yield takeLatest(DELETE_COURSES_REQUEST, deleteCoursesRequestSaga);
+  yield takeLatest(CREATE_COURSES_REQUEST, createSectionRequestSaga);
+  yield takeLatest(DELETE_COURSES_REQUEST, deleteSectionRequestSaga);
 }
 
 export function* getCoursesRequestSaga({ payload }) {
@@ -50,5 +58,23 @@ export function* deleteCoursesRequestSaga({ payload }) {
     yield put({ type: DELETE_COURSES_SUCCESS, res: { ...res, name: payload.name } });
   } catch (error) {
     yield put({ type: DELETE_COURSES_FAILED, error });
+  }
+}
+
+export function* createSectionRequestSaga({ payload }) {
+  try {
+    const res = yield call(createSection, payload);
+    yield put({ type: CREATE_SECTIONS_SUCCESS, res });
+  } catch (error) {
+    yield put({ type: CREATE_SECTIONS_FAILED, error });
+  }
+}
+
+export function* deleteSectionRequestSaga({ payload }) {
+  try {
+    const res = yield call(deleteSection, payload);
+    yield put({ type: DELETE_SECTIONS_SUCCESS, res: { ...res, name: payload.name } });
+  } catch (error) {
+    yield put({ type: DELETE_SECTIONS_FAILED, error });
   }
 }
