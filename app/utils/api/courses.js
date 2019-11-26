@@ -83,3 +83,29 @@ export const createSection = payload => {
     })
     .catch(err => ({ success: false, reason: err.response.data.message }));
 };
+
+export const createLecture = payload => {
+  const data = {
+    id: payload.id,
+    title: payload.title,
+    file: payload.file,
+    image: payload.image,
+    text: payload.text,
+    allowComments: payload.allowComments,
+    state: payload.state
+  };
+
+  const courseId = payload.courseId;
+  const sectionId = payload.sectionId;
+
+  return axios
+    .post(`${API_ENDPOINT_URL}/course/${courseId}/section/${sectionId}/lecture`, data)
+    .then(res => {
+      console.log('createLecture res', res);
+      if (res.data) {
+        return { success: true, data: res.data };
+      }
+      return { success: false, reason: res.message };
+    })
+    .catch(err => ({ success: false, reason: err.response.data.message }));
+};

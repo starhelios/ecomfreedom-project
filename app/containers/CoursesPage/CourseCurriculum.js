@@ -21,7 +21,7 @@ import Card from 'components/Card/Card';
 import CardBody from 'components/Card/CardBody';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { createSection, getCourse } from 'redux/actions/courses';
+import { createSection, getCourse, createLecture } from 'redux/actions/courses';
 import routes from 'constants/routes.json';
 import NewLectureButton from 'components/Lecture/NewLectureButton';
 import Section from 'components/Course/Section';
@@ -125,9 +125,20 @@ class CourseCurriculum extends Component {
     createSectionAction(payload);
   };
 
-  onNewLecture = () => {
-    // TODO Create lecture
-    console.log('onNewLecture');
+  onNewLecture = section => () => {
+    const { createLectureAction } = this.props;
+    const { course } = this.state;
+    const payload = {
+      title: 'New Lecture',
+      file: null,
+      image: null,
+      text: 'lecture text',
+      allowComments: false,
+      state: 'draft',
+      courseId: course && course.id,
+      sectionId: section && section._id
+    };
+    createLectureAction(payload);
   };
 
   onCheckSection = () => {
@@ -186,7 +197,7 @@ class CourseCurriculum extends Component {
                         onCheck={this.onCheckSection}
                       />
                     ))}
-                    <NewLectureButton onSelect={this.onNewLecture} />
+                    <NewLectureButton onSelect={this.onNewLecture(section)} />
                   </CardBody>
                 </Card>
               ))}
@@ -203,6 +214,7 @@ CourseCurriculum.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   getCourseAction: PropTypes.func.isRequired,
   createSectionAction: PropTypes.func.isRequired,
+  createLectureAction: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired
 };
 
@@ -213,6 +225,9 @@ const mapStateToProps = ({ courses }) => ({
 const mapDispatchToProps = dispatch => ({
   createSectionAction: data => {
     dispatch(createSection(data));
+  },
+  createLectureAction: data => {
+    dispatch(createLecture(data));
   },
   getCourseAction: data => {
     dispatch(getCourse(data));
