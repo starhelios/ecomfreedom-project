@@ -125,18 +125,18 @@ class CourseCurriculum extends Component {
     createSectionAction(payload);
   };
 
-  onNewLecture = section => () => {
+  onNewLecture = sectionIndex => () => {
     const { createLectureAction } = this.props;
     const { course } = this.state;
     const payload = {
       title: 'New Lecture',
-      file: null,
-      image: null,
+      file: 'file',
+      image: 'image',
       text: 'lecture text',
       allowComments: false,
       state: 'draft',
       courseId: course && course.id,
-      sectionId: section && section._id
+      section: sectionIndex
     };
     createLectureAction(payload);
   };
@@ -178,7 +178,7 @@ class CourseCurriculum extends Component {
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              {map(sections, section => (
+              {map(sections, (section, index) => (
                 <Card className={classes.card}>
                   <CardBody>
                     <Section
@@ -197,7 +197,7 @@ class CourseCurriculum extends Component {
                         onCheck={this.onCheckSection}
                       />
                     ))}
-                    <NewLectureButton onSelect={this.onNewLecture(section)} />
+                    <NewLectureButton onSelect={this.onNewLecture(index)} />
                   </CardBody>
                 </Card>
               ))}
