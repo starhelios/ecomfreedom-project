@@ -1,5 +1,14 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
-import { getCourses, createCourses, deleteCourses, getCourse, createSection, deleteSection } from 'utils/api/courses';
+import {
+  getCourses,
+  createCourses,
+  deleteCourses,
+  getCourse,
+  createSection,
+  deleteSection,
+  createLecture,
+  deleteLecture
+} from 'utils/api/courses';
 import {
   GET_COURSES_REQUEST,
   GET_COURSES_SUCCESS,
@@ -19,6 +28,12 @@ import {
   DELETE_SECTIONS_REQUEST,
   DELETE_SECTIONS_SUCCESS,
   DELETE_SECTIONS_FAILED,
+  CREATE_LECTURES_REQUEST,
+  CREATE_LECTURES_SUCCESS,
+  CREATE_LECTURES_FAILED,
+  DELETE_LECTURES_REQUEST,
+  DELETE_LECTURES_SUCCESS,
+  DELETE_LECTURES_FAILED
 } from 'constants/actionTypes';
 
 // Responsible for searching media library, making calls to the API
@@ -32,6 +47,8 @@ export default function* watchAuthListener(context = {}) {
   yield takeLatest(DELETE_COURSES_REQUEST, deleteCoursesRequestSaga);
   yield takeLatest(CREATE_SECTIONS_REQUEST, createSectionRequestSaga);
   yield takeLatest(DELETE_SECTIONS_REQUEST, deleteSectionRequestSaga);
+  yield takeLatest(CREATE_LECTURES_REQUEST, createLectureRequestSaga);
+  yield takeLatest(DELETE_LECTURES_REQUEST, deleteLectureRequestSaga);
 }
 
 export function* getCoursesRequestSaga({ payload }) {
@@ -80,7 +97,6 @@ export function* createSectionRequestSaga({ payload }) {
   try {
     const res = yield call(createSection, payload);
     yield put({ type: CREATE_SECTIONS_SUCCESS, res });
-    console.log( 'getCourseRequestSaga refresh', res, { id: payload.courseId })
     yield call(getCourseRequestSaga, { payload: { id: payload.courseId } } );
   } catch (error) {
     yield put({ type: CREATE_SECTIONS_FAILED, error });
@@ -93,5 +109,24 @@ export function* deleteSectionRequestSaga({ payload }) {
     yield put({ type: DELETE_SECTIONS_SUCCESS, res: { ...res, name: payload.name } });
   } catch (error) {
     yield put({ type: DELETE_SECTIONS_FAILED, error });
+  }
+}
+
+export function* createLectureRequestSaga({ payload }) {
+  try {
+    const res = yield call(createLecture, payload);
+    yield put({ type: CREATE_LECTURES_SUCCESS, res });
+    yield call(getCourseRequestSaga, { payload: { id: payload.courseId } });
+  } catch (error) {
+    yield put({ type: CREATE_LECTURES_FAILED, error });
+  }
+}
+
+export function* deleteLectureRequestSaga({ payload }) {
+  try {
+    const res = yield call(deleteLecture, payload);
+    yield put({ type: DELETE_LECTURES_SUCCESS, res: { ...res, name: payload.name } });
+  } catch (error) {
+    yield put({ type: DELETE_LECTURES_FAILED, error });
   }
 }
