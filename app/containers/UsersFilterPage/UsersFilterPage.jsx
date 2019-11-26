@@ -227,6 +227,7 @@ class UsersFilterPage extends Component {
         control = (
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
+              autoOk
               disableToolbar
               variant="inline"
               format="MM/dd/yyyy"
