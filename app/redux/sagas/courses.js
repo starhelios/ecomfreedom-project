@@ -62,9 +62,9 @@ export function* getCoursesRequestSaga({ payload }) {
 
 export function* getCourseRequestSaga({ payload }) {
   try {
-    console.log('getCourseRequestSaga payload', payload)
+    console.log('getCourseRequestSaga payload', payload);
     const res = yield call(getCourse, payload);
-    console.log('getCourseRequestSaga', res)
+    console.log('getCourseRequestSaga', res);
     yield put({ type: GET_COURSE_SUCCESS, res });
   } catch (error) {
     yield put({ type: GET_COURSE_FAILED, error });
@@ -97,7 +97,7 @@ export function* createSectionRequestSaga({ payload }) {
   try {
     const res = yield call(createSection, payload);
     yield put({ type: CREATE_SECTIONS_SUCCESS, res });
-    yield call(getCourseRequestSaga, { payload: { id: payload.courseId } } );
+    yield call(getCourseRequestSaga, { payload: { id: payload.courseId } });
   } catch (error) {
     yield put({ type: CREATE_SECTIONS_FAILED, error });
   }

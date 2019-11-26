@@ -70,7 +70,7 @@ export const createSection = payload => {
     id: payload.id
   };
 
-  const courseId = payload.courseId;
+  const { courseId } = payload;
 
   return axios
     .post(`${API_ENDPOINT_URL}/course/${courseId}/section`, data)
@@ -84,6 +84,17 @@ export const createSection = payload => {
     .catch(err => ({ success: false, reason: err.response.data.message }));
 };
 
+export const deleteSection = payload =>
+  axios
+    .delete(`${API_ENDPOINT_URL}/course/${payload.name}/section`)
+    .then(res => {
+      if (res.data) {
+        return { success: true };
+      }
+      return { success: false, reason: res.message };
+    })
+    .catch(err => ({ success: false, reason: err.response.data.message }));
+
 export const createLecture = payload => {
   const data = {
     id: payload.id,
@@ -95,7 +106,7 @@ export const createLecture = payload => {
     state: payload.state
   };
 
-  const courseId = payload.courseId;
+  const { courseId } = payload;
   const sectionId = payload.section;
 
   return axios
@@ -109,3 +120,13 @@ export const createLecture = payload => {
     })
     .catch(err => ({ success: false, reason: err.response.data.message }));
 };
+export const deleteLecture = payload =>
+  axios
+    .delete(`${API_ENDPOINT_URL}/course/${payload.name}/section`)
+    .then(res => {
+      if (res.data) {
+        return { success: true };
+      }
+      return { success: false, reason: res.message };
+    })
+    .catch(err => ({ success: false, reason: err.response.data.message }));
