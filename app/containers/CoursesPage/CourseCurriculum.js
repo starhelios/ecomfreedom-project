@@ -21,7 +21,7 @@ import Card from 'components/Card/Card';
 import CardBody from 'components/Card/CardBody';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { createCourse } from 'redux/actions/courses';
+import { createSection } from 'redux/actions/courses';
 import routes from 'constants/routes.json';
 import { getUsers } from 'redux/actions/users';
 import NewLectureButton from 'components/Lecture/NewLectureButton';
@@ -142,33 +142,14 @@ class CourseCurriculum extends Component {
     this.setState({ [field]: event.target.value });
   };
 
-  handleCreateCourse = () => {
-    const { createCourseAction } = this.props;
-    const { title, subtitle, author } = this.state;
+  handleCreateSection = () => {
+    const { createSectionAction } = this.props;
 
-    if (title && subtitle && author ) {
-      const payload = {
-        title,
-        subtitle,
-        authors: [
-          author
-        ]
-      };
-      console.log('payload', payload);
-      createCourseAction(payload);
-    }
+    const payload = {
+      title: 'New Section'
+    };
+    createSectionAction(payload);
   };
-
-  renderNavbar = classes => (
-    <>
-      <Fab variant="extended" color="default" size="medium" aria-label="like" onClick={this.handleAddNew}>
-        preview
-      </Fab>
-      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleAddNew}>
-        New Section
-      </Fab>
-    </>
-  );
 
   onNewLecture = () => {
     // TODO Create lecture
@@ -184,6 +165,22 @@ class CourseCurriculum extends Component {
     // TODO
     console.log('onChangeSection');
   };
+
+  handlePreview = () => {
+    // TODO
+    console.log('handlePreview');
+  };
+
+  renderNavbar = classes => (
+    <>
+      <Fab variant="extended" color="default" size="medium" aria-label="like" onClick={this.handlePreview}>
+        preview
+      </Fab>
+      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={this.handleCreateSection}>
+        New Section
+      </Fab>
+    </>
+  );
 
   render() {
     const { classes, users } = this.props;
@@ -222,7 +219,7 @@ class CourseCurriculum extends Component {
 
 CourseCurriculum.propTypes = {
   classes: PropTypes.objectOf(PropTypes.any).isRequired,
-  createCourseAction: PropTypes.func.isRequired,
+  createSectionAction: PropTypes.func.isRequired,
   getUsersAction: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired
@@ -236,8 +233,8 @@ const mapDispatchToProps = dispatch => ({
   getUsersAction: () => {
     dispatch(getUsers());
   },
-  createCourseAction: data => {
-    dispatch(createCourse(data));
+  createSectionAction: data => {
+    dispatch(createSection(data));
   },
 });
 
