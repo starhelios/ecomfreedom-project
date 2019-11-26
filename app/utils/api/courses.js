@@ -96,7 +96,7 @@ export const createLecture = payload => {
   };
 
   const courseId = payload.courseId;
-  const sectionId = payload.sectionId;
+  const sectionId = payload.section;
 
   return axios
     .post(`${API_ENDPOINT_URL}/course/${courseId}/section/${sectionId}/lecture`, data)
