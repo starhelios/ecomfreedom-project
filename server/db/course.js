@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types;
 const { DEFAULT_OPTIONS } = require('./common');
+const { generateUploadUrl } = require('../file-util');
 const { softDeletedMiddleware, removeNestedSoftDeleted } = require('../middleware/soft-deleted');
 
 const COURSE_STATE = {
@@ -120,7 +121,10 @@ COURSE.methods.createLecture = async function createLecture(
       });
     }
     await this.save();
-    return section.lectures.length;
+    return {
+      lectureCount: section.lectures.length,
+      image: image ? await generateUploadUrl(image) : null
+    };
   }
   return 0;
 };
