@@ -136,7 +136,6 @@ COURSE.methods.deleteLecture = async function deleteLecture(section, lecture) {
     error.status = 404;
     throw error;
   } else {
-    // другого способа как доставать sub-sub documents нет
     const _lecture = _section.lectures.find(i => i._id.toString() === lecture);
     if (!_lecture) {
       const error = new Error(`Lecture for id ${lecture} is not found`);
@@ -151,7 +150,6 @@ COURSE.methods.deleteLecture = async function deleteLecture(section, lecture) {
 
 COURSE.methods.deleteSection = async function deleteSection(section) {
   const subDoc = this.sections.id(section);
-  console.log(this.sections, subDoc, section);
   if (!subDoc) {
     const error = new Error(`Section for id ${section} is not found.`);
     error.status = 404;
