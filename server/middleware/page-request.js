@@ -1,21 +1,22 @@
 const HttpStatus = require('http-status-codes');
 const validator = require('../validator');
 
-module.exports = DEFAULT_PAGE_SIZE => async (req, res, next) => {
+module.exports = DEFAULT_PAGE_SIZE => async (ctx, next) => {
   // eslint-disable-next-line prefer-const
-  let { pageNumber, pageSize, ...fields } = req.query;
+  let { pageNumber, pageSize, ...fields } = ctx.query;
   pageNumber = pageNumber || '0';
   pageSize = pageSize || String(DEFAULT_PAGE_SIZE);
 
   if (!validator.pageRequest({ pageNumber, pageSize })) {
-    res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({ errors: validator.pageRequest.errors });
+    ctx.status = HttpStatus.UNPROCESSABLE_ENTITY;
+    ctx.body = { errors: validator.pageRequest.errors };
     return;
   }
 
-  req.query = fields;
+  ctx.query = fields;
   const n = Number(pageNumber);
   const s = Number(pageSize);
-  req.page = { limit: s, skip: s * n };
+  ctx.state.page = { limit: s, skip: s * n };
 
   next();
 };
