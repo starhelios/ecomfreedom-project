@@ -20,7 +20,7 @@ const GRANT_TYPE = {
 };
 
 module.exports = app => {
-  const router = new Router({ prefix: 'oauth' });
+  const router = new Router({ prefix: '/api/v1/oauth' });
 
   /**
    * @swagger

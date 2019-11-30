@@ -1,42 +1,35 @@
 const path = require('path');
-// const koa = require('koa');
+const Koa = require('koa');
+const bodyParser = require('koa-bodyparser');
+const serve = require('koa-static');
+const convert = require('koa-convert');
+const mount = require('koa-mount');
+const swaggerUi = require('swagger-ui-koa');
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
-
-const userRoute = require('./route/user');
-const roleRoute = require('./route/role');
-const permissionRoute = require('./route/permission');
-const oauthRoute = require('./route/oauth');
-const filterRoute = require('./route/filter');
-const courseRoute = require('./route/course');
-const pricingPlanRoute = require('./route/pricing-plan');
-
 const config = require('./config');
-
 const createLogger = require('./logger');
 const logger = createLogger('web-server');
-const API = config.get('base-path');
+const app = new Koa();
 
-const app = express();
-app.use(bodyParser.json());
-app.use(`${API}/api-docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use(`${API}/user`, userRoute);
-app.use(`${API}/role`, roleRoute);
-app.use(`${API}/permission`, permissionRoute);
-app.use(`${API}/oauth`, oauthRoute);
-app.use(`${API}/filter`, filterRoute);
-app.use(`${API}/course`, courseRoute);
-app.use(`${API}/pricing-plan`, pricingPlanRoute);
+app.use(bodyParser());
+app.use(swaggerUi.serve);
+app.use(convert(mount('/api/v1/api-docs', swaggerUi.setup(swaggerSpec))));
+
+require('./route/course')(app);
+require('./route/filter')(app);
+require('./route/oauth')(app);
+require('./route/permission')(app);
+require('./route/pricing-plan')(app);
+require('./route/role')(app);
+require('./route/user')(app);
 
 const port = config.get('web-app:port');
 
 /* istanbul ignore next */
 if (config.get('NODE_ENV') === 'production') {
   // production mode
-  app.use('/', express.static(path.join(__dirname, '..', 'build')));
+  app.use(serve(path.join(__dirname, '..', 'build')));
   app.listen(port, () => logger.info('web server started in production, port', port));
 } else if (config.get('NODE_ENV') === 'development') {
   // npm: run dev script to start

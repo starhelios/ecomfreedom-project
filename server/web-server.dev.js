@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const ngrok = require('ngrok');
+const Router = require('koa-router');
 const setup = require('./middlewares/frontendMiddleware');
 const createLogger = require('./logger');
 const logger = createLogger('web-server.dev');
@@ -15,11 +16,16 @@ module.exports = (app, port) => {
   });
 
   // use the gzipped bundle
-  app.get('*.js', (req, res, next) => {
-    req.url = req.url + '.gz'; // eslint-disable-line
-    res.set('Content-Encoding', 'gzip');
-    next();
+  const router = new Router();
+
+  router.get('*.js', async (ctx, next) => {
+    ctx.url = ctx.req.url + '.gz'; // eslint-disable-line
+    ctx.set('Content-Encoding', 'gzip');
+    await next();
   });
+
+  app.use(router.routes());
+  app.use(router.allowedMethods());
 
   app.listen(port, async () => {
     try {

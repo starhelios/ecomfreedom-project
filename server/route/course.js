@@ -9,7 +9,7 @@ const paginated = require('../middleware/page-request');
 const upload = multer({ storage: multer.memoryStorage() });
 
 module.exports = app => {
-  const router = new Router({ prefix: 'course' });
+  const router = new Router({ prefix: '/api/v1/course' });
   /**
    * @swagger
    * definitions:

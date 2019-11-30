@@ -183,7 +183,15 @@
     "mime-types": "latest",
     "multer": "latest",
     "koa-router": "latest",
-    "@koa/multer": "latest"
+    "@koa/multer": "latest",
+    "koa-bodyparser": "latest",
+    "koa": "latest",
+    "koa-static": "latest",
+    "koa-compress": "latest",
+    "koa-send": "latest",
+    "koa-convert": "latest",
+    "swagger-ui-koa": "latest",
+    "koa-mount": "latest"
   },
   "devDependencies": {
     "compare-versions": "3.4.0",

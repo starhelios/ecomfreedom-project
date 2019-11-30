@@ -9,7 +9,7 @@ const filter = require('../filter');
 const logger = createLogger('web-server.role-route');
 
 module.exports = app => {
-  const router = new Router({ prefix: 'role' });
+  const router = new Router({ prefix: '/api/v1/role' });
 
   /**
    * @swagger

@@ -6,7 +6,7 @@ const logger = createLogger('web-server.course-route');
 const db = require('../db');
 
 module.exports = app => {
-  const router = new Router({ prefix: 'pricing-plan' });
+  const router = new Router({ prefix: '/api/v1/pricing-plan' });
   /**
    * @swagger
    * definitions:

@@ -11,7 +11,7 @@ const { Role, Permission } = require('../middleware/authorizer');
 const logger = createLogger('web-server.user-route');
 
 module.exports = app => {
-  const router = new Router({ prefix: 'user' });
+  const router = new Router({ prefix: '/api/v1/user' });
   /**
    * @swagger
    * definitions:

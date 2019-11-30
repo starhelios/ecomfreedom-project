@@ -3,7 +3,7 @@ const HttpStatus = require('http-status-codes');
 const filter = require('../filter');
 
 module.exports = app => {
-  const router = new Router({ prefix: 'filter' });
+  const router = new Router({ prefix: '/api/v1/filter' });
 
   /**
    * @swagger

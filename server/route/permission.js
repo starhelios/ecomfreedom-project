@@ -7,7 +7,7 @@ const paginated = require('../middleware/page-request');
 const logger = createLogger('web-server.permission-route');
 
 module.exports = app => {
-  const router = new Router({ prefix: 'permission' });
+  const router = new Router({ prefix: '/api/v1/permission' });
   /**
    * @swagger
    * definitions:
