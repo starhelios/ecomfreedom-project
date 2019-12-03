@@ -113,43 +113,20 @@ COURSE.methods.createSection = async function createSection({ section, title }) 
   return course.sections.find(s => s.title === title);
 };
 
-COURSE.methods.createLecture = async function createLecture({
-  section,
-  lecture,
-  title,
-  image,
-  text,
-  allowComments,
-  state,
-  file,
-  content
-}) {
+COURSE.methods.createLecture = async function createLecture(args) {
+  const { section, lecture, ...rest } = args;
   if (this.sections && this.sections.length) {
     const _section = this.sections.id(section);
-
     if (lecture && _section.lectures && _section.lectures.length) {
       const _lecture = _section.lectures.id(lecture);
       Object.assign(_lecture, {
-        file,
         updatedAt: new Date(),
-        title,
-        image,
-        text,
-        content,
-        allowComments,
-        state
+        ...rest
       });
     } else {
       _section.lectures.push({
-        file,
-        // file && file.url,
         createdAt: new Date(),
-        title,
-        content,
-        image,
-        text,
-        allowComments,
-        state
+        ...rest
       });
     }
     await this.save();
