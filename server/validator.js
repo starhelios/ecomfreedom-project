@@ -24,6 +24,7 @@ const getCourseSchema = readJson('schema', 'get-course.schema.json');
 const deleteLectureSchema = readJson('schema', 'delete-lecture.schema.json');
 const deleteSectionSchema = readJson('schema', 'delete-section.schema.json');
 const deletePlanSchema = readJson('schema', 'delete-plan.schema.json');
+const putLectureSchema = readJson('schema', 'put-lecture.schema.json');
 
 const name = ajv.compile(nameRequestSchema);
 const newUser = ajv.compile(newUserSchema);
@@ -41,6 +42,7 @@ const course = ajv.compile(courseSchema);
 const pricingPlan = ajv.compile(pricingPlanSchema);
 const courseSection = ajv.compile(courseSectionSchema);
 const courseLecture = ajv.compile(courseLectureSchema);
+const putLecture = ajv.compile(putLectureSchema);
 const getCourse = ajv.compile(getCourseSchema);
 
 module.exports = {
@@ -55,6 +57,7 @@ module.exports = {
   tokenRequest,
   deleteSection,
   pageRequest,
+  putLecture,
   assignFilter,
   filters,
   course,
