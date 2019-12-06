@@ -13,10 +13,6 @@ import AdminContent from 'components/Content/AdminContent';
 import routes from 'constants/routes.json';
 import { getCourses } from 'redux/actions/courses';
 import CardMedia from 'components/Card/CardMedia';
-import image1 from 'assets/img/sidebar-1.jpg';
-import image2 from 'assets/img/sidebar-2.jpg';
-import image3 from 'assets/img/sidebar-3.jpg';
-import image4 from 'assets/img/sidebar-4.jpg';
 import defaultImage from 'assets/img/reactlogo.png';
 
 const styles = {
