@@ -187,7 +187,7 @@ class CourseCurriculum extends Component {
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              {map(sections, (section, index) => (
+              {map(sections, section => (
                 <Card className={classes.card}>
                   <CardBody>
                     <Section
