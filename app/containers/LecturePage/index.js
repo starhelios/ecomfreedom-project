@@ -223,6 +223,7 @@ class CourseCurriculum extends Component {
       courseId: course && course.id,
       section: section._id
     };
+    console.log('onChangeLecture', payload, payload.text);
     createLectureAction(payload);
   };
 
@@ -340,6 +341,8 @@ class CourseCurriculum extends Component {
                 </Tabs>
                 <TabPanel value={tab} index={0}>
                   <Dropzone
+                    accept="image/*"
+                    multiple={false}
                     onDrop={acceptedFiles => {
                       this.dropFiles(acceptedFiles);
                     }}
@@ -356,6 +359,7 @@ class CourseCurriculum extends Component {
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
                   <Editor
+                    stripPastedStyles
                     editorState={editorState}
                     toolbarClassName="toolbarClassName"
                     wrapperClassName={styles.wrapperClassName}

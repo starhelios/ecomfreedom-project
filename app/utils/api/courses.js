@@ -127,7 +127,10 @@ export const createLecture = payload => {
       }
       return { success: false, reason: res.message };
     })
-    .catch(err => ({ success: false, reason: err.response.data.message }));
+    .catch(err => {
+      console.log('createLecture err', err, err.response);
+      return { success: false, reason: err.response.data.message }
+    });
 };
 export const deleteLecture = payload =>
   axios
