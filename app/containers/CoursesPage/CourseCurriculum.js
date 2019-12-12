@@ -79,7 +79,7 @@ const SortableItem = SortableElement(({ value }) => {
       <CardBody>
         <Section
           key={section._id}
-          onChange={onChangeSection}
+          onChange={onChangeSection(section._id)}
           title={section.title}
           checked={false}
           onCheck={onCheckSection}
@@ -102,7 +102,7 @@ const SortableItem = SortableElement(({ value }) => {
 const SortableList = SortableContainer(({ items }) => (
   <div>
     {items.map((value, index) => (
-      <SortableItem key={`item-${value}`} index={index} value={value} />
+      <SortableItem key={`item-${index}`} index={index} value={value} />
     ))}
   </div>
 ));
@@ -171,6 +171,7 @@ class CourseCurriculum extends Component {
   };
 
   onChangeSection = id => title => {
+    console.log('onChangeSection', id, title);
     const { createSectionAction } = this.props;
     const { course } = this.state;
     const payload = {
@@ -196,10 +197,16 @@ class CourseCurriculum extends Component {
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
+    const { createSectionAction } = this.props;
     const course = { ...this.state.course };
     course.sections = arrayMove(course.sections, oldIndex, newIndex);
     this.setState({ course });
     // TODO update dbase
+    // const payload = {
+    //   sections: course.sections,
+    //   courseId: course && course.id
+    // };
+    // createSectionAction(payload);
   };
 
   renderNavbar = classes => (
@@ -224,8 +231,9 @@ class CourseCurriculum extends Component {
     const { course } = this.state;
     const sections = (course && course.sections) || [];
 
-    const contentItems = map(sections, (item, index) => ({
+    const contentItems = map(sections, item => ({
       ...item,
+      onChangeSection: this.onChangeSection,
       onCheckSection: this.onCheckSection,
       onChangeLecture: this.onChangeLecture,
       onNewLecture: this.onNewLecture,

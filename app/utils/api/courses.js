@@ -63,10 +63,18 @@ export const deleteCourses = payload =>
     .catch(err => ({ success: false, reason: err.response.data.message }));
 
 export const createSection = payload => {
-  const data = {
-    title: payload.title,
-    index: payload.index
-  };
+  console.log('createSection', payload);
+  let data = {}
+  if (payload.sections) {
+    data = {
+      sections: payload.sections
+    };
+  } else {
+    data = {
+      title: payload.title,
+      index: payload.index
+    };
+  }
 
   if (payload.id) {
     data.section = payload.id;
@@ -83,7 +91,10 @@ export const createSection = payload => {
       }
       return { success: false, reason: res.message };
     })
-    .catch(err => ({ success: false, reason: err.response.data.message }));
+    .catch(err => {
+      console.log('createSection error', err, err.response, err.response.data.message);
+      return { success: false, reason: err.response.data.message };
+    });
 };
 
 export const deleteSection = payload =>
