@@ -202,11 +202,11 @@ class CourseCurriculum extends Component {
     course.sections = arrayMove(course.sections, oldIndex, newIndex);
     this.setState({ course });
     // TODO update dbase
-    // const payload = {
-    //   sections: course.sections,
-    //   courseId: course && course.id
-    // };
-    // createSectionAction(payload);
+    const payload = {
+      sections: course.sections,
+      courseId: course && course.id
+    };
+    createSectionAction(payload);
   };
 
   renderNavbar = classes => (
