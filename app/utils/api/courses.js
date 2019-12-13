@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { map } from 'lodash';
 import { API_ENDPOINT_URL } from 'constants/default';
 
 // Courses
@@ -66,7 +67,9 @@ export const createSection = payload => {
   console.log('createSection', payload);
   let data = {}
   if (payload.sections) {
-    data = payload.sections;
+    data = {
+      sections: map(payload.sections, (item, index) => ({ ...item, id: item._id, index }))
+    };
   } else {
     data = {
       title: payload.title,
@@ -80,6 +83,7 @@ export const createSection = payload => {
 
   const { courseId } = payload;
 
+  console.log('createSection', data)
   return axios
     .post(`${API_ENDPOINT_URL}/course/${courseId}/section`, data)
     .then(res => {
