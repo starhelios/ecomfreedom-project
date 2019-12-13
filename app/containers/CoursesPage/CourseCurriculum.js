@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { map, orderBy } from 'lodash';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 // @material-ui/core components
@@ -72,14 +72,15 @@ const styles = {
 };
 
 const SortableItem = SortableElement(({ value }) => {
-  const { classes, onChangeSection, onChangeLecture, onCheckSection, onNewLecture, ...section } = value;
+  const { classes, onChangeSection, onChangeLecture, onCheckSection, onNewLecture, sortIndex, ...section } = value;
 
+  console.log('SortableItem', section)
   return (
     <Card className={classes.card}>
       <CardBody>
         <Section
-          key={section._id}
-          onChange={onChangeSection(section._id)}
+          key={section._id || section.id}
+          onChange={onChangeSection(section, sortIndex)}
           title={section.title}
           checked={false}
           onCheck={onCheckSection}
@@ -93,7 +94,7 @@ const SortableItem = SortableElement(({ value }) => {
             onChange={onChangeLecture(lecture)}
           />
         ))}
-        <NewLectureButton onSelect={onNewLecture(section._id)} />
+        <NewLectureButton onSelect={onNewLecture(section._id || section.id)} />
       </CardBody>
     </Card>
   )
@@ -125,13 +126,15 @@ class CourseCurriculum extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { course } = this.props;
 
-    if (course !== prevState.course) {
+    if (course !== prevProps.course) {
       this.setCourse(course);
     }
   }
 
   setCourse = course => {
-    this.setState({ course });
+    console.log('setCourse', course)
+    const sortedSections = orderBy((course && course.sections) || [], ['index'], ['asc']);
+    this.setState({ course: { ...course, sections: sortedSections } });
   };
 
   onChange = field => event => {
@@ -170,14 +173,15 @@ class CourseCurriculum extends Component {
     console.log('onCheckSection');
   };
 
-  onChangeSection = id => title => {
-    console.log('onChangeSection', id, title);
+  onChangeSection = (section, sortIndex) => title => {
+    console.log('onChangeSection', sortIndex, section, title);
     const { createSectionAction } = this.props;
     const { course } = this.state;
     const payload = {
       title,
-      id,
-      courseId: course && course.id
+      id: section._id || section.id,
+      index: sortIndex,
+      courseId: course && (course.id || course._id)
     };
     createSectionAction(payload);
   };
@@ -185,9 +189,10 @@ class CourseCurriculum extends Component {
   onChangeLecture = lecture => () => {
     const { course } = this.state;
     const { history } = this.props;
+    console.log('onChangeLecture', lecture)
     const lectureRoute = `${routes.ADMIN}${routes.NEW_LECTURE}`
       .replace(':course', course && course.id)
-      .replace(':lecture', lecture._id);
+      .replace(':lecture', lecture.id || lecture._id);
     history.push(lectureRoute);
   };
 
@@ -199,7 +204,9 @@ class CourseCurriculum extends Component {
   onSortEnd = ({ oldIndex, newIndex }) => {
     const { createSectionAction } = this.props;
     const course = { ...this.state.course };
-    course.sections = arrayMove(course.sections, oldIndex, newIndex);
+    const sections = [ ...course.sections ];
+    course.sections = arrayMove(sections, oldIndex, newIndex);
+    console.log('onSortEnd', course.sections)
     this.setState({ course });
     // TODO update dbase
     const payload = {
@@ -230,23 +237,26 @@ class CourseCurriculum extends Component {
     const { classes } = this.props;
     const { course } = this.state;
     const sections = (course && course.sections) || [];
+    // const sections = orderBy((course && course.sections) || [], ['index'], ['asc']);
 
-    const contentItems = map(sections, item => ({
+    console.log('course', course, sections)
+    const contentItems = map(sections, (item, index) => ({
       ...item,
+      sortIndex: index,
       onChangeSection: this.onChangeSection,
       onCheckSection: this.onCheckSection,
       onChangeLecture: this.onChangeLecture,
       onNewLecture: this.onNewLecture,
       classes
     }));
-
+    console.log('contentItems', contentItems)
     return (
       <>
         <AdminNavbar title="Curriculum" right={this.renderNavbar(classes)} />
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              <SortableList items={contentItems} onSortEnd={this.onSortEnd} pressDelay={DND_DELAY} />
+              <SortableList items={[ ...contentItems ]} onSortEnd={this.onSortEnd} pressDelay={DND_DELAY} />
             </GridItem>
           </GridContainer>
         </AdminContent>

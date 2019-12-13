@@ -68,7 +68,7 @@ export const createSection = payload => {
   let data = {}
   if (payload.sections) {
     data = {
-      sections: map(payload.sections, (item, index) => ({ ...item, id: item._id, index }))
+      sections: map(payload.sections, (item, index) => ({ ...item, id: item.id, index }))
     };
   } else {
     data = {
