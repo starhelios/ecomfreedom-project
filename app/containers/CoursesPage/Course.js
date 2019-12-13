@@ -17,6 +17,7 @@ import AdminContent from 'components/Content/AdminContent';
 import { createCourse } from 'redux/actions/courses';
 import routes from 'constants/routes.json';
 import { getUsers } from 'redux/actions/users';
+import CourseSteps from 'components/Course/CourseSteps';
 
 const styles = {
   cardCategoryWhite: {
@@ -190,6 +191,7 @@ class Course extends Component {
             </GridItem>
           </GridContainer>
         </AdminContent>
+        <CourseSteps active={1} />
       </>
     );
   }
