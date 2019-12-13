@@ -66,9 +66,7 @@ export const createSection = payload => {
   console.log('createSection', payload);
   let data = {}
   if (payload.sections) {
-    data = {
-      sections: payload.sections
-    };
+    data = payload.sections;
   } else {
     data = {
       title: payload.title,
