@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { map, find } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Paper, Typography, TextField, FormControl, TextareaAutosize, Fab, Button } from '@material-ui/core';
@@ -51,7 +51,8 @@ const styles = theme => ({
     marginBottom: 30
   },
   subtitle: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    cursor: 'pointer'
   },
   wrapper: {
     width: '100%',
@@ -94,8 +95,6 @@ const styles = theme => ({
     cursor: 'pointer'
   }
 });
-
-
 
 const initialState = {
   newPlan: null,
@@ -163,10 +162,10 @@ class PricingPlans extends Component {
   prepareData = data =>
     map(data, item => {
       const { _id, id, type, title, price, isRecurring } = item;
-
+      const plan = find(PRICING_PLAN_TYPES, p => p.type === type)
       return {
         id: _id || id,
-        type,
+        type: plan.name || type,
         title,
         price,
         isRecurring: isRecurring ? 'Yes' : 'No',
@@ -263,7 +262,6 @@ class PricingPlans extends Component {
     const { classes, history, plans } = this.props;
     const { newPlan } = this.state;
 
-    console.log('plans', plans);
     return (
       <>
         <AdminNavbar title="Pricing" />
@@ -280,7 +278,7 @@ class PricingPlans extends Component {
               {newPlan
                 ? this.renderNew()
                 : map(PRICING_PLAN_TYPES, item => (
-                  <GridItem key={item.id} xs={12} sm={6} md={4} lg={3} onClick={this.handleAddNew(item)} className={classes.plan}>
+                  <GridItem key={item.id} xs={12} sm={6} md={4} lg={3} onClick={this.handleAddNew(item)}>
                     <Typography className={classes.subtitle}>{item.name}</Typography>
                     <Typography>{item.description}</Typography>
                   </GridItem>
