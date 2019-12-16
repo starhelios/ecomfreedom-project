@@ -7,7 +7,9 @@ import {
   createSection,
   deleteSection,
   createLecture,
-  deleteLecture
+  deleteLecture,
+  addPricingPlan,
+  deletePricingPlan
 } from 'utils/api/courses';
 import {
   GET_COURSES_REQUEST,
@@ -33,7 +35,13 @@ import {
   CREATE_LECTURES_FAILED,
   DELETE_LECTURES_REQUEST,
   DELETE_LECTURES_SUCCESS,
-  DELETE_LECTURES_FAILED
+  DELETE_LECTURES_FAILED,
+  ADD_PRICING_PLAN_REQUEST,
+  // ADD_PRICING_PLAN_SUCCESS,
+  ADD_PRICING_PLAN_FAILED,
+  DELETE_PRICING_PLAN_REQUEST,
+  // DELETE_PRICING_PLAN_SUCCESS,
+  DELETE_PRICING_PLAN_FAILED
 } from 'constants/actionTypes';
 
 // Responsible for searching media library, making calls to the API
@@ -49,6 +57,8 @@ export default function* watchCoursesListener(context = {}) {
   yield takeLatest(DELETE_SECTIONS_REQUEST, deleteSectionRequestSaga);
   yield takeLatest(CREATE_LECTURES_REQUEST, createLectureRequestSaga);
   yield takeLatest(DELETE_LECTURES_REQUEST, deleteLectureRequestSaga);
+  yield takeLatest(ADD_PRICING_PLAN_REQUEST, createPricingPlanRequestSaga);
+  yield takeLatest(DELETE_PRICING_PLAN_REQUEST, deletePricingPlanRequestSaga);
 }
 
 export function* getCoursesRequestSaga({ payload }) {
@@ -126,5 +136,26 @@ export function* deleteLectureRequestSaga({ payload }) {
     yield put({ type: DELETE_LECTURES_SUCCESS, res: { ...res, name: payload.name } });
   } catch (error) {
     yield put({ type: DELETE_LECTURES_FAILED, error });
+  }
+}
+
+export function* createPricingPlanRequestSaga({ payload }) {
+  console.log('createPricingPlanRequestSaga', payload)
+  try {
+    const res = yield call(addPricingPlan, payload);
+    // yield put({ type: ADD_PRICING_PLAN_SUCCESS, res });
+    yield call(getCourseRequestSaga, { payload: { id: payload.courseId } });
+  } catch (error) {
+    yield put({ type: ADD_PRICING_PLAN_FAILED, error });
+  }
+}
+
+export function* deletePricingPlanRequestSaga({ payload }) {
+  try {
+    const res = yield call(deletePricingPlan, payload);
+    // yield put({ type: DELETE_PRICING_PLAN_SUCCESS, res: { ...res, name: payload.name } });
+    yield call(getCourseRequestSaga, { payload: { id: payload.courseId } });
+  } catch (error) {
+    yield put({ type: DELETE_PRICING_PLAN_FAILED, error });
   }
 }
