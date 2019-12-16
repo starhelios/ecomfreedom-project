@@ -181,7 +181,8 @@
     "winston-daily-rotate-file": "3.10.0",
     "@google-cloud/storage": "latest",
     "mime-types": "latest",
-    "multer": "latest"
+    "multer": "latest",
+    "nodemailer": "latest"
   },
   "devDependencies": {
     "compare-versions": "3.4.0",
