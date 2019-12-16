@@ -4,16 +4,19 @@ import { connect } from 'react-redux';
 import { map } from 'lodash';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Paper, Typography, TextField, FormControl, TextareaAutosize, Fab } from '@material-ui/core';
+import { Paper, Typography, TextField, FormControl, TextareaAutosize, Fab, Button } from '@material-ui/core';
 import { ChevronLeft } from '@material-ui/icons';
 // core components
 import GridItem from 'components/Grid/GridItem';
 import GridContainer from 'components/Grid/GridContainer';
 import AdminNavbar from 'components/Navbars/AdminNavbar';
 import AdminContent from 'components/Content/AdminContent';
-import { getCourses } from 'redux/actions/courses';
 import CourseSteps from 'components/Course/CourseSteps';
-import {addPricingPlan} from "../../redux/actions/courses";
+import { addPricingPlan, getPricingPlans } from 'redux/actions/courses';
+import TableList from 'components/Table/TableList';
+import { PRICING_PLAN_TYPES } from 'constants/default';
+import Card from "../../components/Card/Card";
+import CardBody from "../../components/Card/CardBody";
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -92,12 +95,7 @@ const styles = theme => ({
   }
 });
 
-const planTypes = [
-  { id: 1, type: 'free', name: 'Free', description: 'No Payments', isRecurring: false },
-  { id: 2, type: 'subscription', name: 'Subscription', description: 'Montly or Annual Billing', isRecurring: true },
-  { id: 3, type: 'one-time', name: 'One-Time Purchase', description: 'A Single Payment', isRecurring: true },
-  { id: 4, type: 'payment-plan', name: 'Payment Plan', description: 'A Fixed Number of Payments', isRecurring: true }
-];
+
 
 const initialState = {
   newPlan: null,
@@ -113,29 +111,35 @@ class PricingPlans extends Component {
   };
 
   componentWillMount() {
-    const { getCoursesAction } = this.props;
-    getCoursesAction();
+    const { match, getPricingPlansAction } = this.props;
+    const courseId = match && match.params && match.params.course;
+
+    getPricingPlansAction({ courseId });
   }
 
   handleAddNew = item => () => {
-    this.setState({ newPlan: item });
+    if (item.type === 'free') {
+      this.handleAddPlan(item);
+    } else {
+      this.setState({ newPlan: item });
+    }
   };
 
-  handleAddPlan = () => {
+  handleAddPlan = (item = null) => {
     const { match, addPricingPlanAction } = this.props;
     const { newPlan, price, title, subtitle, description, period } = this.state;
     const courseId = match && match.params && match.params.course;
-
+    const plan = newPlan || item
     const payload = {
       price: parseFloat(price),
       courseId,
-      isRecurring: newPlan.isRecurring,
+      isRecurring: plan.isRecurring,
       purchaseUrl: 'url',
-      title,
+      title: title || plan.title,
       subtitle,
       description,
       period,
-      type: newPlan.type
+      type: plan.type
     };
 
     addPricingPlanAction(payload);
@@ -155,6 +159,20 @@ class PricingPlans extends Component {
   closeForm = () => {
     this.setState({ ...initialState })
   };
+
+  prepareData = data =>
+    map(data, item => {
+      const { _id, type, title, price, isRecurring } = item;
+
+      return {
+        id: _id,
+        type,
+        title,
+        price,
+        isRecurring: isRecurring ? 'Yes' : 'No',
+        purchaseUrl: <Button>Copy</Button>
+      };
+    });
 
   renderNew = () => {
     const { classes } = this.props;
@@ -245,6 +263,7 @@ class PricingPlans extends Component {
     const { classes, history, plans } = this.props;
     const { newPlan } = this.state;
 
+    console.log('plans', plans);
     return (
       <>
         <AdminNavbar title="Pricing" />
@@ -260,7 +279,7 @@ class PricingPlans extends Component {
             <GridContainer>
               {newPlan
                 ? this.renderNew()
-                : map(planTypes, item => (
+                : map(PRICING_PLAN_TYPES, item => (
                   <GridItem key={item.id} xs={12} sm={6} md={4} lg={3} onClick={this.handleAddNew(item)} className={classes.plan}>
                     <Typography className={classes.subtitle}>{item.name}</Typography>
                     <Typography>{item.description}</Typography>
@@ -269,6 +288,21 @@ class PricingPlans extends Component {
               }
             </GridContainer>
           </Paper>
+          {plans.length > 0 ? (
+            <Card>
+              <CardBody>
+                <TableList
+                  tableHeaderColor="info"
+                  tableHead={['ID', 'Plan Type', 'Plan Name', 'Price', 'Recurring', 'Purchase Url']}
+                  tableColumns={['id', 'type', 'title', 'price', 'isRecurring', 'purchaseUrl']}
+                  tableData={this.prepareData(plans)}
+                  // total={plans.length}
+                  // pagination={pagination}
+                  // onChangePage={this.changePage}
+                />
+              </CardBody>
+            </Card>
+          ) : null}
         </AdminContent>
         <CourseSteps active={3} history={history} />
       </>
@@ -278,7 +312,7 @@ class PricingPlans extends Component {
 
 PricingPlans.propTypes = {
   addPricingPlanAction: PropTypes.func.isRequired,
-  getCoursesAction: PropTypes.func.isRequired,
+  getPricingPlansAction: PropTypes.func.isRequired,
   plans: PropTypes.arrayOf(PropTypes.any),
   classes: PropTypes.objectOf(PropTypes.any).isRequired,
   match: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -286,12 +320,12 @@ PricingPlans.propTypes = {
 };
 
 const mapStateToProps = ({ courses }) => ({
-  plans: courses.course && courses.course.pricingPlans,
+  plans: courses.pricingPlans
 });
 
 const mapDispatchToProps = dispatch => ({
-  getCoursesAction: () => {
-    dispatch(getCourses());
+  getPricingPlansAction: data => {
+    dispatch(getPricingPlans(data));
   },
   addPricingPlanAction: data => {
     dispatch(addPricingPlan(data));

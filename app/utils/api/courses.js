@@ -154,6 +154,20 @@ export const deleteLecture = payload =>
     })
     .catch(err => ({ success: false, reason: err.response.data.message }));
 
+export const getPricingPlans = payload => {
+  const params = payload && payload.params;
+  return axios
+    .get(`${API_ENDPOINT_URL}/pricing-plan`, { params })
+    .then(res => {
+      console.log('getPricingPlans res', res);
+      if (res.data) {
+        return { success: true, data: res.data };
+      }
+      return { success: false, reason: res.message };
+    })
+    .catch(err => ({ success: false, reason: err.response.data.message }));
+};
+
 export const addPricingPlan = payload => {
   let data = {};
   if (payload.sections) {
