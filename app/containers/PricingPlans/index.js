@@ -15,8 +15,8 @@ import CourseSteps from 'components/Course/CourseSteps';
 import { addPricingPlan, getPricingPlans } from 'redux/actions/courses';
 import TableList from 'components/Table/TableList';
 import { PRICING_PLAN_TYPES } from 'constants/default';
-import Card from "../../components/Card/Card";
-import CardBody from "../../components/Card/CardBody";
+import Card from '../../components/Card/Card';
+import CardBody from '../../components/Card/CardBody';
 
 const styles = theme => ({
   cardCategoryWhite: {
@@ -80,7 +80,7 @@ const styles = theme => ({
     background: 'orange',
     margin: '20px auto 0 !important',
     width: '100% !important',
-    display: 'block',
+    display: 'block'
   },
   textarea: {
     padding: '20px 14px',
@@ -128,7 +128,7 @@ class PricingPlans extends Component {
     const { match, addPricingPlanAction } = this.props;
     const { newPlan, price, title, subtitle, description, period } = this.state;
     const courseId = match && match.params && match.params.course;
-    const plan = newPlan || item
+    const plan = newPlan || item;
     const payload = {
       price: parseFloat(price),
       courseId,
@@ -156,13 +156,13 @@ class PricingPlans extends Component {
   };
 
   closeForm = () => {
-    this.setState({ ...initialState })
+    this.setState({ ...initialState });
   };
 
   prepareData = data =>
     map(data, item => {
       const { _id, id, type, title, price, isRecurring } = item;
-      const plan = find(PRICING_PLAN_TYPES, p => p.type === type)
+      const plan = find(PRICING_PLAN_TYPES, p => p.type === type);
       return {
         id: _id || id,
         type: plan.name || type,
@@ -192,33 +192,36 @@ class PricingPlans extends Component {
             value={price || ''}
           />
         </FormControl>
-        {type === 'payment-plan'
-          ? [
-            <FormControl className={classes.marginRow}>
-              <TextField
-                style={{width: 'auto', marginRight: 16}}
-                type="number"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                onChange={this.onChange('period')}
-                value={period}
-              />
-              <span>monthly payments</span>
-            </FormControl>,
-            <FormControl className={classes.margin}>
-              <TextField
-                fullWidth
-                placeholder="Title"
-                id="outlined-size-small"
-                variant="outlined"
-                size="small"
-                onChange={this.onChange('title')}
-                value={title}
-              />
-            </FormControl>,
-            <FormControl className={classes.margin}>
-              <TextField
+        {type === 'payment-plan' ? (
+          <FormControl className={classes.marginRow}>
+            <TextField
+              style={{ width: 'auto', marginRight: 16 }}
+              type="number"
+              id="outlined-size-small"
+              variant="outlined"
+              size="small"
+              onChange={this.onChange('period')}
+              value={period}
+            />
+            <span>monthly payments</span>
+          </FormControl>
+        ) : null}
+        {type === 'payment-plan' ? (
+          <FormControl className={classes.margin}>
+            <TextField
+              fullWidth
+              placeholder="Title"
+              id="outlined-size-small"
+              variant="outlined"
+              size="small"
+              onChange={this.onChange('title')}
+              value={title}
+            />
+          </FormControl>
+        ) : null}
+        {type === 'payment-plan' ? (
+          <FormControl className={classes.margin}>
+            <TextField
               fullWidth
               placeholder="Subtitle"
               id="outlined-size-small"
@@ -226,10 +229,12 @@ class PricingPlans extends Component {
               size="small"
               onChange={this.onChange('subtitle')}
               value={subtitle}
-              />
-            </FormControl>,
-            <FormControl className={classes.margin}>
-              <TextareaAutosize
+            />
+          </FormControl>
+        ) : null}
+        {type === 'payment-plan' ? (
+          <FormControl className={classes.margin}>
+            <TextareaAutosize
               className={classes.textarea}
               fullWidth
               aria-label="empty textarea"
@@ -237,11 +242,9 @@ class PricingPlans extends Component {
               rows={6}
               onChange={this.onChange('description')}
               value={description}
-              />
-            </FormControl>,
-          ]
-          : null
-        }
+            />
+          </FormControl>
+        ) : null}
         <FormControl className={classes.margin}>
           <Fab
             className={classes.fab}
@@ -261,29 +264,30 @@ class PricingPlans extends Component {
   render() {
     const { classes, history, plans } = this.props;
     const { newPlan } = this.state;
-
+    // prettier-ignore
     return (
       <>
         <AdminNavbar title="Pricing" />
         <AdminContent>
           <Paper classes={{ root: classes.wrapper }}>
             <Typography className={classes.title} variant="h6">
-              {newPlan
-                ? <div className={classes.backIcon}><ChevronLeft onClick={this.closeForm} /></div>
-                : null
-              }
+              {newPlan ? (
+                <div className={classes.backIcon}>
+                  <ChevronLeft onClick={this.closeForm} />
+                </div>
+              ) : null}
               New Pricing Plan
             </Typography>
             <GridContainer>
               {newPlan
                 ? this.renderNew()
-                : map(PRICING_PLAN_TYPES, item => (
-                  <GridItem key={item.id} xs={12} sm={6} md={4} lg={3} onClick={this.handleAddNew(item)}>
-                    <Typography className={classes.subtitle}>{item.name}</Typography>
-                    <Typography>{item.description}</Typography>
-                  </GridItem>
-                ))
-              }
+                : map(PRICING_PLAN_TYPES, item =>
+                  (
+                    <GridItem key={item.id} xs={12} sm={6} md={4} lg={3} onClick={this.handleAddNew(item)}>
+                      <Typography className={classes.subtitle}>{item.name}</Typography>
+                      <Typography>{item.description}</Typography>
+                    </GridItem>
+                  ))}
             </GridContainer>
           </Paper>
           {plans.length > 0 ? (
