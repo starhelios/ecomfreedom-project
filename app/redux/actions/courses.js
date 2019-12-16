@@ -7,6 +7,7 @@ import {
   DELETE_SECTIONS_REQUEST,
   CREATE_LECTURES_REQUEST,
   DELETE_LECTURES_REQUEST,
+  GET_PRICING_PLANS_REQUEST,
   ADD_PRICING_PLAN_REQUEST,
   DELETE_PRICING_PLAN_REQUEST
 } from 'constants/actionTypes';
@@ -53,6 +54,11 @@ export const deleteSLecture = payload => ({
 
 export const addPricingPlan = payload => ({
   type: ADD_PRICING_PLAN_REQUEST,
+  payload
+});
+
+export const getPricingPlans = payload => ({
+  type: GET_PRICING_PLANS_REQUEST,
   payload
 });
 
