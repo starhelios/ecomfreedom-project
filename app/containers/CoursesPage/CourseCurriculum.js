@@ -251,7 +251,7 @@ class CourseCurriculum extends Component {
         <AdminContent>
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
-              <SortableList items={[...contentItems]} onSortEnd={this.onSortEnd} useDragHandle/>
+              <SortableList items={[...contentItems]} onSortEnd={this.onSortEnd} useDragHandle />
             </GridItem>
           </GridContainer>
         </AdminContent>
