@@ -73,11 +73,18 @@ USER.statics.resetPasswordRequest = async ({ email }) => {
     throw error;
   }
   const link = `https://example.com/reset?bjson=${user.id}`;
+  const subject = 'Password recovery';
+  const template = 'forgot-password';
+  const from = `EcomFreedom Support <support@ecomfreedom.com>`;
+
+  const data = { link };
+
   const message = await sendMail({
-    from: 'EcomFreedom Support <support@ecomfreedom.com>',
     to: email,
-    subject: 'Password recovery',
-    html: `Click <b><a href="${link}" target="_blank">here</a></b>`
+    from,
+    subject,
+    template,
+    data
   });
   return {
     success: !!message.messageId
