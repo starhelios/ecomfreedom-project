@@ -1,13 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { Storage } = require('@google-cloud/storage');
+const { Storage } = require('@google-cloud/storage/build/src/index');
 const mimeTypes = require('mime-types');
-const request = require('./request');
+const { request } = require('../core/util');
 const SEPARATOR = path.sep;
 
 const p = __filename.split(SEPARATOR);
-p.length -= 2;
+console.log(p);
+p.length -= 3;
 const BASE_PATH = p.join(SEPARATOR) + SEPARATOR;
 
 function checkFile(path) {
