@@ -210,7 +210,7 @@ const db = require('../db');
  *         required: true
  *         type: string
  *         schema:
- *           $ref: '#/definitions/Course'
+ *           $ref: '#/definitions/CourseAdmin'
  *     responses:
  *       200:
  *         description: fetched navigations by course
@@ -229,7 +229,7 @@ const db = require('../db');
  *         required: true
  *         type: string
  *         schema:
- *           $ref: '#/definitions/Course'
+ *           $ref: '#/definitions/CourseAdmin'
  *       - name: navigation
  *         in: path
  *         required: true

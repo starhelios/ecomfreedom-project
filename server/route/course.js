@@ -10,7 +10,7 @@ const paginated = require('../middleware/page-request');
 /**
  * @swagger
  * definitions:
- *   Course:
+ *   CourseAdmin:
  *     type: object
  *     properties:
  *       id:
@@ -63,12 +63,12 @@ const paginated = require('../middleware/page-request');
  *       - application/json
  *     parameters:
  *       - name: course
- *         description: New Course object
+ *         description: New CourseAdmin object
  *         in:  body
  *         required: true
  *         type: string
  *         schema:
- *           $ref: '#/definitions/Course'
+ *           $ref: '#/definitions/CourseAdmin'
  *     responses:
  *       200:
  *         description: created a new course in DB
@@ -191,7 +191,7 @@ router.put('/:course', async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *      - name: section
  *        in: path
  *        required: true
@@ -275,7 +275,7 @@ router.delete('/:course/section/:section', async (req, res) => {
  *       url:
  *         type: string
  *         description: link for img type
- *   Lecture:
+ *   LectureAdmin:
  *     type: object
  *     properties:
  *       index:
@@ -409,7 +409,7 @@ router.delete('/:course/section/:section', async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *      - name: section
  *        in: path
  *        required: true
@@ -421,7 +421,7 @@ router.delete('/:course/section/:section', async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Lecture'
+ *          $ref: '#/definitions/LectureAdmin'
  *      - name: lecture
  *        description: New lecture
  *        in:  body
@@ -441,7 +441,7 @@ router.delete('/:course/section/:section', async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *      - name: section
  *        in: path
  *        required: true
@@ -453,7 +453,7 @@ router.delete('/:course/section/:section', async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Lecture'
+ *          $ref: '#/definitions/LectureAdmin'
  *    responses:
  *      202:
  *        description: lecture is deleted
@@ -581,7 +581,7 @@ router.get('/', paginated(20), async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *      - name: course
  *        in: body
  *        required: true
@@ -607,7 +607,7 @@ router.get('/', paginated(20), async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *    responses:
  *      200:
  *        description: course by id is found
@@ -627,7 +627,7 @@ router.get('/', paginated(20), async (req, res) => {
  *        required: true
  *        type: string
  *        schema:
- *          $ref: '#/definitions/Course'
+ *          $ref: '#/definitions/CourseAdmin'
  *    responses:
  *      202:
  *        description: course is deleted
