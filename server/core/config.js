@@ -4,7 +4,7 @@ const ajv = new Ajv({ schemaId: 'auto', allErrors: true });
 
 const ENV = 'NODE_ENV';
 const nconf = require('nconf/lib/nconf');
-const { readJson, BASE_PATH } = require('./core/file-util');
+const { readJson, BASE_PATH } = require('./file-util');
 
 nconf
   .argv()
