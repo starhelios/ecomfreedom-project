@@ -22,6 +22,7 @@ require('./route/navigation')(app);
 require('./route/file')(app);
 require('./route/oauth')(app);
 require('./route/page')(app);
+require('./route/comments')(app);
 
 const port = config.get('web-app:port');
 
