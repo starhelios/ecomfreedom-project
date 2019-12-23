@@ -53,7 +53,7 @@ class WistiaDriver {
       error.status = response.status;
       throw error;
     }
-    return response;
+    return response.data;
   }
 
   async getMediaStats(mediaId) {
