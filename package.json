@@ -191,7 +191,9 @@
     "webpack-pwa-manifest": "4.0.0",
     "winston": "2.4.0",
     "winston-daily-rotate-file": "3.10.0",
-    "ejs": "latest"
+    "ejs": "latest",
+    "cors": "latest",
+    "form-data": "latest"
   },
   "devDependencies": {
     "compare-versions": "3.4.0",
