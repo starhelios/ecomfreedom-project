@@ -183,7 +183,9 @@
     "mime-types": "latest",
     "multer": "latest",
     "nodemailer": "latest",
-    "ejs": "latest"
+    "ejs": "latest",
+    "cors": "latest",
+    "form-data": "latest"
   },
   "devDependencies": {
     "compare-versions": "3.4.0",
