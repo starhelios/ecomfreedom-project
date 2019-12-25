@@ -1,10 +1,12 @@
 const HttpStatus = require('http-status-codes');
 const FormData = require('form-data');
-const { request } = require('./util');
-const { isVideo } = require('./file-util');
+const Driver = require('./driver');
+const { request } = require('../util');
+const { isVideo } = require('../file-util');
 
-class WistiaDriver {
+class WistiaDriver extends Driver {
   constructor(apiKey) {
+    super();
     this.apiKey = apiKey;
     this.apiUrl = 'https://api.wistia.com/v1';
     this.uploadUrl = 'https://upload.wistia.com';
