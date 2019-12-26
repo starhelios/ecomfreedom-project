@@ -16,9 +16,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import routes from 'constants/routes.json';
 import Button from 'components/Button/Button';
-import { Email, VpnKey, Visibility, VisibilityOff } from '@material-ui/icons';
-import EmailIcon from 'assets/img/email-icon.svg';
-import KeyIcon from 'assets/img/key-icon.svg';
+import { EmailOutlined, VpnKey, Visibility, VisibilityOff } from '@material-ui/icons';
 import styles from './styles';
 
 class Login extends Component {
@@ -102,7 +100,7 @@ class Login extends Component {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <Email className={classes.icon} />
+                      <EmailOutlined className={classes.icon} />
                     </InputAdornment>
                   )
                 }}
@@ -135,7 +133,11 @@ class Login extends Component {
                         onClick={this.handleClickShowPassword}
                         onMouseDown={this.handleMouseDownPassword}
                       >
-                        {showPassword ? <Visibility className={classes.iconVis} /> : <VisibilityOff className={classes.iconVis} />}
+                        {showPassword ? (
+                          <Visibility className={classes.iconVis} />
+                        ) : (
+                          <VisibilityOff className={classes.iconVis} />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   )
@@ -144,28 +146,17 @@ class Login extends Component {
             </FormControl>
             <div className={classes.divider} style={{ marginTop: 40 }} />
             <div className={classes.actions} style={{ marginTop: 20 }}>
-              <Button
-                outlined
-                onClick={this.handleRegister}
-              >
+              <Button outlined onClick={this.handleRegister}>
                 Register
               </Button>
-              <Button
-                type="submit"
-                onClick={this.handleSubmit}
-              >
+              <Button type="submit" onClick={this.handleSubmit}>
                 Login
               </Button>
             </div>
             <div className={classes.actions} style={{ marginTop: 10 }}>
               <FormControlLabel
                 control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={onCheckChange('checkedB')}
-                    value="checkedB"
-                    color="primary"
-                  />
+                  <Checkbox checked={checked} onChange={onCheckChange('checkedB')} value="checkedB" color="primary" />
                 }
                 label="Remember me"
                 classes={{ root: classes.checkbox }}
