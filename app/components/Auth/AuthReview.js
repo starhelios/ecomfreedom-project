@@ -1,11 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Link } from 'react-router-dom';
-import { Grid, AppBar, Avatar, Toolbar, Typography } from '@material-ui/core';
-import GridContainer from 'components/Grid/GridContainer';
-import GridItem from 'components/Grid/GridItem';
-import routes from 'constants/routes.json';
+import { Avatar, Typography } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -33,10 +30,10 @@ const styles = theme => ({
   },
   reviewer: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
   avatarWrap: {
-    width: 111,
+    width: 111
   },
   avatar: {
     width: 48,
@@ -65,11 +62,21 @@ const AuthReview = ({ classes, text, reviewer = {} }) => (
         <Avatar className={classes.avatar} src={reviewer.avatar} />
       </div>
       <div>
-        <Typography component="div" className={classes.name}>{reviewer.name}</Typography>
-        <Typography component="div" className={classes.username}>{reviewer.username}</Typography>
+        <Typography component="div" className={classes.name}>
+          {reviewer.name}
+        </Typography>
+        <Typography component="div" className={classes.username}>
+          {reviewer.username}
+        </Typography>
       </div>
     </div>
   </div>
 );
+
+AuthReview.propTypes = {
+  text: PropTypes.string,
+  reviewer: PropTypes.objectOf(PropTypes.any),
+  classes: PropTypes.object
+};
 
 export default withStyles(styles)(AuthReview);

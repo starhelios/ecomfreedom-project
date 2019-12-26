@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  CssBaseline,
-  Typography,
-  Container,
-  Box
-} from '@material-ui/core';
+import { CssBaseline, Typography, Container, Box } from '@material-ui/core';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Button from 'components/Button/Button';
@@ -45,10 +40,7 @@ class ForgotPasswordForm extends Component {
           </Typography>
           <div className={classes.divider} style={{ marginTop: 40 }} />
           <div className={classes.actionsCenter} style={{ marginTop: 20 }}>
-            <Button
-              type="submit"
-              onClick={this.handleSubmit}
-            >
+            <Button type="submit" onClick={this.handleSubmit}>
               Send Again
             </Button>
           </div>
@@ -61,20 +53,8 @@ class ForgotPasswordForm extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { login } = state;
-  return { login };
-}
-
-ForgotPasswordForm.defaultProps = {
-  onCheckChange: () => {}
-};
-
 ForgotPasswordForm.propTypes = {
-  onCheckChange: PropTypes.func,
-  checked: PropTypes.bool,
   onSubmit: PropTypes.func.isRequired,
-  login: PropTypes.object,
   classes: PropTypes.object
 };
-export default withRouter(connect(mapStateToProps)(withStyles(styles)(ForgotPasswordForm)));
+export default withRouter(connect()(withStyles(styles)(ForgotPasswordForm)));

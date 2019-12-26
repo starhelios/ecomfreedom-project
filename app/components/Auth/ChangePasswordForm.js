@@ -8,17 +8,13 @@ import {
   Container,
   TextField,
   InputAdornment,
-  IconButton,
-  Checkbox,
-  FormControlLabel
+  IconButton
 } from '@material-ui/core';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import routes from 'constants/routes.json';
 import Button from 'components/Button/Button';
-import { Email, VpnKey, Visibility, VisibilityOff } from '@material-ui/icons';
-import EmailIcon from 'assets/img/email-icon.svg';
-import KeyIcon from 'assets/img/key-icon.svg';
+import { VpnKey, Visibility, VisibilityOff } from '@material-ui/icons';
 import styles from './styles';
 
 class Login extends Component {
@@ -118,7 +114,11 @@ class Login extends Component {
                         onClick={this.handleClickShowPassword}
                         onMouseDown={this.handleMouseDownPassword}
                       >
-                        {showPassword ? <Visibility className={classes.iconVis} /> : <VisibilityOff className={classes.iconVis} />}
+                        {showPassword ? (
+                          <Visibility className={classes.iconVis} />
+                        ) : (
+                          <VisibilityOff className={classes.iconVis} />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   )
@@ -140,11 +140,7 @@ class Login extends Component {
                 autoComplete="current-password"
                 classes={{ root: classes.input }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      &nbsp;
-                    </InputAdornment>
-                  ),
+                  startAdornment: <InputAdornment position="start">&nbsp;</InputAdornment>,
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -152,7 +148,11 @@ class Login extends Component {
                         onClick={this.handleClickShowConfirmPassword}
                         onMouseDown={this.handleMouseDownPassword}
                       >
-                        {showPassword ? <Visibility className={classes.iconVis} /> : <VisibilityOff className={classes.iconVis} />}
+                        {showPassword ? (
+                          <Visibility className={classes.iconVis} />
+                        ) : (
+                          <VisibilityOff className={classes.iconVis} />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   )
@@ -161,10 +161,7 @@ class Login extends Component {
             </FormControl>
             <div className={classes.divider} style={{ marginTop: 40 }} />
             <div className={classes.actionsCenter} style={{ marginTop: 20 }}>
-              <Button
-                type="submit"
-                onClick={this.handleSubmit}
-              >
+              <Button type="submit" onClick={this.handleSubmit}>
                 Confirm
               </Button>
             </div>
@@ -180,13 +177,8 @@ function mapStateToProps(state) {
   return { login };
 }
 
-Login.defaultProps = {
-  onCheckChange: () => {}
-};
-
 Login.propTypes = {
-  onCheckChange: PropTypes.func,
-  checked: PropTypes.bool,
+  history: PropTypes.objectOf(PropTypes.any),
   onSubmit: PropTypes.func.isRequired,
   login: PropTypes.object,
   classes: PropTypes.object
