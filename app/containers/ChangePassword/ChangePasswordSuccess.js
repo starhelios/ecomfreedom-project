@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
-import ChangePasswordForm from 'components/Auth/ChangePasswordForm';
-import { resetPasswordAction } from 'redux/actions/auth';
+import ChangePasswordSuccessForm from 'components/Auth/ChangePasswordSuccessForm';
+import { signInAction } from 'redux/actions/auth';
 import Bg from 'assets/img/forgot-bg.jpg';
 import AuthHeader from 'components/Auth/AuthHeader';
 import AuthFooter from 'components/Auth/AuthFooter';
@@ -50,16 +50,10 @@ const styles = theme => ({
   }
 });
 
-class ChangePassword extends PureComponent {
+class ChangePasswordSuccess extends PureComponent {
   onSubmit = password => {
-    const { resetPassword } = this.props;
     // TODO send request
     console.log('onSubmit', password);
-    const payload = {
-      password,
-      id: '123'
-    }
-    resetPassword(payload);
   };
 
   render() {
@@ -70,7 +64,7 @@ class ChangePassword extends PureComponent {
         <Grid container spacing={0} className={classes.wrapper}>
           <Grid item xs={6} className={classes.column}>
             <AuthHeader />
-            <ChangePasswordForm onSubmit={this.onSubmit} />
+            <ChangePasswordSuccessForm onSubmit={this.onSubmit} />
             <AuthFooter />
           </Grid>
           <Grid item xs={6} className={classes.columnRight}>
@@ -90,12 +84,12 @@ class ChangePassword extends PureComponent {
 }
 
 const mapDispatchToProps = dispatch => ({
-  resetPassword: password => {
-    dispatch(resetPasswordAction(password));
+  onSubmit: ({ email, password }) => {
+    dispatch(signInAction(email, password));
   }
 });
 
-ChangePassword.propTypes = {
+ChangePasswordSuccess.propTypes = {
   classes: PropTypes.object
 };
 
@@ -103,5 +97,5 @@ export default withRouter(
   connect(
     null,
     mapDispatchToProps
-  )(withStyles(styles)(ChangePassword))
+  )(withStyles(styles)(ChangePasswordSuccess))
 );
