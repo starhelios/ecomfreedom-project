@@ -61,8 +61,9 @@ export const forgotPasswordRequest = payload =>
 export const resetPasswordRequest = payload => {
   console.log('api.js', payload);
   return axios
-    .post(`${API_ENDPOINT_URL}/auth/reset_password/${payload.token}`, {
-      password: payload.password
+    .put(`${API_ENDPOINT_URL}/reset-password`, {
+      newPassword: payload.password,
+      id: payload.id
     })
     .then(res => {
       if (res.data.status) {
