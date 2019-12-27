@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import ForgotPasswordForm from 'components/Auth/ForgotPasswordForm';
-import { signInAction } from 'redux/actions/auth';
+import { forgotPasswordAction } from 'redux/actions/auth';
 import Bg from 'assets/img/forgot-bg.jpg';
 import AuthHeader from 'components/Auth/AuthHeader';
 import AuthFooter from 'components/Auth/AuthFooter';
@@ -52,8 +52,9 @@ const styles = theme => ({
 });
 
 class ForgotPassword extends PureComponent {
-  onSubmit = () => {
-    const { history } = this.props;
+  onSubmit = (email) => {
+    const { history, forgotPassword } = this.props;
+    forgotPassword({ email });
     history.push(routes.RESEND_PASSWORD);
   };
 
@@ -85,13 +86,14 @@ class ForgotPassword extends PureComponent {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onSubmit: ({ email, password }) => {
-    dispatch(signInAction(email, password));
+  forgotPassword: data => {
+    dispatch(forgotPasswordAction(data));
   }
 });
 
 ForgotPassword.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  forgotPassword: PropTypes.func.isRequired,
   classes: PropTypes.object
 };
 

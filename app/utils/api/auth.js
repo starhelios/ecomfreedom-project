@@ -47,12 +47,12 @@ export const signUpRequest = payload =>
 
 export const forgotPasswordRequest = payload =>
   axios
-    .post(`${API_ENDPOINT_URL}/auth/forgot_password`, {
+    .get(`${API_ENDPOINT_URL}/reset-password`, {
       email: payload.email
     })
     .then(res => {
-      if (res.data.status) {
-        return { success: true };
+      if (res.data) {
+        return { success: true, data: res.data };
       }
       return { success: false, reason: res.message };
     })
