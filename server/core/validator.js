@@ -109,6 +109,17 @@ const courseSectionSchema = readJson('schema', 'section', 'new-section.schema.js
 const createCommentSchema = readJson('schema', 'comments', 'create-comment.schema.json');
 const deleteCommentSchema = readJson('schema', 'comments', 'delete-comment.schema.json');
 
+/**
+ * @namespace enrollments
+ */
+const createEnrollmentSchema = readJson('schema', 'enrollments', 'create-enrollment.schema.json');
+const deleteUserEnrollmentSchema = readJson('schema', 'enrollments', 'delete-user-enrollment.schema.json');
+const getUserEnrollsSchema = readJson('schema', 'enrollments', 'get-user-enrollments.schema.json');
+const getCourseEnrollsSchema = readJson('schema', 'enrollments', 'get-course-enrolls.schema.json');
+const getEnrollmentSchema = readJson('schema', 'enrollments', 'get-enrollment.schema.json');
+const addUserEnrollmentSchema = readJson('schema', 'enrollments', 'add-user-enrollment.schema.json');
+const putEnrollmentSchema = readJson('schema', 'enrollments', 'put-enrollment.schema.json');
+
 module.exports = {
   name: ajv.compile(nameRequestSchema),
   newUser: ajv.compile(newUserSchema),
@@ -116,11 +127,15 @@ module.exports = {
   newPermission: ajv.compile(newPermissionSchema),
   assignPermission: ajv.compile(assignPermissionSchema),
   editPage: ajv.compile(editPageSchema),
+  deleteUserEnrollment: ajv.compile(deleteUserEnrollmentSchema),
   tokenRequest: ajv.compile(tokenRequestSchema),
+  putEnrollment: ajv.compile(putEnrollmentSchema),
   getPricing: ajv.compile(getPricingSchema),
   deleteGcs: ajv.compile(deleteGcsSchema),
+  getEnrollment: ajv.compile(getEnrollmentSchema),
   roleUserRoutes: ajv.compile(roleUserRoutesSchema),
   uploadGcs: ajv.compile(uploadGcsSchema),
+  addUserEnrollment: ajv.compile(addUserEnrollmentSchema),
   getPricingByCourse: ajv.compile(getPricingByCourseSchema),
   deletePlan: ajv.compile(deletePlanSchema),
   pageRequest: ajv.compile(pageRequestSchema),
@@ -152,5 +167,8 @@ module.exports = {
   uploadWistia: ajv.compile(uploadWistiaSchema),
   deleteWistiaVideo: ajv.compile(deleteWistiaVideoSchema),
   createComment: ajv.compile(createCommentSchema),
-  deleteComment: ajv.compile(deleteCommentSchema)
+  deleteComment: ajv.compile(deleteCommentSchema),
+  createEnrollment: ajv.compile(createEnrollmentSchema),
+  getUserEnrolls: ajv.compile(getUserEnrollsSchema),
+  getCourseEnrolls: ajv.compile(getCourseEnrollsSchema)
 };
