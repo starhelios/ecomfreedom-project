@@ -3,13 +3,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { map } from 'lodash';
 import { Switch, Route, Redirect } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 // creates a beautiful scrollbar
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+import Sidebar from "components/Admin/Sidebar/Sidebar.jsx";
 import adminRoutes from "constants/adminRoutes";
 import routes from "constants/routes.json";
 
@@ -17,17 +17,27 @@ import routes from "constants/routes.json";
 
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
-import AdminMainNavbar from 'components/Admin/AdminMainNavbar/AdminMainNavbar';
+import AdminMainNavbar from 'components/Admin/AdminMainNavbar';
 
 const { REACT_APP_SERVER_URL } = process.env;
 let userInfo = {};
 
 const styles = theme => ({
   wrapperMain: {
+    display: 'block',
+    height: '100vh',
     marginTop: 64,
+    position: 'relative'
+  },
+  container: {
+    display: 'flex',
+    height: '100%',
+    position: 'relative'
   },
   mainPanel: {
-    flex: 1
+    flex: 1,
+    height: '100%',
+    overflow: 'auto'
   }
 });
 
@@ -96,37 +106,15 @@ class Dashboard extends React.Component {
     }
   };
   async componentDidMount() {
-    // const { history } = this.props;
-    //
-    // if (navigator.platform.indexOf("Win") > -1) {
-    //   const ps = new PerfectScrollbar(this.refs.mainPanel);
-    // }
-    // window.addEventListener("resize", this.resizeFunction);
-    //
-    // let getSessionRequest;
-    // try {
-    //   getSessionRequest = await axios.get(
-    //     `http://${REACT_APP_SERVER_URL}/get-session`,
-    //     {
-    //       withCredentials: true
-    //     }
-    //   );
-    // } catch ({ response }) {
-    //   getSessionRequest = response;
-    // }
-    // const { data: getSessionRequestData } = getSessionRequest;
-    // if (getSessionRequestData.success) {
-    //   return userInfo = getSessionRequestData.userInfo;
-    // }
-    // return history.push("/auth/login-page");
+    window.addEventListener("resize", this.resizeFunction);
   }
   componentDidUpdate(e) {
-    // if (e.history.location.pathname !== e.location.pathname) {
-    //   this.refs.mainPanel.scrollTop = 0;
-    //   if (this.state.mobileOpen) {
-    //     this.setState({ mobileOpen: false });
-    //   }
-    // }
+    if (e.history.location.pathname !== e.location.pathname) {
+      this.refs.mainPanel.scrollTop = 0;
+      if (this.state.mobileOpen) {
+        this.setState({ mobileOpen: false });
+      }
+    }
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunction);
@@ -138,18 +126,23 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.wrapperMain}>
         <AdminMainNavbar />
-        <Sidebar
-          routes={menu}
-          logoText={"Ecom Freedom"}
-          logo={logo}
-          // image={this.state.image}
-          handleDrawerToggle={this.handleDrawerToggle}
-          open={this.state.mobileOpen}
-          color={this.state.color}
-          {...rest}
-        />
-        <div className={classes.mainPanel} ref="mainPanel">
-          {switchRoutes}
+        <div className={classes.container}>
+          <Sidebar
+            routes={menu}
+            user={{
+              avatar: logo,
+              name: 'Dav Vas',
+              role: 'Course Admin'
+            }}
+            // image={this.state.image}
+            handleDrawerToggle={this.handleDrawerToggle}
+            open={this.state.mobileOpen}
+            color={this.state.color}
+            {...rest}
+          />
+          <div className={classes.mainPanel} ref="mainPanel">
+            {switchRoutes}
+          </div>
         </div>
       </div>
     );
