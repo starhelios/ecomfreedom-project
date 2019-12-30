@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { map, filter } from 'lodash';
-// @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Fab from '@material-ui/core/Fab';
 import { TextField, Typography, FormLabel, FormControl, Box, Select, MenuItem } from '@material-ui/core';
@@ -17,7 +16,7 @@ import AdminContent from 'components/Content/AdminContent';
 import { createCourse } from 'redux/actions/courses';
 import routes from 'constants/routes.json';
 import { getUsers } from 'redux/actions/users';
-import CourseSteps from 'components/CourseAdmin/CourseSteps';
+import CourseSteps from 'components/Admin/CourseAdmin/CourseSteps';
 
 const styles = {
   cardCategoryWhite: {
