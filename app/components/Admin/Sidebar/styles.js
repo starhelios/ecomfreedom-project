@@ -1,19 +1,14 @@
 import {
-  drawerWidth,
   transition,
   boxShadow,
   defaultFont,
-  primaryColor,
-  primaryBoxShadow,
   infoColor,
-  successColor,
-  warningColor,
-  dangerColor,
   whiteColor,
   grayColor,
   blackColor,
   hexToRgb
 } from "assets/jss/material-dashboard-react.jsx";
+import { DRAWER_WIDTH } from 'constants/default';
 
 const sidebarStyle = theme => ({
   drawerPaper: {
@@ -23,15 +18,16 @@ const sidebarStyle = theme => ({
     bottom: "0",
     left: "0",
     zIndex: "1",
-    ...boxShadow,
-    width: drawerWidth,
+    display: 'flex',
+    flexDirection: 'column',
+    width: DRAWER_WIDTH,
     [theme.breakpoints.up("md")]: {
-      width: drawerWidth,
+      width: DRAWER_WIDTH,
       position: "relative",
       height: "100%"
     },
     [theme.breakpoints.down("sm")]: {
-      width: drawerWidth,
+      width: DRAWER_WIDTH,
       ...boxShadow,
       position: "relative",
       display: "block",
@@ -46,35 +42,34 @@ const sidebarStyle = theme => ({
       textAlign: "left",
       paddingRight: "0px",
       paddingLeft: "0",
-      transform: `translate3d(${drawerWidth}px, 0, 0)`,
+      transform: `translate3d(${DRAWER_WIDTH}px, 0, 0)`,
       ...transition
     }
   },
-  drawerPaperRTL: {
-    [theme.breakpoints.up("md")]: {
-      left: "auto !important",
-      right: "0 !important"
-    },
-    [theme.breakpoints.down("sm")]: {
-      left: "0  !important",
-      right: "auto !important"
-    }
+  username: {
+    fontSize: 16,
+    lineHeight: '20px',
+    color: '#ECF0F1',
+    textTransform: 'none',
+    marginTop: 18
+  },
+  userRole: {
+    fontSize: 12,
+    lineHeight: '16px',
+    color: '#9EA0A5',
+    textTransform: 'none'
   },
   logo: {
     position: "relative",
-    padding: "15px 15px",
-    textAlign: 'center',
+    width: '100%',
+    height: 213,
+    minHeight: 213,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: "4",
-    "&:after": {
-      content: '""',
-      position: "absolute",
-      bottom: "0",
-
-      height: "1px",
-      right: "15px",
-      width: "calc(100% - 30px)",
-      backgroundColor: "rgba(" + hexToRgb(grayColor[6]) + ", 0.3)"
-    }
+    background: 'rgba(' + hexToRgb(theme.palette.primary.main) + ',.74)'
   },
   logoLink: {
     ...defaultFont,
@@ -90,9 +85,6 @@ const sidebarStyle = theme => ({
     "&,&:hover": {
       color: whiteColor
     }
-  },
-  logoLinkRTL: {
-    textAlign: "right"
   },
   logoImage: {
     maxWidth: "101px",
@@ -113,6 +105,7 @@ const sidebarStyle = theme => ({
     display: "block",
     top: "0",
     left: "0",
+    backgroundImage: 'linear-gradient(180deg, #3b4b77 0%, #242c46 100%)',
     // backgroundSize: "cover",
     // backgroundPosition: "center center",
     "&:after": {
@@ -122,7 +115,7 @@ const sidebarStyle = theme => ({
       height: "100%",
       content: '""',
       display: "block",
-      background: '#262b41',
+      // background: '#262b41',
       // opacity: ".8"
     }
   },
@@ -146,7 +139,7 @@ const sidebarStyle = theme => ({
   itemLink: {
     width: "auto",
     transition: "all 300ms linear",
-    margin: "10px 15px 0",
+    margin: "8px 16px 0",
     borderRadius: "3px",
     position: "relative",
     display: "block",
@@ -165,11 +158,6 @@ const sidebarStyle = theme => ({
     verticalAlign: "middle",
     color: "rgba(" + hexToRgb(whiteColor) + ", 0.8)"
   },
-  itemIconRTL: {
-    marginRight: "3px",
-    marginLeft: "15px",
-    float: "right"
-  },
   itemText: {
     ...defaultFont,
     margin: "0",
@@ -177,113 +165,20 @@ const sidebarStyle = theme => ({
     fontSize: "14px",
     color: whiteColor
   },
-  itemTextRTL: {
-    textAlign: "right"
-  },
   whiteFont: {
     color: whiteColor
   },
-  purple: {
-    backgroundColor: primaryColor[0],
-    ...primaryBoxShadow,
-    "&:hover,&:focus": {
-      backgroundColor: primaryColor[0],
-      ...primaryBoxShadow
-    }
-  },
-  blue: {
-    backgroundColor: infoColor[0],
-    boxShadow:
-    "0 12px 20px -10px rgba(" +
-    hexToRgb(infoColor[0]) +
-    ",.28), 0 4px 20px 0 rgba(" +
-    hexToRgb(blackColor) +
-    ",.12), 0 7px 8px -5px rgba(" +
-    hexToRgb(infoColor[0]) +
-    ",.2)",
-    "&:hover,&:focus": {
-      backgroundColor: infoColor[0],
-      boxShadow:
-      "0 12px 20px -10px rgba(" +
-      hexToRgb(infoColor[0]) +
-      ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
-      ",.12), 0 7px 8px -5px rgba(" +
-      hexToRgb(infoColor[0]) +
-      ",.2)"
-    }
-  },
-  green: {
-    backgroundColor: successColor[0],
-    boxShadow:
-    "0 12px 20px -10px rgba(" +
-    hexToRgb(successColor[0]) +
-    ",.28), 0 4px 20px 0 rgba(" +
-    hexToRgb(blackColor) +
-    ",.12), 0 7px 8px -5px rgba(" +
-    hexToRgb(successColor[0]) +
-    ",.2)",
-    "&:hover,&:focus": {
-      backgroundColor: successColor[0],
-      boxShadow:
-      "0 12px 20px -10px rgba(" +
-      hexToRgb(successColor[0]) +
-      ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
-      ",.12), 0 7px 8px -5px rgba(" +
-      hexToRgb(successColor[0]) +
-      ",.2)"
-    }
-  },
-  orange: {
-    backgroundColor: warningColor[0],
-    boxShadow:
-    "0 12px 20px -10px rgba(" +
-    hexToRgb(warningColor[0]) +
-    ",.28), 0 4px 20px 0 rgba(" +
-    hexToRgb(blackColor) +
-    ",.12), 0 7px 8px -5px rgba(" +
-    hexToRgb(warningColor[0]) +
-    ",.2)",
-    "&:hover,&:focus": {
-      backgroundColor: warningColor[0],
-      boxShadow:
-      "0 12px 20px -10px rgba(" +
-      hexToRgb(warningColor[0]) +
-      ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
-      ",.12), 0 7px 8px -5px rgba(" +
-      hexToRgb(warningColor[0]) +
-      ",.2)"
-    }
-  },
-  red: {
-    backgroundColor: dangerColor[0],
-    boxShadow:
-    "0 12px 20px -10px rgba(" +
-    hexToRgb(dangerColor[0]) +
-    ",.28), 0 4px 20px 0 rgba(" +
-    hexToRgb(blackColor) +
-    ",.12), 0 7px 8px -5px rgba(" +
-    hexToRgb(dangerColor[0]) +
-    ",.2)",
-    "&:hover,&:focus": {
-      backgroundColor: dangerColor[0],
-      boxShadow:
-      "0 12px 20px -10px rgba(" +
-      hexToRgb(dangerColor[0]) +
-      ",.28), 0 4px 20px 0 rgba(" +
-      hexToRgb(blackColor) +
-      ",.12), 0 7px 8px -5px rgba(" +
-      hexToRgb(dangerColor[0]) +
-      ",.2)"
+  activeLink: {
+    backgroundColor: '#556791',
+    '&:hover,&:focus': {
+      backgroundColor: '#556791'
     }
   },
   sidebarWrapper: {
     position: "relative",
-    height: "calc(100vh - 75px)",
+    flex: 1,
     overflow: "auto",
-    width: "260px",
+    width: DRAWER_WIDTH,
     zIndex: "4",
     overflowScrolling: "touch"
   },
