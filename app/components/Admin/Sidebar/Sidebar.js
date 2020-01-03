@@ -16,10 +16,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-// core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.jsx";
-import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.jsx";
-
 import sidebarStyle from "./styles.js";
 
 const useStyles = makeStyles(theme => ({
@@ -39,7 +35,8 @@ const Sidebar = ({ ...props }) => {
   function activeParent(children, routeName, link) {
     return !!find(children, item => (activeRoute(item.layout + item.path, item.layout + item.link)));
   }
-  const { classes, color, user: { name, role, avatar }, routes } = props;
+  const { classes, color, user, routes } = props;
+  const { name, role, avatar } = user;
   const styles = useStyles();
   var links = (
     <List className={classes.list}>
@@ -47,7 +44,7 @@ const Sidebar = ({ ...props }) => {
         var activePro = " ";
         var listItemClasses;
         listItemClasses = classNames({
-          [" " + classes[color]]: activeRoute(prop.layout + prop.path, prop.layout + prop.link)
+          [" " + classes['activeLink']]: activeRoute(prop.layout + prop.path, prop.layout + prop.link)
         });
         const whiteFontClasses = classNames({
           [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path, prop.layout + prop.link ) ||
@@ -63,24 +60,18 @@ const Sidebar = ({ ...props }) => {
               <ListItem button className={classes.itemLink + listItemClasses}>
                 {typeof prop.icon === 'string' ? (
                   <Icon
-                    className={classNames(classes.itemIcon, whiteFontClasses, {
-                      [classes.itemIconRTL]: props.rtlActive
-                    })}
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
                   >
                     {prop.icon}
                   </Icon>
                 ) : (
                   <prop.icon
-                    className={classNames(classes.itemIcon, whiteFontClasses, {
-                      [classes.itemIconRTL]: props.rtlActive
-                    })}
+                    className={classNames(classes.itemIcon, whiteFontClasses)}
                   />
                 )}
                 <ListItemText
-                  primary={props.rtlActive ? prop.rtlName : prop.name}
-                  className={classNames(classes.itemText, whiteFontClasses, {
-                    [classes.itemTextRTL]: props.rtlActive
-                  })}
+                  primary={prop.name}
+                  className={classNames(classes.itemText, whiteFontClasses)}
                   style={{ display: 'inline-block' }}
                   disableTypography={true}
                 />
@@ -111,10 +102,8 @@ const Sidebar = ({ ...props }) => {
                         [" " + classes[color]]: activeRoute(item.layout + item.path, item.layout + item.link)
                       })}>
                         <ListItemText
-                          primary={props.rtlActive ? item.rtlName : item.name}
-                          className={classNames(classes.itemText, whiteFontClasses, {
-                            [classes.itemTextRTL]: props.rtlActive
-                          })}
+                          primary={item.name}
+                          className={classNames(classes.itemText, whiteFontClasses)}
                           disableTypography={true}
                         />
                       </ListItem>
@@ -139,8 +128,8 @@ const Sidebar = ({ ...props }) => {
         <div className={classes.logoImage}>
           <img src={avatar} alt="logo" className={classes.img} />
         </div>
-        <div>{name}</div>
-        <div><small>{role}</small></div>
+        <div className={classes.username}>{name}</div>
+        <div className={classes.userRole}>{role}</div>
       </a>
     </div>
   );
@@ -148,9 +137,7 @@ const Sidebar = ({ ...props }) => {
     <Paper className={classes.drawerPaper}>
       {brand}
       <div className={classes.sidebarWrapper}>{links}</div>
-      <div
-        className={classes.background}
-      />
+      <div className={classes.background} />
     </Paper>
   );
 };

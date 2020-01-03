@@ -33,3 +33,5 @@ export const PRICING_PLAN_TYPES = [
 ];
 
 export const RESET_PASSWORD_ID_PARAM = 'bjson';
+
+export const DRAWER_WIDTH = 270;
