@@ -48,7 +48,7 @@ const styles = theme => ({
 });
 
 const AdminMainNavbar = ({ classes, right }) => (
-  <AppBar elevation={1} className={classes.root}>
+  <AppBar elevation={0} className={classes.root}>
     <Toolbar disableGutters>
       <Typography variant="h6" className={classes.logo}>
         <Link to={routes.HOME}>

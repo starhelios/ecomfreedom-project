@@ -19,8 +19,7 @@ import { logoutAction } from 'redux/actions/auth';
 
 // import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
-import image from 'assets/img/sidebar-2.jpg';
-import logo from 'assets/img/reactlogo.png';
+import Logo from 'assets/img/faces/dan.png';
 import AdminMainNavbar from 'components/Admin/AdminMainNavbar';
 
 let userInfo = {};
@@ -83,7 +82,6 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: image,
       color: "blue",
       hasImage: true,
       fixedClasses: "dropdown show",
@@ -143,16 +141,15 @@ class Dashboard extends React.Component {
         <div className={classes.container}>
           <Sidebar
             routes={menu}
-            user={{
-              avatar: logo,
-              name: 'Dav Vas',
-              role: 'Course Admin'
-            }}
-            // image={this.state.image}
             handleDrawerToggle={this.handleDrawerToggle}
             open={this.state.mobileOpen}
             color={this.state.color}
             {...rest}
+            user={{
+              avatar: Logo,
+              name: 'Dav Vas',
+              role: 'Course Admin'
+            }}
           />
           <div className={classes.mainPanel} ref="mainPanel">
             {switchRoutes}
