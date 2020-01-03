@@ -185,7 +185,8 @@
     "nodemailer": "latest",
     "ejs": "latest",
     "cors": "latest",
-    "form-data": "latest"
+    "form-data": "latest",
+    "mailjet": "latest"
   },
   "devDependencies": {
     "compare-versions": "3.4.0",
