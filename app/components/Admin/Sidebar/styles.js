@@ -145,7 +145,8 @@ const sidebarStyle = theme => ({
     display: "block",
     padding: "8px 15px",
     backgroundColor: "transparent",
-    ...defaultFont
+    ...defaultFont,
+    minHeight: 46
   },
   itemIcon: {
     width: "24px",
@@ -195,7 +196,6 @@ const sidebarStyle = theme => ({
       outline: '1px solid slategrey',
       borderRadius: 4
     }
-
   },
   submenu: {
     position: 'absolute',
@@ -203,15 +203,17 @@ const sidebarStyle = theme => ({
     top: 0,
     height: '100%',
     width: DRAWER_SUBMENU_WIDTH,
-    background: '#425581'
+    background: '#425581',
+    boxShadow: '0 2px 2px rgba(0, 0, 0, 0.3)'
   },
   submenuTitle: {
-    color: theme.palette.primary.link,
+    color: 'rgba(255, 255, 255, .33)',
     fontSize: 14,
     fontWeight: 500,
-    fontFamily: "Roboto', 'Helvetica', 'Arial', sans-serif",
+    fontFamily: 'Roboto',
     textTransform: 'uppercase',
     marginTop: 21,
+    marginBottom: 8,
     marginLeft: 25
   },
   activePro: {
