@@ -173,7 +173,6 @@ const sidebarStyle = theme => ({
     }
   },
   sidebarWrapper: {
-    display: 'flex',
     height: 'calc(100% - 213px)',
     overflowY: 'auto',
     overflowX: 'hidden',
