@@ -12,10 +12,22 @@ import sidebarStyle from './styles';
 
 const useStyles = makeStyles(theme => ({
   nested: {
-    paddingLeft: `9px !important`
+    paddingLeft: `9px !important`,
+    marginTop: `0px !important`,
+    paddingTop: `4px !important`,
+    paddingBottom: `4px !important`,
+    minHeight: '38px !important'
   },
   arrow: {
     float: 'right'
+  },
+  divider: {
+    display: 'block',
+    height: 1,
+    width: 100,
+    background: 'rgba(149, 165, 166, .5)',
+    marginTop: 20,
+    marginLeft: 25
   }
 }));
 
@@ -109,6 +121,7 @@ const Sidebar = ({ ...props }) => {
           </NavLink>)
         )}
       </List>
+      <div className={styles.divider} />
     </div>
   ) : null;
 
