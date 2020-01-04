@@ -56,7 +56,7 @@ const Sidebar = ({ ...props }) => {
       }
     }
   });
-  console.log('activeChildItem', activeChildItem);
+
   const styles = useStyles();
   const links = (
     <List className={classes.list}>
