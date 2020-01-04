@@ -6,8 +6,7 @@ import { NavLink } from 'react-router-dom';
 // @material-ui/core components
 import { makeStyles } from '@material-ui/core/styles';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Paper, List, ListItem, ListItemText, Icon, Collapse } from '@material-ui/core';
-import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { Paper, List, ListItem, ListItemText, Icon } from '@material-ui/core';
 import sidebarStyle from './styles';
 
 const useStyles = makeStyles(theme => ({
@@ -28,6 +27,11 @@ const useStyles = makeStyles(theme => ({
     background: 'rgba(149, 165, 166, .5)',
     marginTop: 20,
     marginLeft: 25
+  },
+  short: {
+    marginRight: '0 !important',
+    borderBottomRightRadius: '0 !important',
+    borderTopRightRadius: '0 !important'
   }
 }));
 
@@ -60,7 +64,8 @@ const Sidebar = ({ ...props }) => {
         const activeRouteValue = activeRoute(prop.layout + prop.path, prop.layout + prop.link);
         const activePro = ' ';
         const listItemClasses = classNames({
-          [' ' + classes.activeLink]: activeRouteValue
+          [' ' + classes.activeLink]: activeRouteValue,
+          [' ' + styles.short]: activeChildItem,
         });
         const activeParentValue = activeParent(prop.children);
         const whiteFontClasses = classNames({ [' ' + classes.whiteFont]: activeRouteValue || activeParentValue });
@@ -143,10 +148,11 @@ const Sidebar = ({ ...props }) => {
     <Paper className={classes.drawerPaper}>
       {brand}
       <div className={classes.sidebarWrapper}>
-        {links}
-        {submenu}
+        <div className={classes.menus}>
+          {links}
+          {submenu}
+        </div>
       </div>
-      <div className={classes.background} />
     </Paper>
   );
 };
