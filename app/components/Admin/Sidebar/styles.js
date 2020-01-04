@@ -17,9 +17,11 @@ const sidebarStyle = theme => ({
     top: "0",
     bottom: "0",
     left: "0",
-    zIndex: "1",
-    display: 'flex',
-    flexDirection: 'column',
+    borderRadius: 0,
+    // zIndex: "1",
+    // display: 'flex',
+    // flexDirection: 'column',
+    backgroundImage: 'linear-gradient(180deg, #3b4b77 0%, #242c46 100%)',
     width: DRAWER_WIDTH,
     [theme.breakpoints.up("md")]: {
       width: DRAWER_WIDTH,
@@ -68,7 +70,7 @@ const sidebarStyle = theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: "4",
+    // zIndex: "4",
     background: 'rgba(' + hexToRgb(theme.palette.primary.main) + ',.74)'
   },
   logoLink: {
@@ -97,33 +99,12 @@ const sidebarStyle = theme => ({
     maxWidth: "101px",
     border: "0"
   },
-  background: {
-    position: "absolute",
-    zIndex: "1",
-    height: "100%",
-    width: "100%",
-    display: "block",
-    top: "0",
-    left: "0",
-    backgroundImage: 'linear-gradient(180deg, #3b4b77 0%, #242c46 100%)',
-    // backgroundSize: "cover",
-    // backgroundPosition: "center center",
-    "&:after": {
-      position: "absolute",
-      zIndex: "3",
-      width: "100%",
-      height: "100%",
-      content: '""',
-      display: "block",
-      // background: '#262b41',
-      // opacity: ".8"
-    }
-  },
   list: {
-    marginTop: "20px",
+    flex: 1,
+    marginTop: "12px",
     paddingLeft: "0",
     paddingTop: "0",
-    paddingBottom: "0",
+    paddingBottom: "10px",
     marginBottom: "0",
     listStyle: "none",
     position: "unset"
@@ -172,19 +153,25 @@ const sidebarStyle = theme => ({
   },
   activeLink: {
     color: '#ECF0F1',
-    backgroundColor: "rgba(" + hexToRgb('#556791') + ", 0.8)",
-    '&:hover,&:focus': {
-      backgroundColor: '#556791'
+    backgroundColor: "rgba(" + hexToRgb('#556791') + ", 0.5)",
+    '&:hover': {
+      backgroundColor: '#556791 !important'
+    },
+    '&:focus': {
+      backgroundColor: 'rgba(' + hexToRgb('#556791') + ', 0.5)'
     }
   },
   sidebarWrapper: {
-    position: "relative",
-    flex: 1,
-    overflow: "auto",
+    // position: "relative",
+    // flex: 1,
+    display: 'flex',
+    height: 'calc(100% - 213px)',
+    overflowY: "auto",
+    overflowX: 'hidden',
     width: DRAWER_WIDTH,
-    zIndex: "4",
+    maxWidth: DRAWER_WIDTH,
+    // zIndex: "4",
     overflowScrolling: "touch",
-    paddingBottom: 10,
     '&::-webkit-scrollbar': {
       width: '0.4em'
     },
@@ -197,12 +184,16 @@ const sidebarStyle = theme => ({
       borderRadius: 4
     }
   },
+  menus: {
+    display: 'flex',
+    flex: 1,
+    width: DRAWER_WIDTH,
+    maxWidth: DRAWER_WIDTH
+  },
   submenu: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    height: '100%',
+    flex: 1,
     width: DRAWER_SUBMENU_WIDTH,
+    minWidth: DRAWER_SUBMENU_WIDTH,
     background: '#425581',
     boxShadow: '0 2px 2px rgba(0, 0, 0, 0.3)'
   },
