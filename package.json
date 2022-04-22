@@ -157,7 +157,7 @@
     "mongoose": "5.7.6",
     "ms": "2.1.2",
     "multer": "latest",
-    "nconf": "0.10.0",
+    "nconf": "0.11.4",
     "nodemailer": "latest",
     "null-loader": "0.1.1",
     "offline-plugin": "5.0.6",
