@@ -152,7 +152,7 @@
     "lodash": "4.17.11",
     "mime-types": "latest",
     "minimist": "1.2.0",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "moment-timezone": "0.5.27",
     "mongoose": "5.7.6",
     "ms": "2.1.2",
