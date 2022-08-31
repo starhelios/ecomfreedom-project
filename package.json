@@ -153,7 +153,7 @@
     "mime-types": "latest",
     "minimist": "1.2.0",
     "moment": "2.24.0",
-    "moment-timezone": "0.5.27",
+    "moment-timezone": "0.5.35",
     "mongoose": "5.7.6",
     "ms": "2.1.2",
     "multer": "latest",
